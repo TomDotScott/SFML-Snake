@@ -3,36 +3,37 @@
 #include <iostream>
 
 void Rectangle::Render(sf::RenderWindow& window) {
-	window.draw(rectangle);
+	m_rectangle.setPosition(m_position);
+	window.draw(m_rectangle);
 }
 
-Rectangle::Rectangle(sf::Color colourToBe, const sf::Vector2f vector, float heightToBe, float widthToBe, sf::Vector2f speedToBe) {
-	colour = colourToBe;
-	position = vector;
-	height = heightToBe;
-	width = widthToBe;
-	speed = speedToBe;
-	rectangle = sf::RectangleShape(sf::Vector2f(height, width));
-	rectangle.setFillColor(colourToBe);
-	rectangle.setPosition(vector);
+Rectangle::Rectangle(sf::Color colour, const sf::Vector2f position, float height, float width, sf::Vector2f speed) {
+	m_colour = colour;
+	m_position = position;
+	m_height = height;
+	m_width = width;
+	m_speed = speed;
+	m_rectangle = sf::RectangleShape(sf::Vector2f(m_height, m_width));
+	m_rectangle.setFillColor(colour);
+	m_rectangle.setPosition(position);
 }
 
-void Rectangle::Move(sf::RenderWindow& window) {
+void Rectangle::Move() {
 	//if the left arrow is pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		position.x -= speed.x;
+		m_position.x -= m_speed.x;
 	}
 	//right arrow
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		position.x += speed.x;
+		m_position.x += m_speed.x;
 	}
 	//if the up arrow is pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		position.y -= speed.y;
+		m_position.y -= m_speed.y;
 	}
 	//down arrow
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		position.y += speed.y;
+		m_position.y += m_speed.y;
 	}
 	/*//make it "bounce"
 	if (position.x + speed.x <= 0 || position.x + speed.x >= window.getSize().x) {
@@ -41,5 +42,6 @@ void Rectangle::Move(sf::RenderWindow& window) {
 	if (position.y + speed.y <= 0 || position.y + speed.y >= window.getSize().y) {
 		speed.y = -speed.y;
 	}*/
-	rectangle.setPosition(position += speed);
+	std::cout << m_position.x << " " << m_position.y << std::endl;
+
 }

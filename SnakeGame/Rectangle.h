@@ -5,11 +5,11 @@
 class Rectangle : public Shape
 {
 private:
-	float height = 1;
-	float width = 2;
-	sf::RectangleShape rectangle;
+	float m_height = 1;
+	float m_width = 2;
+	sf::RectangleShape m_rectangle;
 public:
 	void Render(sf::RenderWindow& window);
 	Rectangle(sf::Color colourToBe, sf::Vector2f vector, float heightToBe, float widthToBe, sf::Vector2f speedToBe);
-	void Move(sf::RenderWindow& window);
+	void Move();
 };

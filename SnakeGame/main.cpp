@@ -25,20 +25,8 @@ int main()
     // and initialise its size and title text
     sf::RenderWindow window(sf::VideoMode(800, 600), "C++ Snake ICA : U0018197");
 
-	std::vector<Shape*> shapes;
 
-	//add 100 shapes to the shapes vector
-	for (size_t i = 0; i < 100; i++)
-	{
-		if (rand() % 2 == 0) {
-			Circle* circle = new Circle(sf::Color(rand() % 255, rand() % 255, rand() % 255), sf::Vector2f(rand() % 800, rand() % 600), rand() % 10, sf::Vector2f(1, 1));
-			shapes.push_back(circle);
-		}
-		else {
-			Rectangle* rectangle = new Rectangle(sf::Color(rand() % 255, rand() % 255, rand() % 255), sf::Vector2f(rand() % 800, rand() % 600), rand() % 200, rand() % 50, sf::Vector2f(0, 1));
-			shapes.push_back(rectangle);
-		}
-	}
+	Rectangle* rectangle = new Rectangle(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
 
     // We can still output to the console window
     std::cout << "SnakeGame: Starting" << std::endl;
@@ -65,10 +53,8 @@ int main()
         // We must clear the window each time around the loop
         window.clear();
 
-		for (Shape* shape : shapes) {
-			shape->Move(window);
-			shape->Render(window);
-		}
+		rectangle->Move();
+		rectangle->Render(window);
 
         // Get the window to display its contents
         window.display();
