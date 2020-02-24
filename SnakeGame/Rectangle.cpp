@@ -18,12 +18,28 @@ Rectangle::Rectangle(sf::Color colourToBe, const sf::Vector2f vector, float heig
 }
 
 void Rectangle::Move(sf::RenderWindow& window) {
-	//make it "bounce"
+	//if the left arrow is pressed
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		position.x -= speed.x;
+	}
+	//right arrow
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		position.x += speed.x;
+	}
+	//if the up arrow is pressed
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		position.y -= speed.y;
+	}
+	//down arrow
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		position.y += speed.y;
+	}
+	/*//make it "bounce"
 	if (position.x + speed.x <= 0 || position.x + speed.x >= window.getSize().x) {
 		speed.x = -speed.x;
 	}
 	if (position.y + speed.y <= 0 || position.y + speed.y >= window.getSize().y) {
 		speed.y = -speed.y;
-	}
+	}*/
 	rectangle.setPosition(position += speed);
 }
