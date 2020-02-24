@@ -11,8 +11,8 @@
 // SFML header file for graphics, there are also ones for Audio, Window, System and Network
 #include <SFML/Graphics.hpp>
 #include "circle.h"
-#include "Rectangle.h"
-#include "Shape.h";
+#include "Snake.h"
+#include "Entity.h";
 
 int main()
 {
@@ -26,7 +26,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "C++ Snake ICA : U0018197");
 
 
-	Rectangle* rectangle = new Rectangle(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
+	Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
 
     // We can still output to the console window
     std::cout << "SnakeGame: Starting" << std::endl;
@@ -53,8 +53,8 @@ int main()
         // We must clear the window each time around the loop
         window.clear();
 
-		rectangle->Move();
-		rectangle->Render(window);
+		snake->Move();
+		snake->Render(window);
 
         // Get the window to display its contents
         window.display();

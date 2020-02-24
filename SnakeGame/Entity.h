@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-class Shape
+class Entity
 {
 protected:
 	sf::Color m_colour;

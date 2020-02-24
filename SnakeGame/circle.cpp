@@ -4,26 +4,26 @@
 
 void Circle::Render(sf::RenderWindow& window)
 {
-	window.draw(circle);
+	window.draw(m_circle);
 }
 
-Circle::Circle(sf::Color colourToBe, const sf::Vector2f vector, float radiusToBe, sf::Vector2f speedToBe) {
-	colour = colourToBe;
-	position = vector;
-	radius = radiusToBe;
-	speed = speedToBe;
-	circle = sf::CircleShape(radiusToBe);
-	circle.setFillColor(colourToBe);
-	circle.setPosition(vector);
+Circle::Circle(sf::Color colour, const sf::Vector2f position, float radius, sf::Vector2f speed) {
+	m_colour = colour;
+	m_position = position;
+	m_radius = radius;
+	m_speed = speed;
+	m_circle = sf::CircleShape(radius);
+	m_circle.setFillColor(colour);
+	m_circle.setPosition(position);
 }
 
 void Circle::Move(sf::RenderWindow& window) {
 	//make it "bounce"
-	if (position.x + speed.x <= 0 || position.x + speed.x >= window.getSize().x) {
-		speed.x = -speed.x;
+	if (m_position.x + m_speed.x <= 0 || m_position.x + m_speed.x >= window.getSize().x) {
+		m_speed.x = -m_speed.x;
 	}
-	if (position.y + speed.y <= 0 || position.y + speed.y >= window.getSize().y) {
-		speed.y = -speed.y;
+	if (m_position.y + m_speed.y <= 0 || m_position.y + m_speed.y >= window.getSize().y) {
+		m_speed.y = -m_speed.y;
 	}
-	circle.setPosition(position += speed);
+	m_circle.setPosition(m_position += m_speed);
 }

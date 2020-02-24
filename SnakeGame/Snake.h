@@ -1,8 +1,8 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "Shape.h"
+#include "Entity.h"
 
-class Rectangle : public Shape
+class Snake : public Entity
 {
 private:
 	float m_height = 1;
@@ -10,6 +10,7 @@ private:
 	sf::RectangleShape m_rectangle;
 public:
 	void Render(sf::RenderWindow& window);
-	Rectangle(sf::Color colourToBe, sf::Vector2f vector, float heightToBe, float widthToBe, sf::Vector2f speedToBe);
+	Snake(sf::Color colourToBe, sf::Vector2f vector, float heightToBe, float widthToBe, sf::Vector2f speedToBe);
 	void Move();
+	void Update();
 };

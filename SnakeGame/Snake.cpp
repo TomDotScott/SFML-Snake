@@ -1,13 +1,13 @@
-#include "Rectangle.h"
+#include "Snake.h"
 #include "SFML/Graphics.hpp"
 #include <iostream>
 
-void Rectangle::Render(sf::RenderWindow& window) {
+void Snake::Render(sf::RenderWindow& window) {
 	m_rectangle.setPosition(m_position);
 	window.draw(m_rectangle);
 }
 
-Rectangle::Rectangle(sf::Color colour, const sf::Vector2f position, float height, float width, sf::Vector2f speed) {
+Snake::Snake(sf::Color colour, const sf::Vector2f position, float height, float width, sf::Vector2f speed) {
 	m_colour = colour;
 	m_position = position;
 	m_height = height;
@@ -18,7 +18,7 @@ Rectangle::Rectangle(sf::Color colour, const sf::Vector2f position, float height
 	m_rectangle.setPosition(position);
 }
 
-void Rectangle::Move() {
+void Snake::Move() {
 	//if the left arrow is pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		m_position.x -= m_speed.x;
