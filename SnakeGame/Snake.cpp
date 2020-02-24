@@ -2,6 +2,32 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 
+void Snake::Update(sf::RenderWindow & window) {
+	Snake::Input();
+	Snake::Move();
+	Snake::Render(window);
+}
+
+void::Snake::Input() {
+	//if the left arrow is pressed
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		if(m_direction != eRight) m_direction = EDirection::eLeft;
+	}
+	//right arrow
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		if (m_direction != eLeft) m_direction = EDirection::eRight;
+	}
+	//if the up arrow is pressed
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		if (m_direction != eDown) m_direction = EDirection::eUp;
+	}
+	//down arrow
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		if (m_direction != eUp) m_direction = EDirection::eDown;
+	}
+}
+
+
 void Snake::Render(sf::RenderWindow& window) {
 	m_rectangle.setPosition(m_position);
 	window.draw(m_rectangle);
@@ -20,28 +46,28 @@ Snake::Snake(sf::Color colour, const sf::Vector2f position, float height, float 
 
 void Snake::Move() {
 	//if the left arrow is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+	switch (m_direction)
+	{
+	case eLeft:
 		m_position.x -= m_speed.x;
-	}
-	//right arrow
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+
+		break;
+	case eRight:
 		m_position.x += m_speed.x;
-	}
-	//if the up arrow is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+
+		break;
+	case eUp:
 		m_position.y -= m_speed.y;
-	}
-	//down arrow
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+
+		break;
+	case eDown:
 		m_position.y += m_speed.y;
+
+		break;
+	default:
+		break;
 	}
-	/*//make it "bounce"
-	if (position.x + speed.x <= 0 || position.x + speed.x >= window.getSize().x) {
-		speed.x = -speed.x;
-	}
-	if (position.y + speed.y <= 0 || position.y + speed.y >= window.getSize().y) {
-		speed.y = -speed.y;
-	}*/
+	
 	std::cout << m_position.x << " " << m_position.y << std::endl;
 
 }
