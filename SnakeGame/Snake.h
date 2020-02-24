@@ -16,8 +16,9 @@ private:
 	void Input();
 	void Render(sf::RenderWindow& window);
 	
-	EDirection m_direction;
 
+
+	EDirection m_direction;
 	sf::RectangleShape m_rectangle;
 public:
 	Snake(sf::Color colourToBe, sf::Vector2f vector, float heightToBe, float widthToBe, sf::Vector2f speedToBe);

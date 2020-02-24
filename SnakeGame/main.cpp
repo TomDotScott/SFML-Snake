@@ -52,9 +52,7 @@ int main()
 
         // We must clear the window each time around the loop
         window.clear();
-
-		snake->Move();
-		snake->Render(window);
+		snake->Update(window);
 
         // Get the window to display its contents
         window.display();

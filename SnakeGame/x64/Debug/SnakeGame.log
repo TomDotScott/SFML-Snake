@@ -1,27 +1,2 @@
-﻿  main.cpp
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(15,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(20,17): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,119): warning C4244:  'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,119): warning C4244:         with
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,119): warning C4244:         [
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,119): warning C4244:             T=float
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,119): warning C4244:         ]
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,105): warning C4244:  'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,105): warning C4244:         with
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,105): warning C4244:         [
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,105): warning C4244:             T=float
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,105): warning C4244:         ]
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(34,134): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,128): warning C4244:  'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,128): warning C4244:         with
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,128): warning C4244:         [
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,128): warning C4244:             T=float
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,128): warning C4244:         ]
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,114): warning C4244:  'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,114): warning C4244:         with
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,114): warning C4244:         [
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,114): warning C4244:             T=float
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,114): warning C4244:         ]
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,157): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\SnakeGame\main.cpp(38,143): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-  SnakeGame.vcxproj -> C:\Users\w9036922\Source\repos\SFML-Shapes\SFML Shapes\x64\Debug\SnakeGame.exe
+﻿  Snake.cpp
+  SnakeGame.vcxproj -> C:\Users\w9036922\Source\Snake\x64\Debug\SnakeGame.exe

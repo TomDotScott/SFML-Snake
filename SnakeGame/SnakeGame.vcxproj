@@ -152,15 +152,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="circle.cpp" />
+    <ClCompile Include="Food.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
-    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Snake.cpp" />
+    <ClCompile Include="Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="circle.h" />
-    <ClInclude Include="Rectangle.h" />
-    <ClInclude Include="Shape.h" />
+    <ClInclude Include="Food.h" />
+    <ClInclude Include="Snake.h" />
+    <ClInclude Include="Entity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

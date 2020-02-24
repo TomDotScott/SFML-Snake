@@ -18,24 +18,24 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="circle.cpp">
+    <ClCompile Include="Snake.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rectangle.cpp">
+    <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shape.cpp">
+    <ClCompile Include="Food.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="circle.h">
+    <ClInclude Include="Snake.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rectangle.h">
+    <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shape.h">
+    <ClInclude Include="Food.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
