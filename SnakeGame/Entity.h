@@ -9,7 +9,7 @@ protected:
 public:
 	//setting the virtual function to 0 means it is a 'pure' virtual
 	//this means that the function can only be called by its children
-	//so therefore a Shape cannot exist on its own
+	//so therefore an Entity cannot exist on its own; it needs to be Food or Snake
 	virtual void Render(sf::RenderWindow& window) = 0;
 
 	virtual void Move() = 0;

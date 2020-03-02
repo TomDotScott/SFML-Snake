@@ -10,14 +10,15 @@
 
 // SFML header file for graphics, there are also ones for Audio, Window, System and Network
 #include <SFML/Graphics.hpp>
-#include "circle.h"
+#include "Food.h"
+#include "Game.h"
 #include "Snake.h"
-#include "Entity.h";
+#include "Entity.h"
 
 int main()
 {
 	//seed the random number generator
-	std::srand(time(NULL));
+	std::srand((unsigned int)time(NULL));
 
     // All SFML types and functions are contained in the sf namespace
 
@@ -26,7 +27,9 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "C++ Snake ICA : U0018197");
 
 
-	Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
+	//Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
+
+	Game* game = new Game();
 
     // We can still output to the console window
     std::cout << "SnakeGame: Starting" << std::endl;
@@ -52,7 +55,7 @@ int main()
 
         // We must clear the window each time around the loop
         window.clear();
-		snake->Update(window);
+		game->Update(window);
 
         // Get the window to display its contents
         window.display();

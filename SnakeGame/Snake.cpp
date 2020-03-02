@@ -2,7 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 
-void Snake::Update(sf::RenderWindow & window) {
+void Snake::Update(sf::RenderWindow& window) {
 	Snake::Input();
 	Snake::Move();
 	Snake::Render(window);
@@ -67,7 +67,4 @@ void Snake::Move() {
 	default:
 		break;
 	}
-	
-	std::cout << m_position.x << " " << m_position.y << std::endl;
-
 }
