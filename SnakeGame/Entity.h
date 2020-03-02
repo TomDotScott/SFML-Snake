@@ -7,6 +7,8 @@ protected:
 	sf::Vector2f m_position;
 	sf::Vector2f m_speed;
 public:
+	Entity(sf::Color color, sf::Vector2f position, sf::Vector2f speed);
+
 	//setting the virtual function to 0 means it is a 'pure' virtual
 	//this means that the function can only be called by its children
 	//so therefore an Entity cannot exist on its own; it needs to be Food or Snake

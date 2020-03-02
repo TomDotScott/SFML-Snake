@@ -29,7 +29,7 @@ int main()
 
 	//Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
 
-	Game* game = new Game();
+	Game* game = new Game(window);
 
     // We can still output to the console window
     std::cout << "SnakeGame: Starting" << std::endl;
@@ -55,7 +55,7 @@ int main()
 
         // We must clear the window each time around the loop
         window.clear();
-		game->Update(window);
+		game->Update();
 
         // Get the window to display its contents
         window.display();

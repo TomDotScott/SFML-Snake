@@ -6,12 +6,18 @@ void Snake::Update(sf::RenderWindow& window) {
 	Snake::Input();
 	Snake::Move();
 	Snake::Render(window);
+
+	
 }
 
 void::Snake::Input() {
 	//if the left arrow is pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		if(m_direction != eRight) m_direction = EDirection::eLeft;
+
+		if (m_direction != eRight)
+		{
+			m_direction = EDirection::eLeft;
+		}
 	}
 	//right arrow
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
@@ -33,19 +39,21 @@ void Snake::Render(sf::RenderWindow& window) {
 	window.draw(m_rectangle);
 }
 
-Snake::Snake(sf::Color colour, const sf::Vector2f position, float height, float width, sf::Vector2f speed) {
+Snake::Snake(sf::Color colour, const sf::Vector2f position, float height, sf::Vector2f speed) 
+	: Entity(colour, position, speed),
+	m_height(height)
+{
+	m_speed = speed;
 	m_colour = colour;
 	m_position = position;
-	m_height = height;
-	m_width = width;
-	m_speed = speed;
-	m_rectangle = sf::RectangleShape(sf::Vector2f(m_height, m_width));
+	m_rectangle = sf::RectangleShape(sf::Vector2f(m_height, m_height));
 	m_rectangle.setFillColor(colour);
 	m_rectangle.setPosition(position);
 }
 
 void Snake::Move() {
 	//if the left arrow is pressed
+
 	switch (m_direction)
 	{
 	case eLeft:

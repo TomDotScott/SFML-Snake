@@ -12,4 +12,3 @@ public:
 	void Move(sf::RenderWindow& window);
 	Food(sf::Color colourToBe, sf::Vector2f vector, float radius, sf::Vector2f speedToBe);
 };
-
