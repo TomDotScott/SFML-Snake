@@ -29,9 +29,9 @@ private:
 	SnakeSegments m_segments;
 
 	void Move();
-	void Input();
 	void Render(sf::RenderWindow& window);
 public:
 	Snake(sf::Color colour, sf::Vector2f position, float height, sf::Vector2f speed);
 	void Update(sf::RenderWindow& window);
+	void Input();
 };

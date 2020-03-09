@@ -7,3 +7,7 @@ Game::Game(sf::RenderWindow& window)
 void Game::Update() {
 	m_playerSnake->Update(m_window);
 }
+
+void Game::Input() {
+	m_playerSnake->Input();
+}

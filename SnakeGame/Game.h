@@ -11,5 +11,6 @@ private:
 
 public:
 	void Update();
+	void Input();
 	Game(sf::RenderWindow& window);
 };

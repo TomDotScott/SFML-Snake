@@ -62,6 +62,8 @@ int main()
           }
         }
 
+		game->Input();
+
 		while (clock.getElapsedTime() >= sf::milliseconds(500)) {
 
 			// We must clear the window each time around the loop
