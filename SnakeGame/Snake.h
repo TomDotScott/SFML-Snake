@@ -3,19 +3,31 @@
 #include "Entity.h"
 #include <list>
 
+using SnakeSegments = std::list<sf::Vector2i>;
+
+const int k_Height = 16;
+
 enum EDirection : int
 {
 	eLeft, eRight, eUp, eDown
 };
 
+struct Segment {
+	int x;
+	int y;
+	Segment(int x, int y) : x(x), y(y) {
+		sf::Vector2i(x, y);
+	}
+};
+
 class Snake : public Entity
 {
 private:
-	float m_height{ 1 };
 	EDirection m_direction{ EDirection::eRight };
 	sf::RectangleShape m_rectangle;
 
-	std::list<sf::RectangleShape> m_segments;
+	SnakeSegments m_segments;
+
 	void Move();
 	void Input();
 	void Render(sf::RenderWindow& window);

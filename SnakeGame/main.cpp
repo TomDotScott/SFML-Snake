@@ -14,11 +14,23 @@
 #include "Game.h"
 #include "Snake.h"
 #include "Entity.h"
+#include <vector>
+#include <assert.h>
+#include <time.h>
+
+
+enum class EntityType 
+{
+	Player = 0,
+	Enemy
+};
 
 int main()
-{
+{	
 	//seed the random number generator
 	std::srand((unsigned int)time(NULL));
+
+	sf::Clock clock;
 
     // All SFML types and functions are contained in the sf namespace
 
@@ -47,18 +59,22 @@ int main()
             case sf::Event::Closed:
               window.close();
             break;
-            default:
-              break;
           }
         }
 
+		while (clock.getElapsedTime() >= sf::milliseconds(500)) {
 
-        // We must clear the window each time around the loop
-        window.clear();
-		game->Update();
+			// We must clear the window each time around the loop
+			window.clear();
 
-        // Get the window to display its contents
-        window.display();
+			game->Update();
+
+			// Get the window to display its contents
+			window.display();
+			clock.restart();
+		}
+
+
     }
 
     std::cout << "SnakeGame: Finished" << std::endl;
