@@ -9,6 +9,5 @@ private:
 	sf::CircleShape m_circle;
 public:
 	void Render(sf::RenderWindow& window);
-	void Move(sf::RenderWindow& window);
 	Food(sf::Color colourToBe, sf::Vector2f vector, float radius, sf::Vector2f speedToBe);
 };

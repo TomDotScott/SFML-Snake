@@ -4,7 +4,6 @@
 #include <assert.h>
 
 void Snake::Update(sf::RenderWindow& window) {
-	Snake::Input();
 	Snake::Move();
 	Snake::Render(window);
 }
@@ -81,4 +80,11 @@ void Snake::Move() {
 
 	m_segments.pop_back();
 	m_segments.push_front(sf::Vector2i(m_position.x, m_position.y));
+}
+
+void Snake::Grow(int amount)
+{
+	for (int i = 0; i < amount; ++i) {
+		m_segments.push_back(sf::Vector2i(m_position.x, m_position.y));
+	}
 }

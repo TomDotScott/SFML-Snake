@@ -28,8 +28,12 @@ private:
 
 	SnakeSegments m_segments;
 
-	void Move();
-	void Render(sf::RenderWindow& window);
+	void Move() override final;
+
+	void Grow(int amount);
+
+	void Render(sf::RenderWindow& window) override final;
+
 public:
 	Snake(sf::Color colour, sf::Vector2f position, float height, sf::Vector2f speed);
 	void Update(sf::RenderWindow& window);
