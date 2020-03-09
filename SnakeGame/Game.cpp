@@ -1,11 +1,20 @@
 #include "Game.h"
-Game::Game(sf::RenderWindow& window)
-	: m_window(window) {
-	m_playerSnake = new Snake(sf::Color::Red, sf::Vector2f(400, 300), 10, sf::Vector2f(0.1, 0.1));
+
+Game::Game(sf::RenderWindow& window) : m_window(window) 
+{
+	m_playerSnake = new Snake();
+	//populate the food array
+	for (int i = 0; i < 5; ++i) {
+		Food food;
+		m_foodArray[i] = food;
+	}
 }
 
 void Game::Update() {
 	m_playerSnake->Update(m_window);
+	for (Food food : m_foodArray) {
+		food.Render(m_window);
+	}
 }
 
 void Game::Input() {

@@ -6,7 +6,7 @@ class Game
 {
 private:
 	Snake* m_playerSnake;
-	std::vector<Food> m_food;
+	Food m_foodArray[5];
 	sf::RenderWindow& m_window;
 
 public:

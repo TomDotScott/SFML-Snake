@@ -35,7 +35,7 @@ private:
 	void Render(sf::RenderWindow& window) override final;
 
 public:
-	Snake(sf::Color colour, sf::Vector2f position, float height, sf::Vector2f speed);
+	Snake();
 	void Update(sf::RenderWindow& window);
 	void Input();
 };
