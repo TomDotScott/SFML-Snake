@@ -16,8 +16,8 @@ void Game::CheckCollisions()
 	for (Food& food : m_foodArray) {
 		//only one collision can happen per snake
 		if (food.GetPosition() == m_playerSnake->GetPosition()) {
-			m_playerSnake->Collision("Food");
-			food.RandomisePosition();
+			m_playerSnake->Collision(food);
+			food.Randomise();
 			return;
 		}
 	}

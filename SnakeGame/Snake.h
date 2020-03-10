@@ -2,16 +2,22 @@
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
 #include <list>
+#include "Food.h"
 
 using SnakeSegments = std::list<sf::Vector2i>;
 
-const int k_Height = 20;
-
+//Holds the directions that the snake can travel in
 enum class EDirection
 {
 	eNone, eLeft, eRight, eUp, eDown
 };
 
+//To deal with collisions in the game
+enum class ECollisionType {
+	eWall, eSnake, eSelf, eFood
+};
+
+//Each part of the snake is a position vector called a Segment
 struct Segment {
 	int x;
 	int y;
@@ -41,9 +47,19 @@ private:
 
 public:
 	Snake();
+
 	void Update(sf::RenderWindow& window);
+
 	void Input();
+
 	void CheckCollision();
-	void Collision(std::string collisionType);
+
+	//for colliding with other snakes, itself and walls
+	void Collision(ECollisionType collisionType);
+
+	//For colliding with pickups
+	void Collision(Food& food);
+
 	sf::Vector2f GetPosition() { return m_position; }
+
 };

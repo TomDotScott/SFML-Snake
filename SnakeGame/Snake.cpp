@@ -69,12 +69,12 @@ Snake::Snake()
 
 
 	m_segments.push_back(sf::Vector2i(m_position.x, (m_position.y)));
-	m_segments.push_back(sf::Vector2i(m_position.x - k_Height - 5, (m_position.y)));
-	m_segments.push_back(sf::Vector2i(m_position.x - k_Height - 5, (m_position.y)));
+	m_segments.push_back(sf::Vector2i(m_position.x - Constants::kSnakeBlockSize - 5, (m_position.y)));
+	m_segments.push_back(sf::Vector2i(m_position.x - Constants::kSnakeBlockSize - 5, (m_position.y)));
 
 
 
-	m_rectangle = sf::RectangleShape(sf::Vector2f((float)k_Height, (float)k_Height));
+	m_rectangle = sf::RectangleShape(sf::Vector2f((float)Constants::kSnakeBlockSize, (float)Constants::kSnakeBlockSize));
 	m_rectangle.setFillColor(m_colour);
 	m_rectangle.setPosition(m_position);
 }
@@ -85,16 +85,16 @@ void Snake::Move() {
 	switch (m_direction)
 	{
 	case EDirection::eLeft:
-		m_position.x -= (k_Height + 5);
+		m_position.x -= (Constants::kSnakeBlockSize + 5);
 		break;
 	case EDirection::eRight:
-		m_position.x += (k_Height + 5);
+		m_position.x += (Constants::kSnakeBlockSize + 5);
 		break;
 	case EDirection::eUp:
-		m_position.y -= (k_Height + 5);
+		m_position.y -= (Constants::kSnakeBlockSize + 5);
 		break;
 	case EDirection::eDown:
-		m_position.y += (k_Height + 5);
+		m_position.y += (Constants::kSnakeBlockSize + 5);
 		break;
 	}
 
@@ -115,17 +115,31 @@ void Snake::CheckCollision() {
 	if (m_direction != EDirection::eNone) {
 		for (sf::Vector2i segment : m_segments) {
 			if ((sf::Vector2f)segment == m_position && !m_isDead) {
-				Collision("Self");
+				Collision(ECollisionType::eSelf);
 			}
 		}
 	}
 }
 
-void Snake::Collision(std::string collisionType) {
-	if (collisionType == "Food") {
-		Grow(3);
-	}
-	if (collisionType == "Self") {
+void Snake::Collision(ECollisionType collisionType) {
+	switch (collisionType)
+	{
+	case ECollisionType::eWall:
+		break;
+	case ECollisionType::eSnake:
+		break;
+	case ECollisionType::eSelf:
 		m_isDead = true;
+		break;
+	case ECollisionType::eFood:
+		break;
+	default:
+		break;
 	}
+}
+
+void Snake::Collision(Food& food)
+{
+	std::cout << "+" << food.GetGrowAmount() << std::endl;
+	Grow(food.GetGrowAmount());
 }

@@ -9,14 +9,29 @@ int Food::RandomRange(int min, int max) //range : [min, max)
 
 Food::Food()
 {
-	RandomisePosition();
-
-	m_colour = sf::Color::Green;
-
-	//std::cout << "FOOD POSITION: " << m_position.x << " " << m_position.y << std::endl;
+	Randomise();
 	m_circle = sf::CircleShape(Constants::kSnakeBlockSize / 2);
-	m_circle.setFillColor(m_colour);
-	m_circle.setPosition(m_position);
+}
+
+Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position)
+{
+	Randomise();
+	m_circle = sf::CircleShape(Constants::kSnakeBlockSize / 2);
+}
+
+void Food::Randomise() {
+	//there will be 3 types of pickup. +1, +3 and Gobble Mode
+	int randomType = RandomRange(0, 3);
+	if (randomType == 0) {
+		m_type = eFoodType::eStandard;
+	}
+	else if (randomType == 1) {
+		m_type = eFoodType::eSpecial;
+	}
+	else {
+		m_type = eFoodType::eGobble;
+	}
+	RandomisePosition();
 }
 
 void Food::RandomisePosition()
@@ -47,18 +62,22 @@ void Food::RandomisePosition()
 
 void Food::Render(sf::RenderWindow& window)
 {
+	switch (m_type) 
+	{
+	case eFoodType::eStandard:
+		m_colour = sf::Color::Green;
+		break;
+	case eFoodType::eSpecial:
+		m_colour = sf::Color::Magenta;
+		break;
+	case eFoodType::eGobble:
+		m_colour = sf::Color::Yellow;
+		break;
+	default:
+		break;
+	}
+	m_circle.setPosition(m_position);
+	m_circle.setFillColor(m_colour);
 	window.draw(m_circle);
 }
 
-Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position)
-{
-	m_position = sf::Vector2f(1, 1);
-	RandomisePosition();
-
-	m_colour = sf::Color::Green;
-
-	//std::cout << "FOOD POSITION: " << m_position.x << " " << m_position.y << std::endl;
-	m_circle = sf::CircleShape(Constants::kSnakeBlockSize / 2);
-	m_circle.setFillColor(colour);
-	m_circle.setPosition(position);
-}
