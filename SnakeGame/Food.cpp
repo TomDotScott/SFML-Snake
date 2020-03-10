@@ -22,6 +22,7 @@ Food::Food()
 
 void Food::RandomisePosition()
 {
+	std::cout << "CURRENT FOOD POSITION" << m_position.x << " " << m_position.y << std::endl;
 	std::cout << "RANDOMISING POSITION" << std::endl;
 	do {
 		int random = rand() % 33 + 1;

@@ -38,6 +38,6 @@ public:
 	Snake();
 	void Update(sf::RenderWindow& window);
 	void Input();
-	void Collision(bool hasCollided);
+	void Collision(std::string collisionType);
 	sf::Vector2f GetPosition() { return m_position; }
 };

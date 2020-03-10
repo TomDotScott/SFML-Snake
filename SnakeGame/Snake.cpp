@@ -101,10 +101,8 @@ void Snake::Grow(int amount)
 	}
 }
 
-void Snake::Collision(bool hasCollided) {
-	if (hasCollided) {
-		std::cout << "COLLIDED!" << std::endl;
-
+void Snake::Collision(std::string collisionType) {
+	if (collisionType == "Food") {
 		Grow(3);
 	}
 }

@@ -64,13 +64,13 @@ int main()
 
 		//input and collisions should be done outside of the game tick
 		game->Input();
-		game->CheckCollisions();
+		
 
 		while (clock.getElapsedTime() >= sf::milliseconds(500)) {
 
 			// We must clear the window each time around the loop
 			window.clear();
-
+			game->CheckCollisions();
 			game->Update();
 
 			// Get the window to display its contents

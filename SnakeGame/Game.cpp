@@ -13,7 +13,7 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 
 void Game::CheckCollisions()
 {
-	for (Food food : m_foodArray) {
+	for (Food& food : m_foodArray) {
 		//only one collision can happen per snake
 		if (food.GetPosition() == m_playerSnake->GetPosition()) {
 			m_playerSnake->Collision(true);
@@ -25,8 +25,8 @@ void Game::CheckCollisions()
 
 void Game::Update() {
 	m_playerSnake->Update(m_window);
-	std::cout << "SNAKE POSITION: " << m_playerSnake->GetPosition().x << " " << m_playerSnake->GetPosition().y << std::endl;
-	for (Food food : m_foodArray) {
+	//std::cout << "SNAKE POSITION: " << m_playerSnake->GetPosition().x << " " << m_playerSnake->GetPosition().y << std::endl;
+	for (Food& food : m_foodArray) {
 		food.Render(m_window);
 	}
 }
