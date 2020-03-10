@@ -6,10 +6,10 @@
     SFML documentation: https://www.sfml-dev.org/learn.php
 */
 
-#include <iostream>
 
 // SFML header file for graphics, there are also ones for Audio, Window, System and Network
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Food.h"
 #include "Game.h"
 #include "Snake.h"
@@ -17,13 +17,7 @@
 #include <vector>
 #include <assert.h>
 #include <time.h>
-
-
-enum class EntityType 
-{
-	Player = 0,
-	Enemy
-};
+#include "Constants.h"
 
 int main()
 {	
@@ -36,7 +30,7 @@ int main()
 
     // Create an instance of the SFML RenderWindow type which represents the display
     // and initialise its size and title text
-    sf::RenderWindow window(sf::VideoMode(800, 600), "C++ Snake ICA - Thomas Scott : W9036922");
+    sf::RenderWindow window(sf::VideoMode(Constants::kScreenWidth, Constants::kScreenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
 
 
 	//Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
@@ -77,8 +71,6 @@ int main()
 			window.display();
 			clock.restart();
 		}
-
-
     }
 
     std::cout << "SnakeGame: Finished" << std::endl;

@@ -1,14 +1,15 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
-
-const float k_Radius = 9;
+#include "Constants.h"
 
 class Food : public Entity
 {
 private:
-	float m_radius = k_Radius;
 	sf::CircleShape m_circle;
+
+	int random(int min, int max);
+
 public:
 	Food();
 
@@ -20,3 +21,5 @@ public:
 
 	sf::Vector2f GetPosition() { return m_position; }
 };
+
+
