@@ -5,11 +5,11 @@
 
 using SnakeSegments = std::list<sf::Vector2i>;
 
-const int k_Height = 16;
+const int k_Height = 20;
 
-enum EDirection : int
+enum class EDirection
 {
-	eLeft, eRight, eUp, eDown
+	eNone, eLeft, eRight, eUp, eDown
 };
 
 struct Segment {
@@ -23,7 +23,7 @@ struct Segment {
 class Snake : public Entity
 {
 private:
-	EDirection m_direction{ EDirection::eRight };
+	EDirection m_direction{ EDirection::eNone };
 	sf::RectangleShape m_rectangle;
 
 	SnakeSegments m_segments;
@@ -38,4 +38,6 @@ public:
 	Snake();
 	void Update(sf::RenderWindow& window);
 	void Input();
+	void Collision(bool hasCollided);
+	sf::Vector2f GetPosition() { return m_position; }
 };

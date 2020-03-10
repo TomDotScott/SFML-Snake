@@ -36,7 +36,7 @@ int main()
 
     // Create an instance of the SFML RenderWindow type which represents the display
     // and initialise its size and title text
-    sf::RenderWindow window(sf::VideoMode(800, 600), "C++ Snake ICA : U0018197");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "C++ Snake ICA - Thomas Scott : W9036922");
 
 
 	//Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
@@ -62,7 +62,9 @@ int main()
           }
         }
 
+		//input and collisions should be done outside of the game tick
 		game->Input();
+		game->CheckCollisions();
 
 		while (clock.getElapsedTime() >= sf::milliseconds(500)) {
 

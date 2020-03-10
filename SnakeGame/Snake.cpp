@@ -12,22 +12,22 @@ void::Snake::Input() {
 	//if the left arrow is pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 
-		if (m_direction != eRight)
+		if (m_direction != EDirection::eRight)
 		{
 			m_direction = EDirection::eLeft;
 		}
 	}
 	//right arrow
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		if (m_direction != eLeft) m_direction = EDirection::eRight;
+		if (m_direction != EDirection::eLeft) m_direction = EDirection::eRight;
 	}
 	//if the up arrow is pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		if (m_direction != eDown) m_direction = EDirection::eUp;
+		if (m_direction != EDirection::eDown) m_direction = EDirection::eUp;
 	}
 	//down arrow
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		if (m_direction != eUp) m_direction = EDirection::eDown;
+		if (m_direction != EDirection::eUp) m_direction = EDirection::eDown;
 	}
 }
 
@@ -44,17 +44,19 @@ Snake::Snake()
 	m_colour = sf::Color::Red;
 	int random{ 0 };
 
-	while (m_position.x < 700 && m_position.x > 100) {
+	do {
 		//Generate a random x position 
-		random = rand() % 44 + 1;
-		m_position.x = random * 18;
-	}
+		random = rand() % 32 + 1;
+		m_position.x = random * 25;
+	} while (m_position.x <= 700 && m_position.x >= 100);
 
-	while (m_position.y < 500 && m_position.y > 100) {
+
+	do {
 		//Generate a random y position 
-		random = rand() % 33 + 1;
-		m_position.y = random * 18;
-	}
+		random = rand() % 24 + 1;
+		m_position.y = random * 25;
+	} while (m_position.y <= 500 && m_position.y >= 100);
+
 
 	m_segments.push_back(sf::Vector2i(m_position.x, (m_position.y)));
 	m_segments.push_back(sf::Vector2i(m_position.x - k_Height - 5, (m_position.y)));
@@ -72,16 +74,16 @@ void Snake::Move() {
 
 	switch (m_direction)
 	{
-	case eLeft:
+	case EDirection::eLeft:
 		m_position.x -= (k_Height + 5);
 		break;
-	case eRight:
+	case EDirection::eRight:
 		m_position.x += (k_Height + 5);
 		break;
-	case eUp:
+	case EDirection::eUp:
 		m_position.y -= (k_Height + 5);
 		break;
-	case eDown:
+	case EDirection::eDown:
 		m_position.y += (k_Height + 5);
 		break;
 	//default:
@@ -96,5 +98,13 @@ void Snake::Grow(int amount)
 {
 	for (int i = 0; i < amount; ++i) {
 		m_segments.push_back(sf::Vector2i(m_position.x, m_position.y));
+	}
+}
+
+void Snake::Collision(bool hasCollided) {
+	if (hasCollided) {
+		std::cout << "COLLIDED!" << std::endl;
+
+		Grow(3);
 	}
 }
