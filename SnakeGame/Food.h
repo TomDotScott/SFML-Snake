@@ -35,11 +35,11 @@ public:
 		switch (m_type)
 		{
 		case eFoodType::eStandard:
-			return 1;
+			return Constants::kStandardGrowAmount;
 		case eFoodType::eSpecial:
-			return 3;
+			return Constants::kSpecialGrowAmount;
 		case eFoodType::eGobble:
-			return 5;
+			return Constants::kGobbleGrowAmount;
 		}
 	}
 };
