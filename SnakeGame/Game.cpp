@@ -24,11 +24,12 @@ void Game::CheckCollisions()
 }
 
 void Game::Update() {
-	m_playerSnake->Update(m_window);
 	//std::cout << "SNAKE POSITION: " << m_playerSnake->GetPosition().x << " " << m_playerSnake->GetPosition().y << std::endl;
 	for (Food& food : m_foodArray) {
 		food.Render(m_window);
 	}
+	m_playerSnake->Update(m_window);
+
 }
 
 void Game::Input() {
