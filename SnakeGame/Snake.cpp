@@ -33,9 +33,11 @@ void::Snake::Input() {
 
 
 void Snake::Render(sf::RenderWindow& window) {
-	for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr) {
-		m_rectangle.setPosition(sf::Vector2f(itr->x, itr->y));
-		window.draw(m_rectangle);
+	if (!m_isDead) {
+		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr) {
+			m_rectangle.setPosition(sf::Vector2f(itr->x, itr->y));
+			window.draw(m_rectangle);
+		}
 	}
 }
 
@@ -86,10 +88,9 @@ void Snake::Move() {
 	case EDirection::eDown:
 		m_position.y += (k_Height + 5);
 		break;
-	//default:
-	//	break;
 	}
 
+	CheckCollision();
 	m_segments.pop_back();
 	m_segments.push_front(sf::Vector2i(m_position.x, m_position.y));
 }
@@ -101,8 +102,22 @@ void Snake::Grow(int amount)
 	}
 }
 
+//check whether a snake has collided with itself
+void Snake::CheckCollision() {
+	if (m_direction != EDirection::eNone) {
+		for (sf::Vector2i segment : m_segments) {
+			if ((sf::Vector2f)segment == m_position && !m_isDead) {
+				Collision("Self");
+			}
+		}
+	}
+}
+
 void Snake::Collision(std::string collisionType) {
 	if (collisionType == "Food") {
 		Grow(3);
+	}
+	if (collisionType == "Self") {
+		m_isDead = true;
 	}
 }

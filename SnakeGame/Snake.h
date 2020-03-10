@@ -24,9 +24,12 @@ class Snake : public Entity
 {
 private:
 	EDirection m_direction{ EDirection::eNone };
+
 	sf::RectangleShape m_rectangle;
 
 	SnakeSegments m_segments;
+
+	bool m_isDead{ false };
 
 	void Move() override final;
 
@@ -38,6 +41,7 @@ public:
 	Snake();
 	void Update(sf::RenderWindow& window);
 	void Input();
+	void CheckCollision();
 	void Collision(std::string collisionType);
 	sf::Vector2f GetPosition() { return m_position; }
 };
