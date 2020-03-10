@@ -36,6 +36,8 @@ private:
 	void Grow(int amount);
 
 	void Render(sf::RenderWindow& window) override final;
+	
+	int RandomRange(int min, int max);
 
 public:
 	Snake();

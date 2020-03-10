@@ -2,6 +2,12 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 #include <assert.h>
+#include "Constants.h"
+
+int Snake::RandomRange(int min, int max) //range : [min, max)
+{
+	return min + rand() % ((max + 1) - min);
+}
 
 void Snake::Update(sf::RenderWindow& window) {
 	Snake::Move();
@@ -44,20 +50,22 @@ void Snake::Render(sf::RenderWindow& window) {
 Snake::Snake()
 {
 	m_colour = sf::Color::Red;
-	int random{ 0 };
 
-	do {
-		//Generate a random x position 
-		random = rand() % 32 + 1;
-		m_position.x = random * 25;
-	} while (m_position.x <= 700 && m_position.x >= 100);
+	int randomNumber = RandomRange(4, (int)(Constants::kScreenWidth - 100) / Constants::kSnakeBlockSize);
+	if (randomNumber * 25 >= Constants::kScreenWidth - 100) {
+		m_position.x = Constants::kScreenWidth - 100;
+	}
+	else {
+		m_position.x = randomNumber * 25;
+	}
 
-
-	do {
-		//Generate a random y position 
-		random = rand() % 24 + 1;
-		m_position.y = random * 25;
-	} while (m_position.y <= 500 && m_position.y >= 100);
+	randomNumber = RandomRange(4, (int)(Constants::kScreenHeight - 100) / Constants::kSnakeBlockSize);
+	if (randomNumber * 25 >= Constants::kScreenHeight - 100) {
+		m_position.y = Constants::kScreenHeight - 100;
+	}
+	else {
+		m_position.y = randomNumber * 25;
+	}
 
 
 	m_segments.push_back(sf::Vector2i(m_position.x, (m_position.y)));

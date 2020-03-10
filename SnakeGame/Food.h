@@ -7,9 +7,7 @@ class Food : public Entity
 {
 private:
 	sf::CircleShape m_circle;
-
-	int random(int min, int max);
-
+	int RandomRange(int min, int max);
 public:
 	Food();
 

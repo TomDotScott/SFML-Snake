@@ -2,7 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 
-int randomRange(int min, int max) //range : [min, max)
+int Food::RandomRange(int min, int max) //range : [min, max)
 {
 	return min + rand() % ((max + 1) - min);
 }
@@ -24,7 +24,7 @@ void Food::RandomisePosition()
 	//Find a random grid position
 	//generate column number
 
-	int randomNumber = randomRange(4, (int)(Constants::kScreenWidth - 100) / Constants::kSnakeBlockSize);
+	int randomNumber = RandomRange(4, (int)(Constants::kScreenWidth - 100) / Constants::kSnakeBlockSize);
 	if (randomNumber * 25 >= Constants::kScreenWidth - 100) {
 		m_position.x = Constants::kScreenWidth - 100;
 	}
@@ -32,7 +32,7 @@ void Food::RandomisePosition()
 		m_position.x = randomNumber * 25;
 	}
 
-	randomNumber = randomRange(4, (int)(Constants::kScreenHeight - 100) / Constants::kSnakeBlockSize);
+	randomNumber = RandomRange(4, (int)(Constants::kScreenHeight - 100) / Constants::kSnakeBlockSize);
 	if (randomNumber * 25 >= Constants::kScreenHeight - 100) {
 		m_position.y = Constants::kScreenHeight - 100;
 	}
