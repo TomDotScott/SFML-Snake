@@ -1,12 +1,13 @@
 #pragma once
 #include "Snake.h"
+#include "PlayerSnake.h"
 #include "Entity.h"
 #include "Food.h"
 
 class Game
 {
 private:
-	Snake* m_playerSnake;
+	PlayerSnake* m_playerSnake;
 	Food m_foodArray[5];
 	sf::RenderWindow& m_window;
 public:

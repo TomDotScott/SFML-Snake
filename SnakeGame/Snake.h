@@ -28,7 +28,7 @@ struct Segment {
 
 class Snake : public Entity
 {
-private:
+protected:
 	EDirection m_direction{ EDirection::eNone };
 
 	sf::RectangleShape m_rectangle;
@@ -37,7 +37,7 @@ private:
 
 	bool m_isDead{ false };
 
-	void Move() override final;
+	void Move();
 
 	void Grow(int amount);
 
@@ -49,8 +49,6 @@ public:
 	Snake();
 
 	void Update(sf::RenderWindow& window);
-
-	void Input();
 
 	void CheckCollision();
 

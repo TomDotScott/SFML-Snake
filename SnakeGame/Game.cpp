@@ -3,7 +3,7 @@
 
 Game::Game(sf::RenderWindow& window) : m_window(window) 
 {
-	m_playerSnake = new Snake();
+	m_playerSnake = new PlayerSnake();
 	//populate the food array
 	for (int i = 0; i < 5; ++i) {
 		Food food;
