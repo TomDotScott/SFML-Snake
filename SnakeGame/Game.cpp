@@ -61,8 +61,17 @@ void Game::CheckCollisions()
 	for (sf::Vector2f& playerSegment : m_playerSnake->GetSnakeSegments()) {
 		for (AISnake* aiSnake : m_AISnakes) {
 			if (!aiSnake->GetIsDead()) {
+				//Checks if an AI snake hits the player's body
 				if (playerSegment == aiSnake->GetHeadPosition()) {
-					m_playerSnake->Collision(ECollisionType::eSnake);
+					aiSnake->Collision(ECollisionType::eSnake);
+					return;
+				}
+				//Check if the player hits an AI Snake's body
+				for (sf::Vector2f& aiSegment : aiSnake->GetSnakeSegments()) {
+					if (aiSegment == m_playerSnake->GetHeadPosition()) {
+						m_playerSnake->Collision(ECollisionType::eSnake);
+						return;
+					}
 				}
 			}
 		}
