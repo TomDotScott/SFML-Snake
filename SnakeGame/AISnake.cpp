@@ -71,6 +71,11 @@ void AISnake::CheckCollision()
 							return;
 						}
 					}
+					//If head-on collisions, they both die
+					if (m_position == otherSnake->GetHeadPosition()) {
+						Collision(ECollisionType::eSnake);
+						otherSnake->Collision(ECollisionType::eSnake);
+					}
 				}
 			}
 		}
