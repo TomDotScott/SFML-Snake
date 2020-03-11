@@ -22,20 +22,27 @@ void Game::CheckCollisions()
 	for (Food& food : m_foodArray) {
 		//only one collision can happen per snake
 		for (AISnake* aiSnake : m_AISnakes) {
-			if (food.GetPosition() == aiSnake->GetPosition()) {
+			if (food.GetPosition() == aiSnake->GetHeadPosition()) {
 				aiSnake->Collision(food);
 				food.Randomise();
 				break;
 			}
 		}
-		//Check the player
-		if (food.GetPosition() == m_playerSnake->GetPosition()) {
+		//Check the player against food
+		if (food.GetPosition() == m_playerSnake->GetHeadPosition()) {
 			m_playerSnake->Collision(food);
 			food.Randomise();
 			break;
 		}
 	}
-	//Check Against other Snakes
+	//Check against other snakes
+	for (sf::Vector2f& playerSegment : m_playerSnake->GetSnakeSegments()) {
+		for (AISnake* aiSnake : m_AISnakes) {
+			if ((sf::Vector2f)playerSegment == aiSnake->GetHeadPosition()) {
+				m_playerSnake->Collision(ECollisionType::eSnake);
+			}
+		}
+	}
 }
 
 void Game::Update() {
@@ -51,6 +58,12 @@ void Game::Update() {
 	}
 
 	m_playerSnake->Update(m_window);
+
+	//Draw the Walls
+	m_window.draw(m_topWall.m_wall);
+	m_window.draw(m_bottomWall.m_wall);
+	m_window.draw(m_leftWall.m_wall);
+	m_window.draw(m_rightWall.m_wall);
 
 }
 
