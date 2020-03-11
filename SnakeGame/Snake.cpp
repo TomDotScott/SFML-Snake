@@ -77,19 +77,26 @@ void Snake::CheckCollision() {
 }
 
 void Snake::Collision(ECollisionType collisionType) {
-	switch (collisionType)
-	{
-	case ECollisionType::eWall:
-		break;
-	case ECollisionType::eSnake:
-		break;
-	case ECollisionType::eSelf:
-		m_isDead = true;
-		break;
-	case ECollisionType::eFood:
-		break;
-	default:
-		break;
+	if (!m_isDead) {
+		switch (collisionType)
+		{
+		case ECollisionType::eWall:
+			std::cout << "I HIT A WALL" << std::endl;
+			m_isDead = true;
+			break;
+		case ECollisionType::eSnake:
+			std::cout << "I HIT ANOTHER SNAKE" << std::endl;
+			m_isDead = true;
+			break;
+		case ECollisionType::eSelf:
+			std::cout << "I HIT MYSELF" << std::endl;
+			m_isDead = true;
+			break;
+		case ECollisionType::eFood:
+			break;
+		default:
+			break;
+		}
 	}
 }
 

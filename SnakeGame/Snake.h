@@ -60,6 +60,8 @@ public:
 
 	sf::Vector2f GetHeadPosition() { return m_position; }
 
+	bool GetIsDead() { return m_isDead; }
+
 	SnakeSegments GetSnakeSegments() { return m_segments; }
 
 };
