@@ -79,5 +79,42 @@ void AISnake::CheckCollision()
 				}
 			}
 		}
+		CheckCollisionAgainstSelf();
+	}
+}
+
+void AISnake::CheckCollisionAgainstSelf()
+{
+	for(sf::Vector2f& segment : m_segments)
+	{
+		switch (m_direction)
+		{
+		case EDirection::e_left:
+			if(sf::Vector2f(m_position.x - Constants::k_snakeBlockSize + 5, m_position.y) == segment)
+			{
+				Collision(ECollisionType::e_self);
+			}
+			break;
+		case EDirection::e_right:
+			if (sf::Vector2f(m_position.x + Constants::k_snakeBlockSize + 5, m_position.y) == segment)
+			{
+				Collision(ECollisionType::e_self);
+			}
+			break;
+		case EDirection::e_up:
+			if (sf::Vector2f(m_position.x, m_position.y - Constants::k_snakeBlockSize + 5) == segment)
+			{
+				Collision(ECollisionType::e_self);
+			}
+			break;
+		case EDirection::e_down:
+			if (sf::Vector2f(m_position.x, m_position.y + Constants::k_snakeBlockSize + 5) == segment)
+			{
+				Collision(ECollisionType::e_self);
+			}
+			break;
+		default:
+			break;
+		}
 	}
 }

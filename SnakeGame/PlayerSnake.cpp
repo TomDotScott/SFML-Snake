@@ -33,19 +33,19 @@ PlayerSnake::PlayerSnake() {
 
 void::PlayerSnake::Input() {
 	//if the left arrow is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		if (m_direction != EDirection::e_right) m_direction = EDirection::e_left;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && m_direction != EDirection::e_right) {
+		m_direction = EDirection::e_left;
 	}
 	//right arrow
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		if (m_direction != EDirection::e_left) m_direction = EDirection::e_right;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && m_direction != EDirection::e_left) {
+		m_direction = EDirection::e_right;
 	}
 	//if the up arrow is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		if (m_direction != EDirection::e_down) m_direction = EDirection::e_up;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_direction != EDirection::e_down){
+		m_direction = EDirection::e_up;
 	}
 	//down arrow
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		if (m_direction != EDirection::e_up) m_direction = EDirection::e_down;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && m_direction != EDirection::e_up) {
+		m_direction = EDirection::e_down;
 	}
 }

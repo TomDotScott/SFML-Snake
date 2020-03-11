@@ -60,7 +60,7 @@ void Snake::Move() {
 	m_segments.push_front(sf::Vector2f(m_position.x, m_position.y));
 }
 
-void Snake::Grow(int amount)
+void Snake::Grow(const int amount)
 {
 	for (int i = 0; i < amount; ++i) {
 		m_segments.push_back(sf::Vector2f(m_position.x, m_position.y));
@@ -78,7 +78,7 @@ void Snake::CheckCollision() {
 	}
 }
 
-void Snake::Collision(ECollisionType collisionType) {
+void Snake::Collision(const ECollisionType collisionType) {
 	if (!m_isDead) {
 		switch (collisionType)
 		{

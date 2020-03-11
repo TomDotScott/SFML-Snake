@@ -13,7 +13,7 @@ Food::Food()
 	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
 }
 
-Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position), m_type(eFoodType::eStandard)
+Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position), m_type(eFoodType::e_standard)
 {
 	Randomise();
 	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
@@ -24,15 +24,15 @@ void Food::Randomise() {
 	const int randomType = RandomRange(0, 100);
 	//60% chance of being standard
 	if (randomType <= 60) {
-		m_type = eFoodType::eStandard;
+		m_type = eFoodType::e_standard;
 	}
 	//30% chance of being Special
 	else if (randomType <= 90) {
-		m_type = eFoodType::eSpecial;
+		m_type = eFoodType::e_special;
 	}
 	//10% chance of being Gobble Mode
 	else {
-		m_type = eFoodType::eGobble;
+		m_type = eFoodType::e_gobble;
 	}
 	RandomisePosition();
 }
@@ -43,20 +43,12 @@ void Food::RandomisePosition()
 	//generate column number
 
 	int randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize));
-	if (randomNumber * 25 >= Constants::k_screenWidth - 100) {
-		m_position.x = Constants::k_screenWidth - 100;
-	}
-	else {
-		m_position.x = randomNumber * 25;
-	}
+
+	m_position.x = randomNumber * 25 >= Constants::k_screenWidth - 100 ? Constants::k_screenWidth - 100 : randomNumber * 25;
 
 	randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize));
-	if (randomNumber * 25 >= Constants::k_screenHeight - 100) {
-		m_position.y = Constants::k_screenHeight - 100;
-	}
-	else {
-		m_position.y = randomNumber * 25;
-	}
+
+	m_position.y = randomNumber * 25 >= Constants::k_screenHeight - 100 ? Constants::k_screenHeight - 100 : randomNumber * 25;
 
 	std::cout << "FOOD LOCATION: " << m_position.x << " " << m_position.y << std::endl;
 
@@ -67,13 +59,13 @@ void Food::Render(sf::RenderWindow& window)
 {
 	switch (m_type) 
 	{
-	case eFoodType::eStandard:
+	case eFoodType::e_standard:
 		m_colour = sf::Color::Green;
 		break;
-	case eFoodType::eSpecial:
+	case eFoodType::e_special:
 		m_colour = sf::Color::Magenta;
 		break;
-	case eFoodType::eGobble:
+	case eFoodType::e_gobble:
 		m_colour = sf::Color::Yellow;
 		break;
 	default:

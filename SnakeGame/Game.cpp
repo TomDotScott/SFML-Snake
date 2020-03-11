@@ -5,9 +5,10 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 {
 	m_playerSnake = new PlayerSnake();
 	//populate the food array
-	for (int i = 0; i < 5; ++i) {
+	for (auto& i : m_foodArray)
+	{
 		Food food;
-		m_foodArray[i] = food;
+		i = food;
 	}
 	//populate the AISnake Vector
 	for (int i = 0; i < m_AISnakeAmount; ++i) {
@@ -17,9 +18,9 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 
 	//Make each AI snake have a reference to each other
 	for (int snakePosition = 0; snakePosition < m_AISnakes.size(); ++snakePosition) {
-		for (AISnake* AISnakeToAdd : m_AISnakes) {
-			if (snakePosition != AISnakeToAdd->GetPlayerNumber()) {
-				m_AISnakes[snakePosition]->SetOtherSnakes(AISnakeToAdd);
+		for (AISnake* aiSnakeToAdd : m_AISnakes) {
+			if (snakePosition != aiSnakeToAdd->GetPlayerNumber()) {
+				m_AISnakes[snakePosition]->SetOtherSnakes(aiSnakeToAdd);
 			}
 		}
 	}
@@ -28,23 +29,19 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 void Game::CheckCollisions()
 {
 	//Check against Walls
-	if (!m_playerSnake->GetIsDead()) {
-		if (m_playerSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
-			m_playerSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
-			m_playerSnake->GetHeadPosition().y == m_topWall.m_position.y ||
-			m_playerSnake->GetHeadPosition().y == m_bottomWall.m_position.y) {
-			m_playerSnake->Collision(ECollisionType::e_wall);
-		}
+	if (!m_playerSnake->GetIsDead() && (m_playerSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
+		m_playerSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
+		m_playerSnake->GetHeadPosition().y == m_topWall.m_position.y ||
+		m_playerSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
+		m_playerSnake->Collision(ECollisionType::e_wall);
 	}
 
 	for (AISnake* aiSnake : m_AISnakes) {
-		if (!aiSnake->GetIsDead()) {
-			if (aiSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
-				aiSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
-				aiSnake->GetHeadPosition().y == m_topWall.m_position.y ||
-				aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y) {
-				aiSnake->Collision(ECollisionType::e_wall);
-			}
+		if (!aiSnake->GetIsDead() && (aiSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
+			aiSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
+			aiSnake->GetHeadPosition().y == m_topWall.m_position.y ||
+			aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
+			aiSnake->Collision(ECollisionType::e_wall);
 		}
 	}
 
@@ -52,12 +49,10 @@ void Game::CheckCollisions()
 	for (Food& food : m_foodArray) {
 		//only one collision can happen per snake
 		for (AISnake* aiSnake : m_AISnakes) {
-			if (!aiSnake->GetIsDead()) {
-				if (food.GetPosition() == aiSnake->GetHeadPosition()) {
-					aiSnake->Collision(food);
-					food.Randomise();
-					break;
-				}
+			if (!aiSnake->GetIsDead() && food.GetPosition() == aiSnake->GetHeadPosition()) {
+				aiSnake->Collision(food);
+				food.Randomise();
+				break;
 			}
 		}
 		//Check the player against food
@@ -70,8 +65,7 @@ void Game::CheckCollisions()
 	//Check against other snakes
 	for (sf::Vector2f& playerSegment : m_playerSnake->GetSnakeSegments()) {
 		for (AISnake* aiSnake : m_AISnakes) {
-			if (!aiSnake->GetIsDead() && !m_playerSnake->GetIsDead()) {
-				//Checks if an AI snake hits the player's body
+			if (!aiSnake->GetIsDead() && !m_playerSnake->GetIsDead()) {//Checks if an AI snake hits the player's body
 				if (playerSegment == aiSnake->GetHeadPosition()) {
 					aiSnake->Collision(ECollisionType::e_snake);
 					return;
@@ -96,7 +90,6 @@ void Game::CheckCollisions()
 }
 
 void Game::Update() {
-	//std::cout << "SNAKE POSITION: " << m_playerSnake->GetPosition().x << " " << m_playerSnake->GetPosition().y << std::endl;
 	for (Food& food : m_foodArray) {
 		food.Render(m_window);
 	}
