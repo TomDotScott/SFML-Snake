@@ -10,18 +10,18 @@ int Food::RandomRange(int min, int max) //range : [min, max)
 Food::Food()
 {
 	Randomise();
-	m_circle = sf::CircleShape(Constants::kSnakeBlockSize / 2);
+	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
 }
 
-Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position)
+Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position), m_type(eFoodType::eStandard)
 {
 	Randomise();
-	m_circle = sf::CircleShape(Constants::kSnakeBlockSize / 2);
+	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
 }
 
 void Food::Randomise() {
 	//there will be 3 types of pickup. Standard, Special and Gobble Mode
-	int randomType = RandomRange(0, 100);
+	const int randomType = RandomRange(0, 100);
 	//60% chance of being standard
 	if (randomType <= 60) {
 		m_type = eFoodType::eStandard;
@@ -42,17 +42,17 @@ void Food::RandomisePosition()
 	//Find a random grid position
 	//generate column number
 
-	int randomNumber = RandomRange(4, (int)(Constants::kScreenWidth - 100) / Constants::kSnakeBlockSize);
-	if (randomNumber * 25 >= Constants::kScreenWidth - 100) {
-		m_position.x = Constants::kScreenWidth - 100;
+	int randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize));
+	if (randomNumber * 25 >= Constants::k_screenWidth - 100) {
+		m_position.x = Constants::k_screenWidth - 100;
 	}
 	else {
 		m_position.x = randomNumber * 25;
 	}
 
-	randomNumber = RandomRange(4, (int)(Constants::kScreenHeight - 100) / Constants::kSnakeBlockSize);
-	if (randomNumber * 25 >= Constants::kScreenHeight - 100) {
-		m_position.y = Constants::kScreenHeight - 100;
+	randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize));
+	if (randomNumber * 25 >= Constants::k_screenHeight - 100) {
+		m_position.y = Constants::k_screenHeight - 100;
 	}
 	else {
 		m_position.y = randomNumber * 25;

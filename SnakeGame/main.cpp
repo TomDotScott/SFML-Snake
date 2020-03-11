@@ -22,7 +22,7 @@
 int main()
 {	
 	//seed the random number generator
-	std::srand((unsigned int)time(NULL));
+	std::srand(static_cast<unsigned int>(time(NULL)));
 
 	sf::Clock clock;
 
@@ -30,7 +30,7 @@ int main()
 
     // Create an instance of the SFML RenderWindow type which represents the display
     // and initialise its size and title text
-    sf::RenderWindow window(sf::VideoMode(Constants::kScreenWidth, Constants::kScreenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
+    sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
 
 
 	//Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
@@ -45,7 +45,7 @@ int main()
     {
         // Handle any pending SFML events
         // These cover keyboard, mouse,joystick etc.
-        sf::Event event;
+        sf::Event event{};
         while (window.pollEvent(event))
         {
           switch(event.type)
@@ -53,6 +53,7 @@ int main()
             case sf::Event::Closed:
               window.close();
             break;
+			default: std::cout << "CRASH" << std::endl;
           }
         }
 

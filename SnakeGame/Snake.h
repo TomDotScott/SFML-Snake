@@ -9,19 +9,19 @@ using SnakeSegments = std::list<sf::Vector2f>;
 //Holds the directions that the snake can travel in
 enum class EDirection
 {
-	eNone, eLeft, eRight, eUp, eDown
+	e_none, e_left, e_right, e_up, e_down
 };
 
 //To deal with collisions in the game
 enum class ECollisionType {
-	eWall, eSnake, eSelf, eFood
+	e_wall, e_snake, e_self, e_food
 };
 
 //Each part of the snake is a position vector called a Segment
 struct Segment {
 	int x;
 	int y;
-	Segment(int x, int y) : x(x), y(y) {
+	Segment(const int x, const int y) : x(x), y(y) {
 		sf::Vector2i(x, y);
 	}
 };
@@ -29,7 +29,7 @@ struct Segment {
 class Snake : public Entity
 {
 protected:
-	EDirection m_direction{ EDirection::eNone };
+	EDirection m_direction{ EDirection::e_none };
 
 	sf::RectangleShape m_rectangle;
 
@@ -37,20 +37,20 @@ protected:
 
 	bool m_isDead{ false };
 
-	void Move();
+	void Move() override;
 
 	void Grow(int amount);
 
 	void Render(sf::RenderWindow& window) override final;
-	
-	int RandomRange(int min, int max);
+
+	static int RandomRange(int min, int max);
 
 public:
 	Snake();
 
 	void Update(sf::RenderWindow& window);
 
-	void CheckCollision();
+	virtual void CheckCollision();
 
 	//for colliding with other snakes, itself and walls
 	void Collision(ECollisionType collisionType);

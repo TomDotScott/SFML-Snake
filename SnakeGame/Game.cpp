@@ -33,7 +33,7 @@ void Game::CheckCollisions()
 			m_playerSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
 			m_playerSnake->GetHeadPosition().y == m_topWall.m_position.y ||
 			m_playerSnake->GetHeadPosition().y == m_bottomWall.m_position.y) {
-			m_playerSnake->Collision(ECollisionType::eWall);
+			m_playerSnake->Collision(ECollisionType::e_wall);
 		}
 	}
 
@@ -43,7 +43,7 @@ void Game::CheckCollisions()
 				aiSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
 				aiSnake->GetHeadPosition().y == m_topWall.m_position.y ||
 				aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y) {
-				aiSnake->Collision(ECollisionType::eWall);
+				aiSnake->Collision(ECollisionType::e_wall);
 			}
 		}
 	}
@@ -73,20 +73,20 @@ void Game::CheckCollisions()
 			if (!aiSnake->GetIsDead() && !m_playerSnake->GetIsDead()) {
 				//Checks if an AI snake hits the player's body
 				if (playerSegment == aiSnake->GetHeadPosition()) {
-					aiSnake->Collision(ECollisionType::eSnake);
+					aiSnake->Collision(ECollisionType::e_snake);
 					return;
 				}
 				//Check if the player hits an AI Snake's body
 				for (sf::Vector2f& aiSegment : aiSnake->GetSnakeSegments()) {
 					if (aiSegment == m_playerSnake->GetHeadPosition()) {
-						m_playerSnake->Collision(ECollisionType::eSnake);
+						m_playerSnake->Collision(ECollisionType::e_snake);
 						return;
 					}
 				}
 				//If head on collisions, then both die
 				if (m_playerSnake->GetHeadPosition() == aiSnake->GetHeadPosition()) {
-					m_playerSnake->Collision(ECollisionType::eSnake);
-					aiSnake->Collision(ECollisionType::eSnake);
+					m_playerSnake->Collision(ECollisionType::e_snake);
+					aiSnake->Collision(ECollisionType::e_snake);
 				}
 			}
 			//Check AI Collisions
@@ -117,6 +117,7 @@ void Game::Update() {
 
 }
 
-void Game::Input() {
+void Game::Input() const
+{
 	m_playerSnake->Input();
 }

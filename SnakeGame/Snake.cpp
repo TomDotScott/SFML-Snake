@@ -29,7 +29,7 @@ Snake::Snake()
 	//Set random colours for the AI Snakes
 	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
 
-	m_rectangle = sf::RectangleShape(sf::Vector2f((float)Constants::kSnakeBlockSize, (float)Constants::kSnakeBlockSize));
+	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
 	m_rectangle.setFillColor(m_colour);
 	m_rectangle.setPosition(m_position);
 }
@@ -39,17 +39,19 @@ void Snake::Move() {
 
 	switch (m_direction)
 	{
-	case EDirection::eLeft:
-		m_position.x -= (Constants::kSnakeBlockSize + 5);
+	case EDirection::e_left:
+		m_position.x -= (Constants::k_snakeBlockSize + 5);
 		break;
-	case EDirection::eRight:
-		m_position.x += (Constants::kSnakeBlockSize + 5);
+	case EDirection::e_right:
+		m_position.x += (Constants::k_snakeBlockSize + 5);
 		break;
-	case EDirection::eUp:
-		m_position.y -= (Constants::kSnakeBlockSize + 5);
+	case EDirection::e_up:
+		m_position.y -= (Constants::k_snakeBlockSize + 5);
 		break;
-	case EDirection::eDown:
-		m_position.y += (Constants::kSnakeBlockSize + 5);
+	case EDirection::e_down:
+		m_position.y += (Constants::k_snakeBlockSize + 5);
+		break;
+	default:
 		break;
 	}
 
@@ -67,10 +69,10 @@ void Snake::Grow(int amount)
 
 //check whether a snake has collided with itself
 void Snake::CheckCollision() {
-	if (m_direction != EDirection::eNone) {
+	if (m_direction != EDirection::e_none) {
 		for (sf::Vector2f segment : m_segments) {
 			if (segment == m_position && !m_isDead) {
-				Collision(ECollisionType::eSelf);
+				Collision(ECollisionType::e_self);
 			}
 		}
 	}
@@ -80,19 +82,19 @@ void Snake::Collision(ECollisionType collisionType) {
 	if (!m_isDead) {
 		switch (collisionType)
 		{
-		case ECollisionType::eWall:
+		case ECollisionType::e_wall:
 			std::cout << "I HIT A WALL" << std::endl;
 			m_isDead = true;
 			break;
-		case ECollisionType::eSnake:
+		case ECollisionType::e_snake:
 			std::cout << "I HIT ANOTHER SNAKE" << std::endl;
 			m_isDead = true;
 			break;
-		case ECollisionType::eSelf:
+		case ECollisionType::e_self:
 			std::cout << "I HIT MYSELF" << std::endl;
 			m_isDead = true;
 			break;
-		case ECollisionType::eFood:
+		case ECollisionType::e_food:
 			break;
 		default:
 			break;

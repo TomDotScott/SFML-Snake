@@ -10,7 +10,7 @@ struct Wall {
 	sf::Vector2f m_position;
 	sf::RectangleShape m_wall;
 	sf::Color m_colour = sf::Color::White;
-	Wall(float height, float width, sf::Vector2f position) : m_height(height), m_width(width), m_position(position) {
+	Wall(const float height, const float width, const sf::Vector2f position) : m_height(height), m_width(width), m_position(position) {
 		m_wall = sf::RectangleShape(sf::Vector2f(width, height));
 		m_wall.setFillColor(m_colour);
 		m_wall.setPosition(m_position);
@@ -27,18 +27,18 @@ private:
 
 	
 	//TOP
-	Wall m_topWall = Wall(25, Constants::kScreenWidth, sf::Vector2f(0, 0));
+	Wall m_topWall = Wall(25, Constants::k_screenWidth, sf::Vector2f(0, 0));
 	//LEFT
-	Wall m_leftWall = Wall(Constants::kScreenHeight, 25, sf::Vector2f(0, 0));
+	Wall m_leftWall = Wall(Constants::k_screenHeight, 25, sf::Vector2f(0, 0));
 	//BOTTOM
-	Wall m_bottomWall = Wall(25, Constants::kScreenWidth, sf::Vector2f(0, Constants::kScreenHeight - 25));
+	Wall m_bottomWall = Wall(25, Constants::k_screenWidth, sf::Vector2f(0, Constants::k_screenHeight - 25));
 	//RIGHT
-	Wall m_rightWall = Wall(Constants::kScreenHeight, 100, sf::Vector2f(Constants::kScreenWidth - 25, 0));
+	Wall m_rightWall = Wall(Constants::k_screenHeight, 100, sf::Vector2f(Constants::k_screenWidth - 25, 0));
 
 	int m_AISnakeAmount{ 5 };
 public:
 	void Update();
-	void Input();
+	void Input() const;
 	Game(sf::RenderWindow& window);
 	void CheckCollisions();
 };

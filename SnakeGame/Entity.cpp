@@ -7,8 +7,7 @@ Entity::Entity(sf::Color color, sf::Vector2f position)
 }
 
 Entity::Entity()
-{
-}
+= default;
 
 void Entity::Move()
 {
