@@ -28,17 +28,17 @@ AISnake::AISnake() {
 
 void AISnake::ChooseDirection() {
 	int randomChoice = RandomRange(0, 4);
-	if (randomChoice == 0)
+	if (randomChoice == 0 && m_direction != EDirection::eRight)
 	{
 		m_direction = EDirection::eLeft;
 	}
-	else if (randomChoice == 1) {
+	else if (randomChoice == 1 && m_direction != EDirection::eLeft) {
 		m_direction = EDirection::eRight;
 	}
-	else if (randomChoice == 2) {
+	else if (randomChoice == 2 && m_direction != EDirection::eDown) {
 		m_direction = EDirection::eUp;
 	}
-	else {
+	else if(randomChoice == 3 && m_direction != EDirection::eUp) {
 		m_direction = EDirection::eDown;
 	}
 }
