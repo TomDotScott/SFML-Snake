@@ -21,6 +21,14 @@ void Game::CheckCollisions()
 	//Check Against Food
 	for (Food& food : m_foodArray) {
 		//only one collision can happen per snake
+		for (AISnake* aiSnake : m_AISnakes) {
+			if (food.GetPosition() == aiSnake->GetPosition()) {
+				aiSnake->Collision(food);
+				food.Randomise();
+				break;
+			}
+		}
+		//Check the player
 		if (food.GetPosition() == m_playerSnake->GetPosition()) {
 			m_playerSnake->Collision(food);
 			food.Randomise();
@@ -36,12 +44,14 @@ void Game::Update() {
 		food.Render(m_window);
 	}
 
-	m_playerSnake->Update(m_window);
 
 	for (AISnake* aiSnake : m_AISnakes) {
 		aiSnake->ChooseDirection();
 		aiSnake->Update(m_window);
 	}
+
+	m_playerSnake->Update(m_window);
+
 }
 
 void Game::Input() {
