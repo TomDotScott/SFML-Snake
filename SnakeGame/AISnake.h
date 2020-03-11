@@ -4,7 +4,8 @@ class AISnake : public Snake
 {
 public:
 	AISnake();
-private:
 	void ChooseDirection();
+
+private:
 };
 

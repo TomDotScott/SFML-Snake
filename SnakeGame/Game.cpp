@@ -9,18 +9,25 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 		Food food;
 		m_foodArray[i] = food;
 	}
+	//populate the AISnake Vector
+	for (int i = 0; i < m_AISnakeAmount; ++i) {
+		std::cout << "AI SNAKE CREATED" << std::endl;
+		m_AISnakes.push_back(new AISnake());
+	}
 }
 
 void Game::CheckCollisions()
 {
+	//Check Against Food
 	for (Food& food : m_foodArray) {
 		//only one collision can happen per snake
 		if (food.GetPosition() == m_playerSnake->GetPosition()) {
 			m_playerSnake->Collision(food);
 			food.Randomise();
-			return;
+			break;
 		}
 	}
+	//Check Against other Snakes
 }
 
 void Game::Update() {
@@ -28,8 +35,13 @@ void Game::Update() {
 	for (Food& food : m_foodArray) {
 		food.Render(m_window);
 	}
+
 	m_playerSnake->Update(m_window);
 
+	for (AISnake* aiSnake : m_AISnakes) {
+		aiSnake->ChooseDirection();
+		aiSnake->Update(m_window);
+	}
 }
 
 void Game::Input() {

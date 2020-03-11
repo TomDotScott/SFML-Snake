@@ -10,8 +10,8 @@ int Snake::RandomRange(int min, int max) //range : [min, max)
 }
 
 void Snake::Update(sf::RenderWindow& window) {
-	Snake::Move();
-	Snake::Render(window);
+	Move();
+	Render(window);
 }
 
 
