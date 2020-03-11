@@ -26,7 +26,8 @@ void Snake::Render(sf::RenderWindow& window) {
 
 Snake::Snake()
 {
-	m_colour = sf::Color(255, 165, 0);
+	//Set random colours for the AI Snakes
+	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
 
 	m_rectangle = sf::RectangleShape(sf::Vector2f((float)Constants::kSnakeBlockSize, (float)Constants::kSnakeBlockSize));
 	m_rectangle.setFillColor(m_colour);
@@ -54,21 +55,21 @@ void Snake::Move() {
 
 	CheckCollision();
 	m_segments.pop_back();
-	m_segments.push_front(sf::Vector2i(m_position.x, m_position.y));
+	m_segments.push_front(sf::Vector2f(m_position.x, m_position.y));
 }
 
 void Snake::Grow(int amount)
 {
 	for (int i = 0; i < amount; ++i) {
-		m_segments.push_back(sf::Vector2i(m_position.x, m_position.y));
+		m_segments.push_back(sf::Vector2f(m_position.x, m_position.y));
 	}
 }
 
 //check whether a snake has collided with itself
 void Snake::CheckCollision() {
 	if (m_direction != EDirection::eNone) {
-		for (sf::Vector2i segment : m_segments) {
-			if ((sf::Vector2f)segment == m_position && !m_isDead) {
+		for (sf::Vector2f segment : m_segments) {
+			if (segment == m_position && !m_isDead) {
 				Collision(ECollisionType::eSelf);
 			}
 		}

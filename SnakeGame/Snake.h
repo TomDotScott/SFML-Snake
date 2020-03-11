@@ -4,7 +4,7 @@
 #include <list>
 #include "Food.h"
 
-using SnakeSegments = std::list<sf::Vector2i>;
+using SnakeSegments = std::list<sf::Vector2f>;
 
 //Holds the directions that the snake can travel in
 enum class EDirection
@@ -58,6 +58,8 @@ public:
 	//For colliding with pickups
 	void Collision(Food& food);
 
-	sf::Vector2f GetPosition() { return m_position; }
+	sf::Vector2f GetHeadPosition() { return m_position; }
+
+	SnakeSegments GetSnakeSegments() { return m_segments; }
 
 };

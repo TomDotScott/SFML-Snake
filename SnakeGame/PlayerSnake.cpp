@@ -20,9 +20,9 @@ PlayerSnake::PlayerSnake() {
 	}
 
 
-	m_segments.push_back(sf::Vector2i(m_position.x, (m_position.y)));
-	m_segments.push_back(sf::Vector2i(m_position.x - Constants::kSnakeBlockSize - 5, (m_position.y)));
-	m_segments.push_back(sf::Vector2i(m_position.x - Constants::kSnakeBlockSize - 5, (m_position.y)));
+	m_segments.push_back(sf::Vector2f(m_position.x, (m_position.y)));
+	m_segments.push_back(sf::Vector2f(m_position.x - Constants::kSnakeBlockSize - 5, (m_position.y)));
+	m_segments.push_back(sf::Vector2f(m_position.x - Constants::kSnakeBlockSize - 5, (m_position.y)));
 
 
 
