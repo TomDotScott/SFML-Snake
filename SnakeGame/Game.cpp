@@ -12,7 +12,16 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 	//populate the AISnake Vector
 	for (int i = 0; i < m_AISnakeAmount; ++i) {
 		std::cout << "AI SNAKE CREATED" << std::endl;
-		m_AISnakes.push_back(new AISnake());
+		m_AISnakes.push_back(new AISnake(i));
+	}
+
+	//Make each AI snake have a reference to each other
+	for (int snakePosition = 0; snakePosition < m_AISnakes.size(); ++snakePosition) {
+		for (AISnake* AISnakeToAdd : m_AISnakes) {
+			if (snakePosition != AISnakeToAdd->GetPlayerNumber()) {
+				m_AISnakes[snakePosition]->SetOtherSnakes(AISnakeToAdd);
+			}
+		}
 	}
 }
 
@@ -74,6 +83,8 @@ void Game::CheckCollisions()
 					}
 				}
 			}
+			//Check AI Collisions
+			aiSnake->CheckCollision();
 		}
 	}
 }

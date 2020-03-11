@@ -1,6 +1,6 @@
 #include "AISnake.h"
 
-AISnake::AISnake() {
+AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 	int randomNumber = RandomRange(4, (int)(Constants::kScreenWidth - 100) / Constants::kSnakeBlockSize);
 	if (randomNumber * 25 >= Constants::kScreenWidth - 100) {
 		m_position.x = Constants::kScreenWidth - 100;
@@ -47,6 +47,32 @@ void AISnake::ChooseDirection() {
 	else if (randomChoice == 3 && m_direction != EDirection::eUp) {
 		if (m_position.y < Constants::kScreenHeight - 100) {
 			m_direction = EDirection::eDown;
+		}
+	}
+}
+
+void AISnake::CheckCollision()
+{
+	if (!m_isDead) {
+		//check each snake segment against other snake heads
+		//and other snake heads against this snake's segments
+		for (sf::Vector2f& segment : m_segments) {
+			for (AISnake* otherSnake : m_otherSnakes) {
+				if (!otherSnake->GetIsDead()) {
+					//If another snake's head has hit this segment
+					if (segment == otherSnake->GetHeadPosition()) {
+						otherSnake->Collision(ECollisionType::eSnake);
+						return;
+					}
+					//Check if this snake has hit another snake's body
+					for (sf::Vector2f& otherSegment : otherSnake->GetSnakeSegments()) {
+						if (otherSegment == m_position) {
+							Collision(ECollisionType::eSnake);
+							return;
+						}
+					}
+				}
+			}
 		}
 	}
 }
