@@ -5,6 +5,7 @@ class AISnake : public Snake
 public:
 	AISnake(int playerNumber);
 	void ChooseDirection();
+	
 	void CheckCollisionAgainstSelf();
 	void CheckCollision() override;
 	void SetOtherSnakes(AISnake* snakeToAdd) { m_otherSnakes.push_back(snakeToAdd); }

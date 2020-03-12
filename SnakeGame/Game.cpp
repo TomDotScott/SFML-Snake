@@ -63,17 +63,20 @@ void Game::CheckCollisions()
 		}
 	}
 	//Check against other snakes
-	for (sf::Vector2f& playerSegment : m_playerSnake->GetSnakeSegments()) {
-		for (AISnake* aiSnake : m_AISnakes) {
+	for (AISnake* aiSnake : m_AISnakes) {
+		for (sf::Vector2f& playerSegment : m_playerSnake->GetSnakeSegments()) {
 			if (!aiSnake->GetIsDead() && !m_playerSnake->GetIsDead()) {//Checks if an AI snake hits the player's body
-				if (playerSegment == aiSnake->GetHeadPosition()) {
+				/*if (playerSegment == aiSnake->GetHeadPosition()) {
 					aiSnake->Collision(ECollisionType::e_snake);
 					return;
-				}
+				}*/
 				//Check if the player hits an AI Snake's body
 				for (sf::Vector2f& aiSegment : aiSnake->GetSnakeSegments()) {
 					if (aiSegment == m_playerSnake->GetHeadPosition()) {
-						m_playerSnake->Collision(ECollisionType::e_snake);
+						const int growShrinkAmount{ aiSnake->FindGobblePoint(m_playerSnake->GetHeadPosition()) };
+						m_playerSnake->Grow(growShrinkAmount);
+						aiSnake->Shrink(growShrinkAmount);
+						//m_playerSnake->Collision(ECollisionType::e_snake);
 						return;
 					}
 				}
@@ -83,9 +86,9 @@ void Game::CheckCollisions()
 					aiSnake->Collision(ECollisionType::e_snake);
 				}
 			}
-			//Check AI Collisions
-			aiSnake->CheckCollision();
 		}
+		//Check AI Collisions
+		aiSnake->CheckCollision();
 	}
 }
 

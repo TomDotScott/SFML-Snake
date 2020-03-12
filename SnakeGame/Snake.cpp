@@ -67,6 +67,33 @@ void Snake::Grow(const int amount)
 	}
 }
 
+//Find the point where a snake intersects and returns the position in the linked list.
+//This point - the overall size will be the grow amount of the snake that collided with it
+int Snake::FindGobblePoint(sf::Vector2f gobbleSnakeHead)
+{
+	if (!m_isDead) {
+		int counter{ 0 };
+		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr)
+		{
+			if (sf::Vector2f(itr->x, itr->y) == gobbleSnakeHead)
+			{
+				return counter;
+			}
+			counter++;
+		}
+	}
+	return -1;
+}
+
+void Snake::Shrink(const int amount)
+{
+	const int newSize = static_cast<signed int>(m_segments.size()) - amount;
+	while (m_segments.size() != newSize)
+	{
+		m_segments.pop_back();
+	}
+}
+
 //check whether a snake has collided with itself
 void Snake::CheckCollision() {
 	if (m_direction != EDirection::e_none) {

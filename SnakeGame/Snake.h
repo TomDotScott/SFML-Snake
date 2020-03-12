@@ -39,14 +39,16 @@ protected:
 
 	void Move() override;
 
-	void Grow(int amount);
-
 	void Render(sf::RenderWindow& window) override final;
 
 	static int RandomRange(int min, int max);
 
 public:
 	Snake();
+	
+	void Grow(const int amount);
+	
+	void Shrink(const int amount);
 
 	void Update(sf::RenderWindow& window);
 
@@ -58,10 +60,13 @@ public:
 	//For colliding with pickups
 	void Collision(Food& food);
 
-	sf::Vector2f GetHeadPosition() { return m_position; }
+	sf::Vector2f GetHeadPosition() const { return m_position; }
 
-	bool GetIsDead() { return m_isDead; }
+	int FindGobblePoint(sf::Vector2f gobbleSnakeHead);
 
-	SnakeSegments GetSnakeSegments() { return m_segments; }
+	
+	bool GetIsDead() const { return m_isDead; }
+
+	SnakeSegments GetSnakeSegments() const { return m_segments; }
 
 };
