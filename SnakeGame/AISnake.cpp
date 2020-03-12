@@ -67,12 +67,23 @@ void AISnake::CheckCollision()
 					//Check if this snake has hit another snake's body
 					for (sf::Vector2f& otherSegment : otherSnake->GetSnakeSegments()) {
 						if (otherSegment == m_position) {
+							if (m_gobbleMode) {
+								const int growShrinkAmount{ otherSnake->FindGobblePoint(m_position) };
+								Grow(growShrinkAmount);
+								Shrink(growShrinkAmount);
+								return;
+							}
 							Collision(ECollisionType::e_snake);
 							return;
 						}
 					}
 					//If head-on collisions, they both die
 					if (m_position == otherSnake->GetHeadPosition()) {
+						if (m_gobbleMode) {
+							Grow((otherSnake->GetSnakeSegments().size()));
+							otherSnake->Collision(ECollisionType::e_snake);
+							return;
+						}
 						Collision(ECollisionType::e_snake);
 						otherSnake->Collision(ECollisionType::e_snake);
 					}

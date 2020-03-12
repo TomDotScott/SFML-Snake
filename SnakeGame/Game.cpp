@@ -76,7 +76,13 @@ void Game::CheckCollisions()
 					}
 				}
 				//If head on collisions, then both die
+				//If gobble mode, the snake eats the entire snake
 				if (m_playerSnake->GetHeadPosition() == aiSnake->GetHeadPosition()) {
+					if (m_playerSnake->GetIsGobbleMode()) {
+						m_playerSnake->Grow((aiSnake->GetSnakeSegments().size()));
+						aiSnake->Collision(ECollisionType::e_snake);
+						return;
+					}
 					m_playerSnake->Collision(ECollisionType::e_snake);
 					aiSnake->Collision(ECollisionType::e_snake);
 					return;
