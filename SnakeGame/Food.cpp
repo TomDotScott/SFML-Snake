@@ -20,7 +20,7 @@ Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position), 
 }
 
 void Food::Randomise() {
-	//there will be 3 types of pickup. Standard, Special and Gobble Mode
+	/*//there will be 3 types of pickup. Standard, Special and Gobble Mode
 	const int randomType = RandomRange(0, 100);
 	//60% chance of being standard
 	if (randomType <= 60) {
@@ -31,9 +31,9 @@ void Food::Randomise() {
 		m_type = eFoodType::e_special;
 	}
 	//10% chance of being Gobble Mode
-	else {
+	else {*/
 		m_type = eFoodType::e_gobble;
-	}
+	//}
 	RandomisePosition();
 }
 

@@ -66,17 +66,21 @@ void Game::CheckCollisions()
 	for (AISnake* aiSnake : m_AISnakes) {
 		for (sf::Vector2f& playerSegment : m_playerSnake->GetSnakeSegments()) {
 			if (!aiSnake->GetIsDead() && !m_playerSnake->GetIsDead()) {//Checks if an AI snake hits the player's body
-				/*if (playerSegment == aiSnake->GetHeadPosition()) {
+				if (playerSegment == aiSnake->GetHeadPosition()) {
 					aiSnake->Collision(ECollisionType::e_snake);
 					return;
-				}*/
+				}
 				//Check if the player hits an AI Snake's body
 				for (sf::Vector2f& aiSegment : aiSnake->GetSnakeSegments()) {
 					if (aiSegment == m_playerSnake->GetHeadPosition()) {
-						const int growShrinkAmount{ aiSnake->FindGobblePoint(m_playerSnake->GetHeadPosition()) };
-						m_playerSnake->Grow(growShrinkAmount);
-						aiSnake->Shrink(growShrinkAmount);
-						//m_playerSnake->Collision(ECollisionType::e_snake);
+						//If it's gobble mode, make sure not to kill the player on collision
+						if (m_playerSnake->GetIsGobbleMode()) {
+							const int growShrinkAmount{ aiSnake->FindGobblePoint(m_playerSnake->GetHeadPosition()) };
+							m_playerSnake->Grow(growShrinkAmount);
+							aiSnake->Shrink(growShrinkAmount);
+							return;
+						}
+						m_playerSnake->Collision(ECollisionType::e_snake);
 						return;
 					}
 				}
@@ -93,14 +97,38 @@ void Game::CheckCollisions()
 }
 
 void Game::Update() {
+	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
+	if(rand() % 10 == 0)
+	{
+		//Check player first
+		if (m_playerSnake->GetIsGobbleMode() && !m_playerSnake->GetIsDead()) {
+			std::cout << "GOBBLE MODE OVER" << std::endl;
+
+			m_playerSnake->SetIsGobbleMode(false);
+		}else
+		{
+			//reset the AI snakes
+			for (AISnake* aiSnake : m_AISnakes) {
+				if (!aiSnake->GetIsDead() && aiSnake->GetIsGobbleMode()) {
+					std::cout << "GOBBLE MODE OVER" << std::endl;
+
+					aiSnake->SetIsGobbleMode(false);
+				}
+			}
+		}
+	}
+	
 	for (Food& food : m_foodArray) {
 		food.Render(m_window);
 	}
 
 
 	for (AISnake* aiSnake : m_AISnakes) {
-		aiSnake->ChooseDirection();
-		aiSnake->Update(m_window);
+		//only move if alive
+		if (!aiSnake->GetIsDead()) {
+			aiSnake->ChooseDirection();
+			aiSnake->Update(m_window);
+		}
 	}
 
 	m_playerSnake->Update(m_window);

@@ -25,6 +25,7 @@ private:
 	Food m_foodArray[5];
 	sf::RenderWindow& m_window;
 
+	sf::Clock m_clock;
 	
 	//TOP
 	Wall m_topWall = Wall(25, Constants::k_screenWidth, sf::Vector2f(0, 0));

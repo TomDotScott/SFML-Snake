@@ -44,6 +44,8 @@ public:
 		}
 		return 0;
 	}
+
+	eFoodType GetType() const { return m_type; }
 };
 
 
