@@ -28,21 +28,12 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 
 void Game::CheckCollisions()
 {
-	//Check against Walls
+	//Check player against Walls
 	if (!m_playerSnake->GetIsDead() && (m_playerSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
 		m_playerSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
 		m_playerSnake->GetHeadPosition().y == m_topWall.m_position.y ||
 		m_playerSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
 		m_playerSnake->Collision(ECollisionType::e_wall);
-	}
-
-	for (AISnake* aiSnake : m_AISnakes) {
-		if (!aiSnake->GetIsDead() && (aiSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
-			aiSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
-			aiSnake->GetHeadPosition().y == m_topWall.m_position.y ||
-			aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
-			aiSnake->Collision(ECollisionType::e_wall);
-		}
 	}
 
 	//Check Against Food
@@ -52,14 +43,14 @@ void Game::CheckCollisions()
 			if (!aiSnake->GetIsDead() && food.GetPosition() == aiSnake->GetHeadPosition()) {
 				aiSnake->Collision(food);
 				food.Randomise();
-				break;
+				return;
 			}
 		}
 		//Check the player against food
 		if (food.GetPosition() == m_playerSnake->GetHeadPosition()) {
 			m_playerSnake->Collision(food);
 			food.Randomise();
-			break;
+			return;
 		}
 	}
 	//Check against other snakes
@@ -88,11 +79,20 @@ void Game::CheckCollisions()
 				if (m_playerSnake->GetHeadPosition() == aiSnake->GetHeadPosition()) {
 					m_playerSnake->Collision(ECollisionType::e_snake);
 					aiSnake->Collision(ECollisionType::e_snake);
+					return;
 				}
 			}
 		}
-		//Check AI Collisions
+		//Check AI Collisions with Other snakes
 		aiSnake->CheckCollision();
+		//Check AI collisions with the Walls
+		if (!aiSnake->GetIsDead() && (aiSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
+			aiSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
+			aiSnake->GetHeadPosition().y == m_topWall.m_position.y ||
+			aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
+			aiSnake->Collision(ECollisionType::e_wall);
+			return;
+		}
 	}
 }
 
