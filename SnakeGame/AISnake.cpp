@@ -29,25 +29,17 @@ AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 void AISnake::ChooseDirection() {
 	const int randomChoice = RandomRange(0, 4);
 	//Make sure they can't go out of bounds and can't kill themselves
-	if (randomChoice == 0 && m_direction != EDirection::e_right) {
-		if (m_position.x > 100) {
-			m_direction = EDirection::e_left;
-		}
+	if (randomChoice == 0 && m_direction != EDirection::e_right && m_position.x > 100) {
+		m_direction = EDirection::e_left;
 	}
-	if (randomChoice == 1 && m_direction != EDirection::e_left) {
-		if(m_position.x < Constants::k_screenWidth - 100) {
-			m_direction = EDirection::e_right;
-		}
+	if (randomChoice == 1 && m_direction != EDirection::e_left && m_position.x < Constants::k_screenWidth - 100) {
+		m_direction = EDirection::e_right;
 	}
-	if (randomChoice == 2 && m_direction != EDirection::e_down) {
-		if (m_position.y > 100) {
-			m_direction = EDirection::e_up;
-		}
+	if (randomChoice == 2 && m_direction != EDirection::e_down && m_position.y > 100) {
+		m_direction = EDirection::e_up;
 	}
-	else if (randomChoice == 3 && m_direction != EDirection::e_up) {
-		if (m_position.y < Constants::k_screenHeight - 100) {
-			m_direction = EDirection::e_down;
-		}
+	if (randomChoice == 3 && m_direction != EDirection::e_up && m_position.y < Constants::k_screenHeight - 100) {
+		m_direction = EDirection::e_down;
 	}
 }
 

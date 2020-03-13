@@ -44,11 +44,15 @@ void Food::RandomisePosition()
 
 	int randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize));
 
-	m_position.x = randomNumber * 25 >= Constants::k_screenWidth - 100 ? Constants::k_screenWidth - 100 : randomNumber * 25;
+	m_position.x = randomNumber * 25 >= Constants::k_screenWidth - 100
+		               ? Constants::k_screenWidth - 100
+		               : randomNumber * 25;
 
 	randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize));
 
-	m_position.y = randomNumber * 25 >= Constants::k_screenHeight - 100 ? Constants::k_screenHeight - 100 : randomNumber * 25;
+	m_position.y = randomNumber * 25 >= Constants::k_screenHeight - 100
+		               ? Constants::k_screenHeight - 100
+		               : randomNumber * 25;
 
 	std::cout << "FOOD LOCATION: " << m_position.x << " " << m_position.y << std::endl;
 

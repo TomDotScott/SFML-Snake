@@ -14,6 +14,8 @@ public:
 private:
 	//To deal with collisions between AI snakes
 	std::vector<AISnake*> m_otherSnakes;
+	//A store of all of the food on screen to help with decision making
+	std::vector<Food*> m_food;
 	int m_playerNumber;
 };
 
