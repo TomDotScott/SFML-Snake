@@ -7,7 +7,7 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 	//populate the food array
 	for (auto& i : m_foodArray)
 	{
-		Food food;
+		Food* food = new Food();
 		i = food;
 	}
 	//populate the AISnake Vector
@@ -21,6 +21,10 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 		for (AISnake* aiSnakeToAdd : m_AISnakes) {
 			if (snakePosition != aiSnakeToAdd->GetPlayerNumber()) {
 				m_AISnakes[snakePosition]->SetOtherSnakes(aiSnakeToAdd);
+				for (Food* food : m_foodArray)
+				{
+					m_AISnakes[snakePosition]->SetFood(food);
+				}
 			}
 		}
 	}
@@ -37,19 +41,19 @@ void Game::CheckCollisions()
 	}
 
 	//Check Against Food
-	for (Food& food : m_foodArray) {
+	for (Food* food : m_foodArray) {
 		//only one collision can happen per snake
 		for (AISnake* aiSnake : m_AISnakes) {
-			if (!aiSnake->GetIsDead() && food.GetPosition() == aiSnake->GetHeadPosition()) {
+			if (!aiSnake->GetIsDead() && food->GetPosition() == aiSnake->GetHeadPosition()) {
 				aiSnake->Collision(food);
-				food.Randomise();
+				food->Randomise();
 				return;
 			}
 		}
 		//Check the player against food
-		if (food.GetPosition() == m_playerSnake->GetHeadPosition()) {
+		if (food->GetPosition() == m_playerSnake->GetHeadPosition()) {
 			m_playerSnake->Collision(food);
-			food.Randomise();
+			food->Randomise();
 			return;
 		}
 	}
@@ -124,8 +128,8 @@ void Game::Update() {
 		}
 	}
 	
-	for (Food& food : m_foodArray) {
-		food.Render(m_window);
+	for (Food* food : m_foodArray) {
+		food->Render(m_window);
 	}
 
 

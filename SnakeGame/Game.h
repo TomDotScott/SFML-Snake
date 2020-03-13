@@ -22,7 +22,7 @@ class Game
 private:
 	PlayerSnake* m_playerSnake;
 	std::vector<AISnake*> m_AISnakes;
-	Food m_foodArray[5];
+	Food* m_foodArray[5];
 	sf::RenderWindow& m_window;
 	
 	//TOP
@@ -34,7 +34,7 @@ private:
 	//RIGHT
 	Wall m_rightWall = Wall(Constants::k_screenHeight, 100, sf::Vector2f(Constants::k_screenWidth - 25, 0));
 
-	int m_AISnakeAmount{ 5 };
+	int m_AISnakeAmount{ 2 };
 public:
 	void Update();
 	void Input() const;

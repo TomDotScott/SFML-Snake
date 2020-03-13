@@ -129,13 +129,13 @@ void Snake::Collision(const ECollisionType collisionType) {
 	}
 }
 
-void Snake::Collision(Food& food)
+void Snake::Collision(Food* food)
 {
-	std::cout << "+" << food.GetGrowAmount() << std::endl;
-	if(food.GetType() == eFoodType::e_gobble)
+	std::cout << "+" << food->GetGrowAmount() << std::endl;
+	if(food->GetType() == eFoodType::e_gobble)
 	{
 		m_gobbleMode = true;
 		std::cout << "GOBBLE MODE!" << std::endl;
 	}
-	Grow(food.GetGrowAmount());
+	Grow(food->GetGrowAmount());
 }
