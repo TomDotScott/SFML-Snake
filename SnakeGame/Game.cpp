@@ -47,7 +47,7 @@ void Game::CheckCollisions()
 			if (!aiSnake->GetIsDead() && food->GetPosition() == aiSnake->GetHeadPosition()) {
 				aiSnake->Collision(food);
 				food->Randomise();
-				aiSnake->ChooseDirection();
+				aiSnake->FindClosestFood();
 				return;
 			}
 		}
@@ -56,7 +56,7 @@ void Game::CheckCollisions()
 			m_playerSnake->Collision(food);
 			food->Randomise();
 			for (AISnake* aiSnake : m_AISnakes) {
-				aiSnake->ChooseDirection();
+				aiSnake->FindClosestFood();
 			}
 			return;
 		}
@@ -67,7 +67,7 @@ void Game::CheckCollisions()
 			if (!aiSnake->GetIsDead() && !m_playerSnake->GetIsDead()) {//Checks if an AI snake hits the player's body
 				if (playerSegment == aiSnake->GetHeadPosition()) {
 					aiSnake->Collision(ECollisionType::e_snake);
-					return;
+					//return;
 				}
 				//Check if the player hits an AI Snake's body
 				for (sf::Vector2f& aiSegment : aiSnake->GetSnakeSegments()) {
@@ -77,10 +77,10 @@ void Game::CheckCollisions()
 							const int growShrinkAmount{ aiSnake->FindGobblePoint(m_playerSnake->GetHeadPosition()) };
 							m_playerSnake->Grow(growShrinkAmount);
 							aiSnake->Shrink(growShrinkAmount);
-							return;
+							//return;
 						}
 						m_playerSnake->Collision(ECollisionType::e_snake);
-						return;
+						//return;
 					}
 				}
 				//If head on collisions, then both die
@@ -89,11 +89,11 @@ void Game::CheckCollisions()
 					if (m_playerSnake->GetIsGobbleMode()) {
 						m_playerSnake->Grow((aiSnake->GetSnakeSegments().size()));
 						aiSnake->Collision(ECollisionType::e_snake);
-						return;
+						//return;
 					}
 					m_playerSnake->Collision(ECollisionType::e_snake);
 					aiSnake->Collision(ECollisionType::e_snake);
-					return;
+					//return;
 				}
 			}
 		}
@@ -105,7 +105,7 @@ void Game::CheckCollisions()
 			aiSnake->GetHeadPosition().y == m_topWall.m_position.y ||
 			aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
 			aiSnake->Collision(ECollisionType::e_wall);
-			return;
+			//return;
 		}
 	}
 }

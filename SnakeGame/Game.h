@@ -34,7 +34,7 @@ private:
 	//RIGHT
 	Wall m_rightWall = Wall(Constants::k_screenHeight, 100, sf::Vector2f(Constants::k_screenWidth - 25, 0));
 
-	int m_AISnakeAmount{ 3 };
+	int m_AISnakeAmount{ 5 };
 public:
 	void Update();
 	void Input() const;

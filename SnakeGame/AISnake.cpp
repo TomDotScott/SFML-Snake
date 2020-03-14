@@ -29,65 +29,34 @@ AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 }
 
 void AISnake::ChooseDirection() {
-	FindClosestFood();
-	
-	std::cout << "MY CLOSEST FOOD IS AT " << m_foodList.front().x << " " << m_foodList.front().y << std::endl;
-	std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
+	if (!m_isDead) {
+		FindClosestFood();
 
-	//If the x positions are the same, move up or down to account for it
-	if(m_closestFood.x == m_position.x)
-	{
-		std::cout << "FOOD IS ON THE SAME X AS ME!" << std::endl;
-		m_direction = m_position.y <= static_cast<float>(Constants::k_screenHeight) / 2 ? EDirection::e_down : EDirection::e_up;
-		return;
+		std::cout << "MY CLOSEST FOOD IS AT " << m_foodList.front().x << " " << m_foodList.front().y << std::endl;
+		//std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
+
+		//Make decisions based on the closest food
+		if (m_foodList.front().x < m_position.x && m_direction != EDirection::e_right)
+		{
+			m_direction = EDirection::e_left;
+
+		}
+		if (m_foodList.front().x > m_position.x && m_direction != EDirection::e_left)
+		{
+			m_direction = EDirection::e_right;
+
+		}
+		if (m_foodList.front().y > m_position.y && m_direction != EDirection::e_up)
+		{
+			m_direction = EDirection::e_down;
+
+		}
+		if (m_foodList.front().y < m_position.y && m_direction != EDirection::e_down)
+		{
+			m_direction = EDirection::e_up;
+
+		}
 	}
-	//If the y positions are the same, move left or right to account for it
-	if (m_closestFood.y == m_position.y)
-	{
-		std::cout << "FOOD IS ON THE SAME Y AS ME!" << std::endl;
-		m_direction = m_position.x <= static_cast<float>(Constants::k_screenWidth) / 2 ? EDirection::e_right : EDirection::e_left;
-		return;
-	}
-
-	//Make decisions based on the closest food
-	if (m_foodList.front().x < m_position.x && m_direction != EDirection::e_right)
-	{
-		m_direction = EDirection::e_left;
-
-	}
-	if (m_foodList.front().x > m_position.x && m_direction != EDirection::e_left)
-	{
-		m_direction = EDirection::e_right;
-
-	}
-	if (m_foodList.front().y > m_position.y && m_direction != EDirection::e_up)
-	{
-		m_direction = EDirection::e_down;
-
-	}
-	if (m_foodList.front().y < m_position.y && m_direction != EDirection::e_down)
-	{
-		m_direction = EDirection::e_up;
-
-	}
-	
-	switch (m_direction) { case EDirection::e_none: break;
-	case EDirection::e_left:
-		std::cout << "I AM MOVING LEFT" << std::endl;
-
-		break;
-	case EDirection::e_right:
-		std::cout << "I AM MOVING RIGHT" << std::endl;
-		break;
-	case EDirection::e_up:
-		std::cout << "I AM MOVING UP" << std::endl;
-		break;
-	case EDirection::e_down:
-		std::cout << "I AM MOVING DOWN" << std::endl;
-		break;
-	default: ;
-	}
-
 }
 
 void AISnake::CheckCollision()
@@ -101,7 +70,7 @@ void AISnake::CheckCollision()
 					//If another snake's head has hit this segment
 					if (segment == otherSnake->GetHeadPosition()) {
 						otherSnake->Collision(ECollisionType::e_snake);
-						return;
+						//return;
 					}
 					//Check if this snake has hit another snake's body
 					for (sf::Vector2f& otherSegment : otherSnake->GetSnakeSegments()) {
@@ -110,10 +79,10 @@ void AISnake::CheckCollision()
 								const int growShrinkAmount{ otherSnake->FindGobblePoint(m_position) };
 								Grow(growShrinkAmount);
 								Shrink(growShrinkAmount);
-								return;
+								//return;
 							}
 							Collision(ECollisionType::e_snake);
-							return;
+							//return;
 						}
 					}
 					//If head-on collisions, they both die
@@ -121,7 +90,7 @@ void AISnake::CheckCollision()
 						if (m_gobbleMode) {
 							Grow((otherSnake->GetSnakeSegments().size()));
 							otherSnake->Collision(ECollisionType::e_snake);
-							return;
+							//return;
 						}
 						Collision(ECollisionType::e_snake);
 						otherSnake->Collision(ECollisionType::e_snake);
@@ -159,9 +128,20 @@ void AISnake::FindClosestFood()
 			closestFood = currentFoodPosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
 			m_foodList.push_front(closestFood);
+
+			//check that the closest food isn't in any of the segments
+			for(sf::Vector2f& segment : m_segments)
+			{
+				if(segment == closestFood)
+				{
+					m_foodList.pop_front();
+				}
+			}
+			
 		}
 		m_foodList.push_back(currentFoodPosition);
 	}
+	
 }
 
 void AISnake::CheckCollisionAgainstSelf()
