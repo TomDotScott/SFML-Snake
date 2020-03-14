@@ -47,6 +47,7 @@ void Game::CheckCollisions()
 			if (!aiSnake->GetIsDead() && food->GetPosition() == aiSnake->GetHeadPosition()) {
 				aiSnake->Collision(food);
 				food->Randomise();
+				aiSnake->ChooseDirection();
 				return;
 			}
 		}
@@ -54,6 +55,9 @@ void Game::CheckCollisions()
 		if (food->GetPosition() == m_playerSnake->GetHeadPosition()) {
 			m_playerSnake->Collision(food);
 			food->Randomise();
+			for (AISnake* aiSnake : m_AISnakes) {
+				aiSnake->ChooseDirection();
+			}
 			return;
 		}
 	}

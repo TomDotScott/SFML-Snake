@@ -51,23 +51,56 @@ void AISnake::ChooseDirection() {
 	}
 
 	std::cout << "MY CLOSEST FOOD IS AT " << m_closestFood.x << " " << m_closestFood.y << std::endl;
+	std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
 
-	//make choices depending on the direction of the closest food
-	if (m_closestFood.x < m_position.x && m_direction != EDirection::e_right)
+	if (m_closestFood.x != m_position.x || m_direction != EDirection::e_left && m_direction != EDirection::e_right)
 	{
-		m_direction = EDirection::e_left;
+		//make choices depending on the direction of the closest food
+		if (m_closestFood.x < m_position.x && m_direction != EDirection::e_right)
+		{
+			m_direction = EDirection::e_left;
+
+		}
+		if (m_closestFood.x > m_position.x && m_direction != EDirection::e_left)
+		{
+			m_direction = EDirection::e_right;
+
+		}
 	}
-	if (m_closestFood.x > m_position.x && m_direction != EDirection::e_left)
-	{
-		m_direction = EDirection::e_right;
+	else {
+		const int randomNumber = RandomRange(1, 2);
+		if (randomNumber == 1) {
+			m_direction = EDirection::e_up;
+			
+		}
+		if (randomNumber == 2) {
+			m_direction = EDirection::e_down;
+
+		}
 	}
-	if (m_closestFood.y > m_position.y && m_direction != EDirection::e_up)
+	if (m_closestFood.y != m_position.y || m_direction != EDirection::e_up && m_direction != EDirection::e_down)
 	{
-		m_direction = EDirection::e_down;
+		if (m_closestFood.y > m_position.y && m_direction != EDirection::e_up)
+		{
+			m_direction = EDirection::e_down;
+			
+		}
+		if (m_closestFood.y < m_position.y && m_direction != EDirection::e_down)
+		{
+			m_direction = EDirection::e_up;
+			
+		}
 	}
-	if (m_closestFood.y < m_position.y && m_direction != EDirection::e_down)
-	{
-		m_direction = EDirection::e_up;
+	else {
+		const int randomNumber = RandomRange(1, 2);
+		if (randomNumber == 1) {
+			m_direction = EDirection::e_right;
+
+		}
+		if (randomNumber == 2) {
+			m_direction = EDirection::e_left;
+			
+		}
 	}
 }
 
