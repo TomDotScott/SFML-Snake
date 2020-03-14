@@ -5,10 +5,14 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 {
 	m_playerSnake = new PlayerSnake();
 	//populate the food array
-	for (auto& i : m_foodArray)
+	for(int i = 0; i < sizeof(m_foodArray)/sizeof(m_foodArray[0]); ++i)
 	{
-		Food* food = new Food();
+		Food food;
+<<<<<<< HEAD
+		m_foodArray[i] = food;
+=======
 		i = food;
+>>>>>>> parent of cf9d80a... Ai Pathfinding
 	}
 	//populate the AISnake Vector
 	for (int i = 0; i < m_AISnakeAmount; ++i) {
@@ -21,10 +25,13 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 		for (AISnake* aiSnakeToAdd : m_AISnakes) {
 			if (snakePosition != aiSnakeToAdd->GetPlayerNumber()) {
 				m_AISnakes[snakePosition]->SetOtherSnakes(aiSnakeToAdd);
-				for (Food* food : m_foodArray)
+<<<<<<< HEAD
+				for (Food& food : m_foodArray)
 				{
 					m_AISnakes[snakePosition]->SetFood(food);
 				}
+=======
+>>>>>>> parent of cf9d80a... Ai Pathfinding
 			}
 		}
 	}
@@ -41,21 +48,31 @@ void Game::CheckCollisions()
 	}
 
 	//Check Against Food
-	for (Food* food : m_foodArray) {
+	for (Food& food : m_foodArray) {
+<<<<<<< HEAD
+		int counter{ 0 };
+=======
+>>>>>>> parent of cf9d80a... Ai Pathfinding
 		//only one collision can happen per snake
 		for (AISnake* aiSnake : m_AISnakes) {
-			if (!aiSnake->GetIsDead() && food->GetPosition() == aiSnake->GetHeadPosition()) {
+			if (!aiSnake->GetIsDead() && food.GetPosition() == aiSnake->GetHeadPosition()) {
 				aiSnake->Collision(food);
-				food->Randomise();
+				food.Randomise();
 				return;
+			}
+			for (int snakePosition = 0; snakePosition < m_AISnakes.size(); ++snakePosition) {
+				if (snakePosition != aiSnake->GetPlayerNumber()) {
+					m_AISnakes[snakePosition]->SetFood(food, counter);
+				}
 			}
 		}
 		//Check the player against food
-		if (food->GetPosition() == m_playerSnake->GetHeadPosition()) {
+		if (food.GetPosition() == m_playerSnake->GetHeadPosition()) {
 			m_playerSnake->Collision(food);
-			food->Randomise();
+			food.Randomise();
 			return;
 		}
+		++counter;
 	}
 	//Check against other snakes
 	for (AISnake* aiSnake : m_AISnakes) {
@@ -128,8 +145,8 @@ void Game::Update() {
 		}
 	}
 	
-	for (Food* food : m_foodArray) {
-		food->Render(m_window);
+	for (Food& food : m_foodArray) {
+		food.Render(m_window);
 	}
 
 

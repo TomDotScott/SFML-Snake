@@ -9,22 +9,23 @@ public:
 	void CheckCollisionAgainstSelf();
 	void CheckCollision() override;
 	void SetOtherSnakes(AISnake* snakeToAdd) { m_otherSnakes.push_back(snakeToAdd); }
-	void SetFood(Food* food) { m_food.push_back(food); }
+<<<<<<< HEAD
+	void SetFood(Food const food) { m_food.push_back(food); }
+	void SetFood(Food const food, int pos) { m_food[pos] = food; }
+=======
+>>>>>>> parent of cf9d80a... Ai Pathfinding
 	int GetPlayerNumber() const { return m_playerNumber; }
 
 private:
 	//To deal with collisions between AI snakes
 	std::vector<AISnake*> m_otherSnakes;
-	
 	//A store of all of the food on screen to help with decision making
+<<<<<<< HEAD
+	std::vector<Food> m_food;
+	
+=======
 	std::vector<Food*> m_food;
-	
+>>>>>>> parent of cf9d80a... Ai Pathfinding
 	int m_playerNumber;
-
-	//the current store for the closest food
-	sf::Vector2f m_closestFood;
-	
-	//Cycle through the food on the screen to find the closest food to the snake
-	sf::Vector2f FindClosestFood();
 };
 

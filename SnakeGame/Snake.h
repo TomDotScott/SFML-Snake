@@ -60,7 +60,7 @@ public:
 	void Collision(ECollisionType collisionType);
 
 	//For colliding with pickups
-	void Collision(Food* food);
+	void Collision(Food& food);
 
 	sf::Vector2f GetHeadPosition() const { return m_position; }
 
