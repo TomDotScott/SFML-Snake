@@ -30,61 +30,47 @@ AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 
 void AISnake::ChooseDirection() {
 	FindClosestFood();
-
-	m_closestFood = m_foodList.front();
 	
-	std::cout << "MY CLOSEST FOOD IS AT " << m_closestFood.x << " " << m_closestFood.y << std::endl;
+	std::cout << "MY CLOSEST FOOD IS AT " << m_foodList.front().x << " " << m_foodList.front().y << std::endl;
 	std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
 
-	if (m_closestFood.x != m_position.x || m_direction != EDirection::e_left && m_direction != EDirection::e_right)
+	//If the x positions are the same, move up or down to account for it
+	if(m_closestFood.x == m_position.x)
 	{
-		//make choices depending on the direction of the closest food
-		if (m_closestFood.x < m_position.x && m_direction != EDirection::e_right)
-		{
-			m_direction = EDirection::e_left;
-
-		}
-		if (m_closestFood.x > m_position.x && m_direction != EDirection::e_left)
-		{
-			m_direction = EDirection::e_right;
-
-		}
+		std::cout << "FOOD IS ON THE SAME X AS ME!" << std::endl;
+		m_direction = m_position.y <= static_cast<float>(Constants::k_screenHeight) / 2 ? EDirection::e_down : EDirection::e_up;
+		return;
 	}
-	else {
-		const int randomNumber = RandomRange(1, 2);
-		if (randomNumber == 1) {
-			m_direction = EDirection::e_up;
-			
-		}
-		if (randomNumber == 2) {
-			m_direction = EDirection::e_down;
-
-		}
-	}
-	if (m_closestFood.y != m_position.y || m_direction != EDirection::e_up && m_direction != EDirection::e_down)
+	//If the y positions are the same, move left or right to account for it
+	if (m_closestFood.y == m_position.y)
 	{
-		if (m_closestFood.y > m_position.y && m_direction != EDirection::e_up)
-		{
-			m_direction = EDirection::e_down;
-			
-		}
-		if (m_closestFood.y < m_position.y && m_direction != EDirection::e_down)
-		{
-			m_direction = EDirection::e_up;
-			
-		}
+		std::cout << "FOOD IS ON THE SAME Y AS ME!" << std::endl;
+		m_direction = m_position.x <= static_cast<float>(Constants::k_screenWidth) / 2 ? EDirection::e_right : EDirection::e_left;
+		return;
 	}
-	else {
-		const int randomNumber = RandomRange(1, 2);
-		if (randomNumber == 1) {
-			m_direction = EDirection::e_right;
 
-		}
-		if (randomNumber == 2) {
-			m_direction = EDirection::e_left;
-			
-		}
+	//Make decisions based on the closest food
+	if (m_foodList.front().x < m_position.x && m_direction != EDirection::e_right)
+	{
+		m_direction = EDirection::e_left;
+
 	}
+	if (m_foodList.front().x > m_position.x && m_direction != EDirection::e_left)
+	{
+		m_direction = EDirection::e_right;
+
+	}
+	if (m_foodList.front().y > m_position.y && m_direction != EDirection::e_up)
+	{
+		m_direction = EDirection::e_down;
+
+	}
+	if (m_foodList.front().y < m_position.y && m_direction != EDirection::e_down)
+	{
+		m_direction = EDirection::e_up;
+
+	}
+	
 	switch (m_direction) { case EDirection::e_none: break;
 	case EDirection::e_left:
 		std::cout << "I AM MOVING LEFT" << std::endl;
