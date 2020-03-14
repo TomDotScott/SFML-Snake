@@ -17,6 +17,8 @@ private:
 
 	eFoodType m_type;
 
+	int m_id = RandomRange(0, 1000);
+	
 	void RandomisePosition();
 
 public:
@@ -24,6 +26,7 @@ public:
 
 	void Randomise();
 
+	int GetID() const { return m_id; }
 
 	void Render(sf::RenderWindow& window) override;
 
@@ -47,3 +50,15 @@ public:
 
 	eFoodType GetType() const { return m_type; }
 };
+
+inline bool operator==(const Food& lhs, const Food& rhs)
+{
+	/* do actual comparison */
+	if(lhs.GetID() == rhs.GetID())
+	{
+		return true;
+	}
+	return false;
+}
+
+inline bool operator!=(const Food& lhs, const Food& rhs) { return !(lhs == rhs); }

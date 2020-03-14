@@ -10,20 +10,21 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 		Food* food = new Food();
 		i = food;
 	}
+
 	//populate the AISnake Vector
 	for (int i = 0; i < m_AISnakeAmount; ++i) {
 		std::cout << "AI SNAKE CREATED" << std::endl;
 		m_AISnakes.push_back(new AISnake(i));
 	}
 
-	//Make each AI snake have a reference to each other
+	//Make each AI snake have a pointer to each other
 	for (int snakePosition = 0; snakePosition < m_AISnakes.size(); ++snakePosition) {
 		for (AISnake* aiSnakeToAdd : m_AISnakes) {
 			if (snakePosition != aiSnakeToAdd->GetPlayerNumber()) {
 				m_AISnakes[snakePosition]->SetOtherSnakes(aiSnakeToAdd);
 				for (Food* food : m_foodArray)
 				{
-					m_AISnakes[snakePosition]->SetFood(food);
+					aiSnakeToAdd->SetFood(food);
 				}
 			}
 		}
@@ -46,8 +47,8 @@ void Game::CheckCollisions()
 		for (AISnake* aiSnake : m_AISnakes) {
 			if (!aiSnake->GetIsDead() && food->GetPosition() == aiSnake->GetHeadPosition()) {
 				aiSnake->Collision(food);
-				food->Randomise();
-				aiSnake->FindClosestFood();
+				RandomiseFood(food);
+				aiSnake->FindFood();
 				return;
 			}
 		}
@@ -56,7 +57,7 @@ void Game::CheckCollisions()
 			m_playerSnake->Collision(food);
 			food->Randomise();
 			for (AISnake* aiSnake : m_AISnakes) {
-				aiSnake->FindClosestFood();
+				aiSnake->FindFood();
 			}
 			return;
 		}
@@ -106,6 +107,31 @@ void Game::CheckCollisions()
 			aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
 			aiSnake->Collision(ECollisionType::e_wall);
 			//return;
+		}
+	}
+}
+
+void Game::RandomiseFood(Food* foodToRandomise)
+{
+	//Check that food doesn't spawn on top of each other
+	bool isOverlapping = true;
+	while (isOverlapping) {
+		foodToRandomise->Randomise();
+		//Check the randomised position
+		for(Food* food : m_foodArray)
+		{
+			//make sure the food isn't getting compared to itself!
+			if(*food != *foodToRandomise)
+			{
+				if(foodToRandomise->GetPosition() != food->GetPosition())
+				{
+					isOverlapping = false;
+					break;
+				}
+			}else
+			{
+				foodToRandomise->Randomise();
+			}
 		}
 	}
 }

@@ -35,6 +35,10 @@ private:
 	Wall m_rightWall = Wall(Constants::k_screenHeight, 100, sf::Vector2f(Constants::k_screenWidth - 25, 0));
 
 	int m_AISnakeAmount{ 5 };
+
+	//ensure that food doesn't overlap
+	void RandomiseFood(Food* foodToRandomise);
+	
 public:
 	void Update();
 	void Input() const;
