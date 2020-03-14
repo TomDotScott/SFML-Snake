@@ -30,7 +30,7 @@ AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 
 void AISnake::ChooseDirection() {
 	if (!m_isDead) {
-		FindClosestFood();
+		FindFood();
 
 		std::cout << "MY CLOSEST FOOD IS AT " << m_foodList.front().x << " " << m_foodList.front().y << std::endl;
 		//std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
@@ -92,6 +92,7 @@ void AISnake::CheckCollision()
 							otherSnake->Collision(ECollisionType::e_snake);
 							//return;
 						}
+						std::cout << "HEAD ON COLLISION!" << std::endl;
 						Collision(ECollisionType::e_snake);
 						otherSnake->Collision(ECollisionType::e_snake);
 					}
@@ -102,7 +103,7 @@ void AISnake::CheckCollision()
 	}
 }
 
-void AISnake::FindClosestFood()
+void AISnake::FindFood()
 {
 	//Clear the list of food positions
 	m_foodList.clear();

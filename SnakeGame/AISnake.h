@@ -7,7 +7,7 @@ public:
 	void ChooseDirection();
 
 	//Cycle through the food on the screen to find the closest food to the snake
-	void FindClosestFood();
+	void FindFood();
 	
 	void CheckCollisionAgainstSelf();
 	void CheckCollision() override;
