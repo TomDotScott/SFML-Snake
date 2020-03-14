@@ -14,9 +14,9 @@ private:
 	sf::CircleShape m_circle;
 
 	int RandomRange(int min, int max);
-	
+
 	eFoodType m_type;
-	
+
 	void RandomisePosition();
 
 public:
@@ -47,5 +47,3 @@ public:
 
 	eFoodType GetType() const { return m_type; }
 };
-
-

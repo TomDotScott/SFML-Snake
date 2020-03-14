@@ -1,4 +1,6 @@
 #include "AISnake.h"
+#include <cmath>
+#include <iostream>
 
 AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 	int randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize);
@@ -27,52 +29,45 @@ AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 }
 
 void AISnake::ChooseDirection() {
-<<<<<<< HEAD
-	m_closestFood = m_food[0].GetPosition();
-	m_closestFood = FindClosestFood();
+	m_closestFood = m_food[0]->GetPosition();
+
+	float magnitudeOfClosestFood = sqrt((m_closestFood.x * m_closestFood.x)
+		+ (m_closestFood.y * m_closestFood.y));
+
+	//Find the food that it is closest to
+	for (Food* currentFood : m_food)
+	{
+		const sf::Vector2f currentFoodPosition = currentFood->GetPosition();
+		//see if the current piece of food is closer by working out the magnitude of the vectors
+		const float magnitudeOfCurrentFood = sqrt((currentFoodPosition.x * currentFoodPosition.x)
+			+ (currentFoodPosition.y * currentFoodPosition.y));
+		//If the current piece of food's magnitude is closer than the previous closest piece, it is closer
+		if (magnitudeOfCurrentFood < magnitudeOfClosestFood)
+		{
+			//reset the closest food
+			m_closestFood = currentFoodPosition;
+			magnitudeOfClosestFood = magnitudeOfCurrentFood;
+		}
+	}
+
+	std::cout << "MY CLOSEST FOOD IS AT " << m_closestFood.x << " " << m_closestFood.y << std::endl;
 
 	//make choices depending on the direction of the closest food
-	if(m_closestFood.x < m_position.x && m_direction != EDirection::e_right)
+	if (m_closestFood.x < m_position.x && m_direction != EDirection::e_right)
 	{
-=======
-	const int randomChoice = RandomRange(0, 4);
-	//Make sure they can't go out of bounds and can't kill themselves
-	if (randomChoice == 0 && m_direction != EDirection::e_right && m_position.x > 100) {
->>>>>>> parent of cf9d80a... Ai Pathfinding
 		m_direction = EDirection::e_left;
 	}
-	if (randomChoice == 1 && m_direction != EDirection::e_left && m_position.x < Constants::k_screenWidth - 100) {
+	if (m_closestFood.x > m_position.x && m_direction != EDirection::e_left)
+	{
 		m_direction = EDirection::e_right;
 	}
-	if (randomChoice == 2 && m_direction != EDirection::e_down && m_position.y > 100) {
-		m_direction = EDirection::e_up;
-	}
-<<<<<<< HEAD
-	if (m_playerNumber == 0) {
-		std::cout << m_playerNumber << ": MY CLOSEST FOOD IS AT " << m_closestFood.x << " " << m_closestFood.y << std::endl;
-
-		std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
-
-		switch (m_direction)
-		{
-		case EDirection::e_left:
-			std::cout << "I AM GOING LEFT" << std::endl;
-			break;
-		case EDirection::e_right:
-			std::cout << "I AM GOING RIGHT" << std::endl;
-			break;
-		case EDirection::e_up:
-			std::cout << "I AM GOING UP" << std::endl;
-			break;
-		case EDirection::e_down:
-			std::cout << "I AM GOING DOWN" << std::endl;
-
-			break;
-		}
-=======
-	if (randomChoice == 3 && m_direction != EDirection::e_up && m_position.y < Constants::k_screenHeight - 100) {
+	if (m_closestFood.y > m_position.y && m_direction != EDirection::e_up)
+	{
 		m_direction = EDirection::e_down;
->>>>>>> parent of cf9d80a... Ai Pathfinding
+	}
+	if (m_closestFood.y < m_position.y && m_direction != EDirection::e_down)
+	{
+		m_direction = EDirection::e_up;
 	}
 }
 
@@ -119,40 +114,14 @@ void AISnake::CheckCollision()
 	}
 }
 
-sf::Vector2f AISnake::FindClosestFood()
-{
-	sf::Vector2f closestFood = m_closestFood;
-	float magnitudeOfClosestFood = sqrt((closestFood.x * closestFood.x)
-		+ (closestFood.y * closestFood.y));
-	
-	//Find the food that it is closest to
-	for (Food& currentFood : m_food)
-	{
-		sf::Vector2f currentFoodPosition = currentFood.GetPosition();
-		
-		//see if the current piece of food is closer by working out the magnitude of the vectors
-		float magnitudeOfCurrentFood = sqrt((currentFoodPosition.x * currentFoodPosition.x)
-			+ (currentFoodPosition.y * currentFoodPosition.y));
-		
-		//If the current piece of food's magnitude is closer than the previous closest piece, it is closer
-		if (magnitudeOfCurrentFood < magnitudeOfClosestFood)
-		{
-			//reset the closest food
-			closestFood = currentFoodPosition;
-			magnitudeOfClosestFood = magnitudeOfCurrentFood;
-		}
-	}
-	return closestFood;
-}
-
 void AISnake::CheckCollisionAgainstSelf()
 {
-	for(sf::Vector2f& segment : m_segments)
+	for (sf::Vector2f& segment : m_segments)
 	{
 		switch (m_direction)
 		{
 		case EDirection::e_left:
-			if(sf::Vector2f(m_position.x - Constants::k_snakeBlockSize + 5, m_position.y) == segment)
+			if (sf::Vector2f(m_position.x - Constants::k_snakeBlockSize + 5, m_position.y) == segment)
 			{
 				Collision(ECollisionType::e_self);
 			}

@@ -41,7 +41,7 @@ void::PlayerSnake::Input() {
 		m_direction = EDirection::e_right;
 	}
 	//if the up arrow is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_direction != EDirection::e_down){
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_direction != EDirection::e_down) {
 		m_direction = EDirection::e_up;
 	}
 	//down arrow

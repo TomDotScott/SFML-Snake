@@ -7,4 +7,3 @@ public:
 	PlayerSnake();
 	void Input();
 };
-

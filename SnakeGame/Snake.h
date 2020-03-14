@@ -36,7 +36,7 @@ protected:
 	SnakeSegments m_segments;
 
 	bool m_gobbleMode{ false };
-	
+
 	bool m_isDead{ false };
 
 	void Move() override;
@@ -47,9 +47,9 @@ protected:
 
 public:
 	Snake();
-	
+
 	void Grow(const int amount);
-	
+
 	void Shrink(const int amount);
 
 	void Update(sf::RenderWindow& window);
@@ -60,7 +60,7 @@ public:
 	void Collision(ECollisionType collisionType);
 
 	//For colliding with pickups
-	void Collision(Food& food);
+	void Collision(Food* food);
 
 	sf::Vector2f GetHeadPosition() const { return m_position; }
 
@@ -69,7 +69,7 @@ public:
 	bool GetIsGobbleMode() const { return m_gobbleMode; }
 
 	void SetIsGobbleMode(const bool& isGobbleMode) { m_gobbleMode = isGobbleMode; }
-	
+
 	bool GetIsDead() const { return m_isDead; }
 
 	SnakeSegments GetSnakeSegments() const { return m_segments; }
