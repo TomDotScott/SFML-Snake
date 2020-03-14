@@ -35,8 +35,6 @@ Snake::Snake()
 }
 
 void Snake::Move() {
-	//if the left arrow is pressed
-
 	switch (m_direction)
 	{
 	case EDirection::e_left:
