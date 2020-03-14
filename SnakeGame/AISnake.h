@@ -24,6 +24,9 @@ private:
 	//the current store for the closest food
 	sf::Vector2f m_closestFood;
 
+	//The front of the list is the closest food to the snake
+	std::list<sf::Vector2f> m_foodList{};
+	
 	//Cycle through the food on the screen to find the closest food to the snake
-	sf::Vector2f FindClosestFood();
+	void FindClosestFood();
 };

@@ -29,7 +29,7 @@ struct Segment {
 class Snake : public Entity
 {
 protected:
-	EDirection m_direction{ EDirection::e_none };
+	EDirection m_direction{ EDirection::e_right };
 
 	sf::RectangleShape m_rectangle;
 
