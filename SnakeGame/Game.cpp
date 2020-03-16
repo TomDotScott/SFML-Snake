@@ -6,7 +6,8 @@ VIRTUAL SNAKE ON SNAKE COLLISION
 MOVE WINDOW INTO GAME
 USE CONST INTO FUNCTIONS AND METHODS
 UPDATE AND THEN RENDER
-
+MAKE BRACKETS CONSISTENT
+CHANGE VS SETTINGS
 */
 Game::Game(sf::RenderWindow& window) : m_window(window)
 {
@@ -148,7 +149,8 @@ void Game::RandomiseFood(Food* foodToRandomise)
 					isOverlapping = false;
 					break;
 				}
-			}else
+			}
+			else
 			{
 				foodToRandomise->Randomise();
 			}

@@ -12,7 +12,6 @@ public:
 	//this means that the function can only be called by its children
 	//so therefore an Entity cannot exist on its own; it needs to be Food or Snake
 	virtual void Render(sf::RenderWindow& window) = 0;
-
 	virtual void Move();
 };
 
