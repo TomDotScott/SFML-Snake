@@ -19,7 +19,7 @@ PlayerSnake::PlayerSnake() {
 		m_position.y = randomNumber * 25;
 	}
 
-
+	//m_segments.emplace_back(m_position);
 	m_segments.push_back(sf::Vector2f(m_position.x, (m_position.y)));
 	m_segments.push_back(sf::Vector2f(m_position.x - Constants::k_snakeBlockSize - 5, (m_position.y)));
 

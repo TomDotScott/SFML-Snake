@@ -37,7 +37,7 @@ protected:
 
 	bool m_gobbleMode{ false };
 
-	bool m_isDead{ false };
+	bool m_dead{ false };
 
 	void Move() override;
 
@@ -64,13 +64,13 @@ public:
 
 	sf::Vector2f GetHeadPosition() const { return m_position; }
 
-	int FindGobblePoint(sf::Vector2f gobbleSnakeHead);
+	int FindGobblePoint(sf::Vector2f gobbleSnakeHead) const;
 
 	bool GetIsGobbleMode() const { return m_gobbleMode; }
 
 	void SetIsGobbleMode(const bool& isGobbleMode) { m_gobbleMode = isGobbleMode; }
 
-	bool GetIsDead() const { return m_isDead; }
+	bool GetIsDead() const { return m_dead; }
 
 	SnakeSegments GetSnakeSegments() const { return m_segments; }
 

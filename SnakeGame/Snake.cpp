@@ -16,7 +16,7 @@ void Snake::Update(sf::RenderWindow& window) {
 
 
 void Snake::Render(sf::RenderWindow& window) {
-	if (!m_isDead) {
+	if (!m_dead) {
 		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr) {
 			m_rectangle.setPosition(sf::Vector2f(itr->x, itr->y));
 			window.draw(m_rectangle);
@@ -67,9 +67,9 @@ void Snake::Grow(const int amount)
 
 //Find the point where a snake intersects and returns the position in the linked list.
 //This point - the overall size will be the grow amount of the snake that collided with it
-int Snake::FindGobblePoint(sf::Vector2f gobbleSnakeHead)
+int Snake::FindGobblePoint(sf::Vector2f gobbleSnakeHead) const
 {
-	if (!m_isDead) {
+	if (!m_dead) {
 		int counter{ 0 };
 		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr)
 		{
@@ -96,7 +96,7 @@ void Snake::Shrink(const int amount)
 void Snake::CheckCollision() {
 	if (m_direction != EDirection::e_none) {
 		for (sf::Vector2f segment : m_segments) {
-			if (segment == m_position && !m_isDead) {
+			if (segment == m_position && !m_dead) {
 				Collision(ECollisionType::e_self);
 			}
 		}
@@ -104,20 +104,20 @@ void Snake::CheckCollision() {
 }
 
 void Snake::Collision(const ECollisionType collisionType) {
-	if (!m_isDead) {
+	if (!m_dead) {
 		switch (collisionType)
 		{
 		case ECollisionType::e_wall:
 			std::cout << "I HIT A WALL" << std::endl;
-			m_isDead = true;
+			m_dead = true;
 			break;
 		case ECollisionType::e_snake:
 			std::cout << "I HIT ANOTHER SNAKE" << std::endl;
-			m_isDead = true;
+			m_dead = true;
 			break;
 		case ECollisionType::e_self:
 			std::cout << "I HIT MYSELF" << std::endl;
-			m_isDead = true;
+			m_dead = true;
 			break;
 		case ECollisionType::e_food:
 			break;

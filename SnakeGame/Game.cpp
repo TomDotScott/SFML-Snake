@@ -1,6 +1,13 @@
 #include "Game.h"
 #include <iostream>
+/* TO DO
+MAKE ARRAY OF SNAKE* INCLUDING THE PLAYER AND AI TO CLEAN UP COLLISIONS
+VIRTUAL SNAKE ON SNAKE COLLISION
+MOVE WINDOW INTO GAME
+USE CONST INTO FUNCTIONS AND METHODS
+UPDATE AND THEN RENDER
 
+*/
 Game::Game(sf::RenderWindow& window) : m_window(window)
 {
 	m_playerSnake = new PlayerSnake();
@@ -29,6 +36,19 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 			}
 		}
 	}
+}
+
+Game::~Game()
+{
+	for (Food* food : m_foodArray) {
+		delete food;
+		food = nullptr;
+	}
+	delete m_foodArray;
+
+	delete m_playerSnake;
+
+	//m_AISnakes
 }
 
 void Game::CheckCollisions()
@@ -118,7 +138,7 @@ void Game::RandomiseFood(Food* foodToRandomise)
 	while (isOverlapping) {
 		foodToRandomise->Randomise();
 		//Check the randomised position
-		for(Food* food : m_foodArray)
+		for(const Food* food : m_foodArray)
 		{
 			//make sure the food isn't getting compared to itself!
 			if(*food != *foodToRandomise)

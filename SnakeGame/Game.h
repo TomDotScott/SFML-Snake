@@ -22,7 +22,7 @@ class Game
 private:
 	PlayerSnake* m_playerSnake;
 	std::vector<AISnake*> m_AISnakes;
-	Food* m_foodArray[5];
+	Food* m_foodArray[5]; //C Array - C++ Array
 	sf::RenderWindow& m_window;
 
 	//TOP
@@ -43,5 +43,6 @@ public:
 	void Update();
 	void Input() const;
 	Game(sf::RenderWindow& window);
+	~Game();
 	void CheckCollisions();
 };

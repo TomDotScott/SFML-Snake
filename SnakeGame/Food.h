@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
 #include "Constants.h"
+#include <assert.h>
 
 
 enum class eFoodType {
@@ -45,7 +46,9 @@ public:
 		case eFoodType::e_gobble:
 			return Constants::k_gobbleGrowAmount;
 		}
-		return 0;
+
+		assert(false);
+		//return 0;
 	}
 
 	eFoodType GetType() const { return m_type; }

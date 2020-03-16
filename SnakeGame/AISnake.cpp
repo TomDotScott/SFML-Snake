@@ -29,7 +29,7 @@ AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 }
 
 void AISnake::ChooseDirection() {
-	if (!m_isDead) {
+	if (!m_dead) {
 		FindFood();
 
 		std::cout << "MY CLOSEST FOOD IS AT " << m_foodList.front().x << " " << m_foodList.front().y << std::endl;
@@ -61,11 +61,12 @@ void AISnake::ChooseDirection() {
 
 void AISnake::CheckCollision()
 {
-	if (!m_isDead) {
+	if (!m_dead) {
 		//check each snake segment against other snake heads
 		//and other snake heads against this snake's segments
 		for (sf::Vector2f& segment : m_segments) {
 			for (AISnake* otherSnake : m_otherSnakes) {
+				assert(otherSnake);
 				if (!otherSnake->GetIsDead()) {
 					//If another snake's head has hit this segment
 					if (segment == otherSnake->GetHeadPosition()) {
@@ -114,11 +115,12 @@ void AISnake::FindFood()
 	
 	float magnitudeOfClosestFood = sqrt((closestFood.x * closestFood.x)
 		+ (closestFood.y * closestFood.y));
+	
 
 	//Find the food that it is closest to
 	for (Food* currentFood : m_food)
 	{
-		const sf::Vector2f currentFoodPosition = currentFood->GetPosition();
+		const sf::Vector2f currentFoodPosition{ currentFood->GetPosition() };
 		//see if the current piece of food is closer by working out the magnitude of the vectors
 		const float magnitudeOfCurrentFood = sqrt((currentFoodPosition.x * currentFoodPosition.x)
 			+ (currentFoodPosition.y * currentFoodPosition.y));
@@ -131,7 +133,7 @@ void AISnake::FindFood()
 			m_foodList.push_front(closestFood);
 
 			//check that the closest food isn't in any of the segments
-			for(sf::Vector2f& segment : m_segments)
+			for(const sf::Vector2f& segment : m_segments)
 			{
 				if(segment == closestFood)
 				{
@@ -147,7 +149,7 @@ void AISnake::FindFood()
 
 void AISnake::CheckCollisionAgainstSelf()
 {
-	if (!m_isDead) {
+	if (!m_dead) {
 		int counter{ 0 };
 		for (sf::Vector2f& segment : m_segments)
 		{
