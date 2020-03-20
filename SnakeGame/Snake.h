@@ -43,6 +43,9 @@ protected:
 
 	static int RandomRange(int min, int max);
 
+	//A store of all of the food on screen to help with decision making
+	std::vector<Food*> m_food;
+	
 public:
 	Snake();
 
@@ -68,7 +71,9 @@ public:
 
 	void SetIsGobbleMode(const bool& isGobbleMode) { m_gobbleMode = isGobbleMode; }
 
-	bool GetIsDead() const { return m_dead; }
+	void SetFood(Food* food) { m_food.push_back(food); }
+	
+	bool IsDead() const { return m_dead; }
 
 	SnakeSegments GetSnakeSegments() const { return m_segments; }
 

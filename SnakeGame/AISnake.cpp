@@ -106,8 +106,8 @@ void AISnake::FindFood()
 	
 	m_foodList.push_front(closestFood);
 	
-	float magnitudeOfClosestFood = sqrt((closestFood.x * closestFood.x)
-		+ (closestFood.y * closestFood.y));
+	float magnitudeOfClosestFood = (closestFood.x * closestFood.x)
+		+ (closestFood.y * closestFood.y);
 	
 
 	//Find the food that it is closest to

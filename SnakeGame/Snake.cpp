@@ -35,16 +35,16 @@ Snake::Snake() {
 void Snake::Move() {
 	switch (m_direction) {
 	case EDirection::e_left:
-		m_position.x -= (Constants::k_snakeBlockSize + 5);
+		m_position.x -= (Constants::k_gridSize);
 		break;
 	case EDirection::e_right:
-		m_position.x += (Constants::k_snakeBlockSize + 5);
+		m_position.x += (Constants::k_gridSize);
 		break;
 	case EDirection::e_up:
-		m_position.y -= (Constants::k_snakeBlockSize + 5);
+		m_position.y -= (Constants::k_gridSize);
 		break;
 	case EDirection::e_down:
-		m_position.y += (Constants::k_snakeBlockSize + 5);
+		m_position.y += (Constants::k_gridSize);
 		break;
 	default:
 		break;
