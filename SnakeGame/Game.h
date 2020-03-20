@@ -19,8 +19,9 @@ struct Wall {
 
 class Game {
 private:
-	PlayerSnake* m_playerSnake;
-	std::vector<AISnake*> m_AISnakes;
+	//PlayerSnake* m_playerSnake;
+	//std::vector<AISnake*> m_AISnakes;
+	
 	Food* m_foodArray[5]; //C Array - C++ Array
 	sf::RenderWindow& m_window;
 
@@ -33,13 +34,22 @@ private:
 	//RIGHT
 	Wall m_rightWall{ Wall(Constants::k_screenHeight, 100, sf::Vector2f(Constants::k_screenWidth - Constants::k_gridSize, 0)) };
 
+	std::vector<Snake*> m_snakes;
+	
 	//ensure that food doesn't overlap
 	void RandomiseFood(Food* foodToRandomise);
 	
 public:
+	void Play();
+	
 	void Update();
+	
 	void Input() const;
+	
 	Game(sf::RenderWindow& window);
+	
 	~Game();
+	
 	void CheckCollisions();
+	
 };
