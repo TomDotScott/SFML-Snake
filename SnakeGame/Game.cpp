@@ -9,29 +9,26 @@ UPDATE AND THEN RENDER
 MAKE BRACKETS CONSISTENT
 CHANGE VS SETTINGS
 */
-Game::Game(sf::RenderWindow& window) : m_window(window)
-{
+Game::Game(sf::RenderWindow& window) : m_window(window) {
 	m_playerSnake = new PlayerSnake();
 	//populate the food array
-	for (auto& i : m_foodArray)
-	{
+	for (auto& i : m_foodArray) {
 		Food* food = new Food();
 		i = food;
 	}
 
 	//populate the AISnake Vector
-	for (int i = 0; i < m_AISnakeAmount; ++i) {
+	for (int i = 0; i < Constants::k_AISnakeAmount; ++i) {
 		std::cout << "AI SNAKE CREATED" << std::endl;
 		m_AISnakes.push_back(new AISnake(i));
 	}
 
 	//Make each AI snake have a pointer to each other
-	for (int snakePosition = 0; snakePosition < m_AISnakes.size(); ++snakePosition) {
+	for (unsigned int snakePosition{ 0 }; snakePosition < m_AISnakes.size(); ++snakePosition) {
 		for (AISnake* aiSnakeToAdd : m_AISnakes) {
-			if (snakePosition != aiSnakeToAdd->GetPlayerNumber()) {
+			if (snakePosition != static_cast<unsigned int>(aiSnakeToAdd->GetPlayerNumber())) {
 				m_AISnakes[snakePosition]->SetOtherSnakes(aiSnakeToAdd);
-				for (Food* food : m_foodArray)
-				{
+				for (Food* food : m_foodArray) {
 					aiSnakeToAdd->SetFood(food);
 				}
 			}
@@ -39,8 +36,7 @@ Game::Game(sf::RenderWindow& window) : m_window(window)
 	}
 }
 
-Game::~Game()
-{
+Game::~Game() {
 	for (Food* food : m_foodArray) {
 		delete food;
 		food = nullptr;
@@ -52,8 +48,7 @@ Game::~Game()
 	//m_AISnakes
 }
 
-void Game::CheckCollisions()
-{
+void Game::CheckCollisions() {
 	//Check player against Walls
 	if (!m_playerSnake->GetIsDead() && (m_playerSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
 		m_playerSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
@@ -139,19 +134,15 @@ void Game::RandomiseFood(Food* foodToRandomise)
 	while (isOverlapping) {
 		foodToRandomise->Randomise();
 		//Check the randomised position
-		for(const Food* food : m_foodArray)
-		{
+		for(const Food* food : m_foodArray) {
 			//make sure the food isn't getting compared to itself!
-			if(*food != *foodToRandomise)
-			{
-				if(foodToRandomise->GetPosition() != food->GetPosition())
-				{
+			if(*food != *foodToRandomise) {
+				if(foodToRandomise->GetPosition() != food->GetPosition()) {
 					isOverlapping = false;
 					break;
 				}
 			}
-			else
-			{
+			else {
 				foodToRandomise->Randomise();
 			}
 		}
@@ -160,16 +151,14 @@ void Game::RandomiseFood(Food* foodToRandomise)
 
 void Game::Update() {
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
-	if (rand() % 10 == 0)
-	{
+	if (rand() % 10 == 0) {
 		//Check player first
 		if (m_playerSnake->GetIsGobbleMode() && !m_playerSnake->GetIsDead()) {
 			std::cout << "GOBBLE MODE OVER" << std::endl;
 
 			m_playerSnake->SetIsGobbleMode(false);
 		}
-		else
-		{
+		else {
 			//reset the AI snakes
 			for (AISnake* aiSnake : m_AISnakes) {
 				if (!aiSnake->GetIsDead() && aiSnake->GetIsGobbleMode()) {

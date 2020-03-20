@@ -3,7 +3,8 @@
 PlayerSnake::PlayerSnake() {
 	m_colour = sf::Color::Red;
 
-	int randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize);
+	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize) };
+	
 	if (randomNumber * 25 >= Constants::k_screenWidth - 100) {
 		m_position.x = Constants::k_screenWidth - 100;
 	}
@@ -19,11 +20,9 @@ PlayerSnake::PlayerSnake() {
 		m_position.y = randomNumber * 25;
 	}
 
-	//m_segments.emplace_back(m_position);
+	m_segments.push_back(m_position);
 	m_segments.push_back(sf::Vector2f(m_position.x, (m_position.y)));
 	m_segments.push_back(sf::Vector2f(m_position.x - Constants::k_snakeBlockSize - 5, (m_position.y)));
-
-
 
 	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
 	m_rectangle.setFillColor(m_colour);

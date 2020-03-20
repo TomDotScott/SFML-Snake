@@ -9,8 +9,7 @@ enum class eFoodType {
 	e_standard, e_special, e_gobble
 };
 
-class Food : public Entity
-{
+class Food : public Entity {
 private:
 	sf::CircleShape m_circle;
 
@@ -18,7 +17,7 @@ private:
 
 	eFoodType m_type;
 
-	int m_id = RandomRange(0, 1000);
+	int m_id{ RandomRange(0, 1000) };
 	
 	void RandomisePosition();
 
@@ -35,10 +34,8 @@ public:
 
 	sf::Vector2f GetPosition() const { return m_position; }
 
-	int GetGrowAmount() const
-	{
-		switch (m_type)
-		{
+	int GetGrowAmount() const {
+		switch (m_type) {
 		case eFoodType::e_standard:
 			return Constants::k_standardGrowAmount;
 		case eFoodType::e_special:
@@ -48,14 +45,13 @@ public:
 		}
 
 		assert(false);
-		//return 0;
+		return 0;
 	}
 
 	eFoodType GetType() const { return m_type; }
 };
 
-inline bool operator==(const Food& lhs, const Food& rhs)
-{
+inline bool operator==(const Food& lhs, const Food& rhs) {
 	/* do actual comparison */
 	if(lhs.GetID() == rhs.GetID())
 	{

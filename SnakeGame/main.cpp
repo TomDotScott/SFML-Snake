@@ -19,8 +19,7 @@
 #include <time.h>
 #include "Constants.h"
 
-int main()
-{	
+int main() {	
 	//seed the random number generator
 	std::srand(static_cast<unsigned int>(time(NULL)));
 
@@ -41,15 +40,12 @@ int main()
     std::cout << "SnakeGame: Starting" << std::endl;
 
     // Main loop that continues until we call window.close()
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         // Handle any pending SFML events
         // These cover keyboard, mouse,joystick etc.
         sf::Event event{};
-        while (window.pollEvent(event))
-        {
-          switch(event.type)
-          {
+        while (window.pollEvent(event)) {
+          switch(event.type) {
             case sf::Event::Closed:
               window.close();
             break;

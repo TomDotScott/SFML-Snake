@@ -2,26 +2,23 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 
-int Food::RandomRange(int min, int max) //range : [min, max)
-{
+int Food::RandomRange(int min, int max) {
 	return min + rand() % ((max + 1) - min);
 }
 
-Food::Food()
-{
+Food::Food() {
 	Randomise();
 	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
 }
 
-Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position), m_type(eFoodType::e_standard)
-{
+Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position), m_type(eFoodType::e_standard) {
 	Randomise();
 	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
 }
 
 void Food::Randomise() {
 	//there will be 3 types of pickup. Standard, Special and Gobble Mode
-	const int randomType = RandomRange(0, 100);
+	const int randomType{ RandomRange(0, 100) };
 	//60% chance of being standard
 	if (randomType <= 60) {
 		m_type = eFoodType::e_standard;
@@ -37,12 +34,11 @@ void Food::Randomise() {
 	RandomisePosition();
 }
 
-void Food::RandomisePosition()
-{
+void Food::RandomisePosition() {
 	//Find a random grid position
 	//generate column number
 
-	int randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize));
+	int randomNumber{ RandomRange(4, static_cast<int>((Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize)) };
 
 	m_position.x = randomNumber * 25 >= Constants::k_screenWidth - 100
 		? Constants::k_screenWidth - 100
@@ -59,8 +55,7 @@ void Food::RandomisePosition()
 	m_circle.setPosition(m_position);
 }
 
-void Food::Render(sf::RenderWindow& window)
-{
+void Food::Render(sf::RenderWindow& window) {
 	switch (m_type)
 	{
 	case eFoodType::e_standard:

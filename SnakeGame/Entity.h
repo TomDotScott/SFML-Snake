@@ -1,7 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-class Entity
-{
+class Entity {
 protected:
 	sf::Color m_colour;
 	sf::Vector2f m_position;

@@ -1,7 +1,6 @@
 #pragma once
 #include "Snake.h"
-class AISnake : public Snake
-{
+class AISnake : public Snake {
 public:
 	AISnake(int playerNumber);
 	void ChooseDirection();
@@ -11,12 +10,11 @@ public:
 	
 	void CheckCollisionAgainstSelf();
 	void CheckCollision() override;
-	void SetOtherSnakes(AISnake* snakeToAdd) { 
-		
-		
-		
-		m_otherSnakes.push_back(snakeToAdd); }
+	
+	void SetOtherSnakes(AISnake* snakeToAdd) { m_otherSnakes.push_back(snakeToAdd); }
+	
 	void SetFood(Food* food) { m_food.push_back(food); }
+	
 	int GetPlayerNumber() const { return m_playerNumber; }
 
 private:

@@ -7,8 +7,7 @@
 using SnakeSegments = std::list<sf::Vector2f>;
 
 //Holds the directions that the snake can travel in
-enum class EDirection
-{
+enum class EDirection {
 	e_none, e_left, e_right, e_up, e_down
 };
 
@@ -26,8 +25,7 @@ struct Segment {
 	}
 };
 
-class Snake : public Entity
-{
+class Snake : public Entity {
 protected:
 	EDirection m_direction{ EDirection::e_right };
 

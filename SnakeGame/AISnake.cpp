@@ -3,7 +3,7 @@
 #include <iostream>
 
 AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
-	int randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize);
+	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize) };
 	
 	if (randomNumber * 25 >= Constants::k_screenWidth - 100) {
 		m_position.x = Constants::k_screenWidth - 100;
@@ -13,6 +13,7 @@ AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 	}
 
 	randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize);
+	
 	if (randomNumber * 25 >= Constants::k_screenHeight - 100) {
 		m_position.y = Constants::k_screenHeight - 100;
 	}
@@ -36,25 +37,17 @@ void AISnake::ChooseDirection() {
 		//std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
 
 		//Make decisions based on the closest food
-		if (m_foodList.front().x < m_position.x && m_direction != EDirection::e_right)
-		{
+		if (m_foodList.front().x < m_position.x && m_direction != EDirection::e_right) {
 			m_direction = EDirection::e_left;
-
 		}
-		if (m_foodList.front().x > m_position.x && m_direction != EDirection::e_left)
-		{
+		else if (m_foodList.front().x > m_position.x && m_direction != EDirection::e_left) {
 			m_direction = EDirection::e_right;
-
 		}
-		if (m_foodList.front().y > m_position.y && m_direction != EDirection::e_up)
-		{
+		else if (m_foodList.front().y > m_position.y && m_direction != EDirection::e_up) {
 			m_direction = EDirection::e_down;
-
 		}
-		if (m_foodList.front().y < m_position.y && m_direction != EDirection::e_down)
-		{
+		else if (m_foodList.front().y < m_position.y && m_direction != EDirection::e_down) {
 			m_direction = EDirection::e_up;
-
 		}
 	}
 }
@@ -118,25 +111,23 @@ void AISnake::FindFood()
 	
 
 	//Find the food that it is closest to
-	for (Food* currentFood : m_food)
-	{
+	for (Food* currentFood : m_food) {
 		const sf::Vector2f currentFoodPosition{ currentFood->GetPosition() };
 		//see if the current piece of food is closer by working out the magnitude of the vectors
 		const float magnitudeOfCurrentFood = sqrt((currentFoodPosition.x * currentFoodPosition.x)
 			+ (currentFoodPosition.y * currentFoodPosition.y));
+		
 		//If the current piece of food's magnitude is closer than the previous closest piece, it is closer
-		if (magnitudeOfCurrentFood < magnitudeOfClosestFood)
-		{
+		if (magnitudeOfCurrentFood < magnitudeOfClosestFood) {
+			
 			//reset the closest food
 			closestFood = currentFoodPosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
 			m_foodList.push_front(closestFood);
 
 			//check that the closest food isn't in any of the segments
-			for(const sf::Vector2f& segment : m_segments)
-			{
-				if(segment == closestFood)
-				{
+			for(const sf::Vector2f& segment : m_segments) {
+				if(segment == closestFood) {
 					m_foodList.pop_front();
 				}
 			}
