@@ -38,8 +38,12 @@ Game::~Game() {
 	}
 	delete m_foodArray;
 
+	for(auto* snake : m_snakes)
+	{
+		delete snake;
+	}
 
-	//m_AISnakes
+	
 }
 
 void Game::CheckCollisions() {

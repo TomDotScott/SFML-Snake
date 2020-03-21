@@ -24,6 +24,8 @@ private:
 public:
 	Food();
 
+	~Food();
+	
 	void Randomise();
 
 	int GetID() const { return m_id; }
