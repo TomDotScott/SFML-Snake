@@ -41,6 +41,8 @@ protected:
 	
 	void Render(sf::RenderWindow& window) override final;
 
+	int m_score{ 0 };
+	
 	//A store of all of the food on screen to help with decision making
 	std::vector<Food*> m_food;
 	
@@ -66,6 +68,8 @@ public:
 	int FindGobblePoint(sf::Vector2f gobbleSnakeHead) const;
 
 	bool GetIsGobbleMode() const { return m_gobbleMode; }
+
+	int GetScore() const { return m_score; }
 
 	void SetIsGobbleMode(const bool& isGobbleMode) { m_gobbleMode = isGobbleMode; }
 

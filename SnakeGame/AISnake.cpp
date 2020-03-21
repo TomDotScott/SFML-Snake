@@ -35,9 +35,6 @@ void AISnake::ChooseDirection() {
 	if (!m_dead) {
 		FindFood();
 
-		std::cout << "MY CLOSEST FOOD IS AT " << m_foodList.front().x << " " << m_foodList.front().y << std::endl;
-		//std::cout << "I AM AT " << m_position.x << " " << m_position.y << std::endl;
-
 		//Make decisions based on the closest food
 		if (m_foodList.front().x < m_position.x && m_direction != EDirection::e_right) {
 			m_direction = EDirection::e_left;

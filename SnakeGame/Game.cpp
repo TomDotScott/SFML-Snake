@@ -138,6 +138,7 @@ void Game::Update() {
 			if (!snake->IsDead() && snake->GetIsGobbleMode()) {
 				std::cout << "GOBBLE MODE OVER" << std::endl;
 				snake->SetIsGobbleMode(false);
+				break;
 			}
 		}
 	}
@@ -147,9 +148,10 @@ void Game::Update() {
 	}
 
 
-	for(auto* snake : m_snakes)
+	for(unsigned int i = 0; i < m_snakes.size(); ++i)
 	{
-		snake->Update(m_window);
+		m_snakes[i]->Update(m_window);
+		std::cout << "Player " << i+1 << " Score: " << m_snakes[i]->GetScore() << std::endl;
 	}
 
 	//Draw the Walls
@@ -157,7 +159,7 @@ void Game::Update() {
 	m_window.draw(m_bottomWall.m_wall);
 	m_window.draw(m_leftWall.m_wall);
 	m_window.draw(m_rightWall.m_wall);
-
+	
 }
 
 void Game::Input() const

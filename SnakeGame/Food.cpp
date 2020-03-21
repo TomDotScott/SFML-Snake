@@ -51,8 +51,6 @@ void Food::RandomisePosition() {
 						? Constants::k_screenHeight - 100
 						: randomNumber * Constants::k_gridSize;
 
-	std::cout << "FOOD LOCATION: " << m_position.x << " " << m_position.y << std::endl;
-
 	m_circle.setPosition(m_position);
 }
 

@@ -55,6 +55,7 @@ void Snake::Grow(const int amount) {
 	for (int i{ 0 }; i < amount; ++i) {
 		m_segments.push_back(sf::Vector2f(m_position.x, m_position.y));
 	}
+	m_score += 10 * amount;
 }
 
 //Find the point where a snake intersects and returns the position in the linked list.
@@ -115,10 +116,10 @@ void Snake::Collision(const ECollisionType collisionType) {
 
 void Snake::Collision(Food* food)
 {
-	std::cout << "+" << food->GetGrowAmount() << std::endl;
 	if (food->GetType() == eFoodType::e_gobble) {
 		m_gobbleMode = true;
 		std::cout << "GOBBLE MODE!" << std::endl;
 	}
-	Grow(food->GetGrowAmount());
+	const int growAmount{ food->GetGrowAmount() };
+	Grow(growAmount);
 }
