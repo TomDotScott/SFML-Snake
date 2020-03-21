@@ -5,7 +5,7 @@ VIRTUAL SNAKE ON SNAKECOLLISION
 UPDATE AND THEN RENDER
 CHANGE VS SETTINGS
 */
-Game::Game(sf::RenderWindow& window) : m_window(window) {
+Game::Game(sf::RenderWindow& window, sf::Font& font) : m_window(window), m_font(font) {
 
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
@@ -36,12 +36,12 @@ Game::~Game() {
 		delete food;
 	}
 
-	for(auto* snake : m_snakes)
+	for (auto* snake : m_snakes)
 	{
 		delete snake;
 	}
 
-	
+
 }
 
 void Game::CheckCollisions() {
@@ -131,6 +131,49 @@ void Game::RandomiseFood(Food* foodToRandomise)
 	}
 }
 
+
+void Game::Play()
+{
+	sf::Clock clock;
+	
+	// We can still output to the console window
+	std::cout << "SnakeGame: Starting" << std::endl;
+
+	// Main loop that continues until we call window.close()
+	while (m_window.isOpen()) {
+		// Handle any pending SFML events
+		// These cover keyboard, mouse,joystick etc.
+		sf::Event event{};
+		while (m_window.pollEvent(event)) {
+			switch (event.type) {
+			case sf::Event::Closed:
+				m_window.close();
+				break;
+			default:
+				break;
+			}
+		}
+
+		//input and collisions should be done outside of the game tick
+		Input();
+
+
+		while (clock.getElapsedTime() >= sf::milliseconds(250)) {
+
+			// We must clear the window each time around the loop
+			m_window.clear();
+			CheckCollisions();
+			Update();
+
+			// Get the window to display its contents
+			m_window.display();
+			clock.restart();
+		}
+	}
+
+	std::cout << "SnakeGame: Finished" << std::endl;
+}
+
 void Game::Update() {
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
 	if (rand() % 10 == 0) {
@@ -148,10 +191,10 @@ void Game::Update() {
 	}
 
 
-	for(unsigned int i = 0; i < m_snakes.size(); ++i)
+	for (unsigned int i = 0; i < m_snakes.size(); ++i)
 	{
 		m_snakes[i]->Update(m_window);
-		std::cout << "Player " << i+1 << " Score: " << m_snakes[i]->GetScore() << std::endl;
+		std::cout << "Player " << i + 1 << " Score: " << m_snakes[i]->GetScore() << std::endl;
 	}
 
 	//Draw the Walls
@@ -159,7 +202,7 @@ void Game::Update() {
 	m_window.draw(m_bottomWall.m_wall);
 	m_window.draw(m_leftWall.m_wall);
 	m_window.draw(m_rightWall.m_wall);
-	
+
 }
 
 void Game::Input() const

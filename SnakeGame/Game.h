@@ -20,6 +20,9 @@ struct Wall {
 class Game {
 private:
 
+	//the font for the UI
+	sf::Font m_font;
+	
 	std::vector<Snake*> m_snakes;
 	
 	Food* m_foodArray[5]; //C Array - C++ Array
@@ -40,8 +43,9 @@ private:
 	
 public:
 	void Update();
+	void Play();
 	void Input() const;
-	Game(sf::RenderWindow& window);
+	explicit Game(sf::RenderWindow& window, sf::Font& font);
 	~Game();
 	void CheckCollisions();
 };
