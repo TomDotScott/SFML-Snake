@@ -19,9 +19,11 @@ struct Wall {
 
 class Game {
 private:
-	PlayerSnake* m_playerSnake;
-	std::vector<AISnake*> m_AISnakes;
+
+	std::vector<Snake*> m_snakes;
+	
 	Food* m_foodArray[5]; //C Array - C++ Array
+	
 	sf::RenderWindow& m_window;
 
 	//TOP
