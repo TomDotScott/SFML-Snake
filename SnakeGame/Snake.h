@@ -29,8 +29,6 @@ class Snake : public Entity {
 protected:
 	EDirection m_direction{ EDirection::e_right };
 
-	std::vector<Food*> m_food;
-
 	sf::RectangleShape m_rectangle;
 
 	SnakeSegments m_segments;

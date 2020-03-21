@@ -36,7 +36,6 @@ Game::~Game() {
 	for (Food* food : m_foodArray) {
 		delete food;
 	}
-	delete m_foodArray;
 
 	for(auto* snake : m_snakes)
 	{
