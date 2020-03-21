@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 
-AISnake::AISnake() {
+AISnake::AISnake(int playerNumber) : m_playerNumber(playerNumber) {
 	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize) };
 	
 	if (randomNumber * 25 >= Constants::k_screenWidth - 100) {
@@ -52,6 +52,50 @@ void AISnake::ChooseDirection() {
 	}
 }
 
+void AISnake::CheckCollision()
+{
+	if (!m_dead) {
+		//check each snake segment against other snake heads
+		//and other snake heads against this snake's segments
+		for (sf::Vector2f& segment : m_segments) {
+			for (AISnake* otherSnake : m_otherSnakes) {
+				assert(otherSnake);
+				if (!otherSnake->GetIsDead()) {
+					//If another snake's head has hit this segment
+					if (segment == otherSnake->GetHeadPosition()) {
+						otherSnake->Collision(ECollisionType::e_snake);
+						//return;
+					}
+					//Check if this snake has hit another snake's body
+					for (sf::Vector2f& otherSegment : otherSnake->GetSnakeSegments()) {
+						if (otherSegment == m_position) {
+							if (m_gobbleMode) {
+								const int growShrinkAmount{ otherSnake->FindGobblePoint(m_position) };
+								Grow(growShrinkAmount);
+								Shrink(growShrinkAmount);
+								//return;
+							}
+							Collision(ECollisionType::e_snake);
+							//return;
+						}
+					}
+					//If head-on collisions, they both die
+					if (m_position == otherSnake->GetHeadPosition()) {
+						if (m_gobbleMode) {
+							Grow((otherSnake->GetSnakeSegments().size()));
+							otherSnake->Collision(ECollisionType::e_snake);
+							//return;
+						}
+						std::cout << "HEAD ON COLLISION!" << std::endl;
+						Collision(ECollisionType::e_snake);
+						otherSnake->Collision(ECollisionType::e_snake);
+					}
+				}
+			}
+		}
+		CheckCollisionAgainstSelf();
+	}
+}
 
 void AISnake::FindFood()
 {
@@ -70,8 +114,8 @@ void AISnake::FindFood()
 	for (Food* currentFood : m_food) {
 		const sf::Vector2f currentFoodPosition{ currentFood->GetPosition() };
 		//see if the current piece of food is closer by working out the magnitude of the vectors
-		const float magnitudeOfCurrentFood = (currentFoodPosition.x * currentFoodPosition.x)
-			+ (currentFoodPosition.y * currentFoodPosition.y);
+		const float magnitudeOfCurrentFood = sqrt((currentFoodPosition.x * currentFoodPosition.x)
+			+ (currentFoodPosition.y * currentFoodPosition.y));
 		
 		//If the current piece of food's magnitude is closer than the previous closest piece, it is closer
 		if (magnitudeOfCurrentFood < magnitudeOfClosestFood) {
@@ -82,7 +126,7 @@ void AISnake::FindFood()
 			m_foodList.push_front(closestFood);
 
 			//check that the closest food isn't in any of the segments
-			for(const auto& segment : m_segments) {
+			for(const sf::Vector2f& segment : m_segments) {
 				if(segment == closestFood) {
 					m_foodList.pop_front();
 				}
@@ -94,36 +138,17 @@ void AISnake::FindFood()
 	
 }
 
-void AISnake::Collision(Food* food)
-{
-	std::cout << "+" << food->GetGrowAmount() << std::endl;
-	if (food->GetType() == eFoodType::e_gobble) {
-		m_gobbleMode = true;
-		std::cout << "GOBBLE MODE!" << std::endl;
-	}
-	Grow(food->GetGrowAmount());
-	//Find the next bit of food
-	FindFood();
-}
-
 void AISnake::CheckCollisionAgainstSelf()
 {
 	if (!m_dead) {
 		int counter{ 0 };
-		for (auto& segment : m_segments)
+		for (sf::Vector2f& segment : m_segments)
 		{
 			if (segment == m_position && counter != 0)
 			{
-				//Collision(ECollisionType::e_self);
-				std::cout << "I HIT MYSELF!" << std::endl;
+				Collision(ECollisionType::e_self);
 			}
 			++counter;
 		}
 	}
-}
-
-void AISnake::Update(sf::RenderWindow& window) {
-	ChooseDirection();
-	Move();
-	Render(window);
 }

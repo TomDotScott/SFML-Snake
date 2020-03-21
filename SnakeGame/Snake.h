@@ -50,7 +50,7 @@ public:
 
 	void Shrink(const int amount);
 
-	virtual void Update(sf::RenderWindow& window);
+	void Update(sf::RenderWindow& window);
 
 	virtual void CheckCollision();
 
@@ -58,7 +58,7 @@ public:
 	void Collision(ECollisionType collisionType);
 
 	//For colliding with pickups
-	virtual void Collision(Food* food);
+	void Collision(Food* food);
 
 	sf::Vector2f GetHeadPosition() const { return m_position; }
 

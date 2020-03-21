@@ -6,22 +6,33 @@ VIRTUAL SNAKE ON SNAKE COLLISION
 MOVE WINDOW INTO GAME
 USE CONST INTO FUNCTIONS AND METHODS
 UPDATE AND THEN RENDER
+MAKE BRACKETS CONSISTENT
 CHANGE VS SETTINGS
 */
 Game::Game(sf::RenderWindow& window) : m_window(window) {
+	m_playerSnake = new PlayerSnake();
 	//populate the food array
 	for (auto& i : m_foodArray) {
 		Food* food = new Food();
 		i = food;
 	}
 
-	auto* playerSnake = new PlayerSnake();
-	m_snakes.push_back(playerSnake);
-	
-	//populate the AISnakes in the vector
+	//populate the AISnake Vector
 	for (int i = 0; i < Constants::k_AISnakeAmount; ++i) {
 		std::cout << "AI SNAKE CREATED" << std::endl;
-		m_snakes.push_back(new AISnake());
+		m_AISnakes.push_back(new AISnake(i));
+	}
+
+	//Make each AI snake have a pointer to each other
+	for (unsigned int snakePosition{ 0 }; snakePosition < m_AISnakes.size(); ++snakePosition) {
+		for (AISnake* aiSnakeToAdd : m_AISnakes) {
+			if (snakePosition != static_cast<unsigned int>(aiSnakeToAdd->GetPlayerNumber())) {
+				m_AISnakes[snakePosition]->SetOtherSnakes(aiSnakeToAdd);
+				for (Food* food : m_foodArray) {
+					aiSnakeToAdd->SetFood(food);
+				}
+			}
+		}
 	}
 }
 
@@ -32,115 +43,86 @@ Game::~Game() {
 	}
 	delete m_foodArray;
 
-	for (auto* snake : m_snakes) {
-		delete snake;
-		snake = nullptr;
-	}
+	delete m_playerSnake;
 
 	//m_AISnakes
 }
 
-void Game::Play() {
-	sf::Clock clock;
-	// We can still output to the console window
-	std::cout << "SnakeGame: Starting" << std::endl;
-
-	// Main loop that continues until we call window.close()
-	while (m_window.isOpen()) {
-		// Handle any pending SFML events
-		// These cover keyboard, mouse,joystick etc.
-		sf::Event event{};
-		while (m_window.pollEvent(event)) {
-			switch (event.type) {
-			case sf::Event::Closed:
-				m_window.close();
-				break;
-			default:
-				break;
-			}
-		}
-
-		//input and collisions should be done outside of the game tick
-		Input();
-		CheckCollisions();
-
-
-		while (clock.getElapsedTime() >= sf::milliseconds(250)) {
-			// We must clear the window each time around the loop
-			m_window.clear();
-			Update();
-
-			// Get the window to display its contents
-			m_window.display();
-			clock.restart();
-		}
+void Game::CheckCollisions() {
+	//Check player against Walls
+	if (!m_playerSnake->GetIsDead() && (m_playerSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
+		m_playerSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
+		m_playerSnake->GetHeadPosition().y == m_topWall.m_position.y ||
+		m_playerSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
+		m_playerSnake->Collision(ECollisionType::e_wall);
 	}
 
-	std::cout << "SnakeGame: Finished" << std::endl;
-}
-
-
-void Game::CheckCollisions() {
-	for (auto* snake : m_snakes) {
-		//only check collisions if the snake is alive
-		if (!snake->GetIsDead()) {
-			//Check against Walls
-			if (snake->GetHeadPosition().x == m_leftWall.m_position.x ||
-				snake->GetHeadPosition().x == m_rightWall.m_position.x ||
-				snake->GetHeadPosition().y == m_topWall.m_position.y ||
-				snake->GetHeadPosition().y == m_bottomWall.m_position.y) {
-				snake->Collision(ECollisionType::e_wall);
+	//Check Against Food
+	for (Food* food : m_foodArray) {
+		//only one collision can happen per snake
+		for (AISnake* aiSnake : m_AISnakes) {
+			if (!aiSnake->GetIsDead() && food->GetPosition() == aiSnake->GetHeadPosition()) {
+				aiSnake->Collision(food);
+				RandomiseFood(food);
+				aiSnake->FindFood();
 				return;
 			}
-
-			//Check Against Food
-			for (auto* food : m_foodArray) {
-				if (food->GetPosition() == snake->GetHeadPosition()) {
-					snake->Collision(food);
-					RandomiseFood(food);
-					return;
+		}
+		//Check the player against food
+		if (food->GetPosition() == m_playerSnake->GetHeadPosition()) {
+			m_playerSnake->Collision(food);
+			food->Randomise();
+			for (AISnake* aiSnake : m_AISnakes) {
+				aiSnake->FindFood();
+			}
+			return;
+		}
+	}
+	//Check against other snakes
+	for (AISnake* aiSnake : m_AISnakes) {
+		for (sf::Vector2f& playerSegment : m_playerSnake->GetSnakeSegments()) {
+			if (!aiSnake->GetIsDead() && !m_playerSnake->GetIsDead()) {//Checks if an AI snake hits the player's body
+				if (playerSegment == aiSnake->GetHeadPosition()) {
+					aiSnake->Collision(ECollisionType::e_snake);
+					//return;
+				}
+				//Check if the player hits an AI Snake's body
+				for (sf::Vector2f& aiSegment : aiSnake->GetSnakeSegments()) {
+					if (aiSegment == m_playerSnake->GetHeadPosition()) {
+						//If it's gobble mode, make sure not to kill the player on collision
+						if (m_playerSnake->GetIsGobbleMode()) {
+							const int growShrinkAmount{ aiSnake->FindGobblePoint(m_playerSnake->GetHeadPosition()) };
+							m_playerSnake->Grow(growShrinkAmount);
+							aiSnake->Shrink(growShrinkAmount);
+							//return;
+						}
+						m_playerSnake->Collision(ECollisionType::e_snake);
+						//return;
+					}
+				}
+				//If head on collisions, then both die
+				//If gobble mode, the snake eats the entire snake
+				if (m_playerSnake->GetHeadPosition() == aiSnake->GetHeadPosition()) {
+					if (m_playerSnake->GetIsGobbleMode()) {
+						m_playerSnake->Grow((aiSnake->GetSnakeSegments().size()));
+						aiSnake->Collision(ECollisionType::e_snake);
+						//return;
+					}
+					m_playerSnake->Collision(ECollisionType::e_snake);
+					aiSnake->Collision(ECollisionType::e_snake);
+					//return;
 				}
 			}
 		}
-		//Check against other snakes
-		for (auto* otherSnake : m_snakes) {
-			if (!otherSnake->GetIsDead() && (otherSnake != snake)) {
-
-				//Check each segment of the snake against the heads of the other snakes
-				for (auto& snakeSegment : snake->GetSnakeSegments()) {
-					if (snakeSegment == otherSnake->GetHeadPosition()) {
-						otherSnake->Collision(ECollisionType::e_snake);
-					}
-					//Check if the snake has hit another snake's body
-					for (auto& otherSegment : otherSnake->GetSnakeSegments()) {
-						if (otherSegment == snake->GetHeadPosition()) {
-							//If it's gobble mode, make sure not to kill the player on collision
-							if (snake->GetIsGobbleMode()) {
-								const int growShrinkAmount{ otherSnake->FindGobblePoint(snake->GetHeadPosition()) };
-								snake->Grow(growShrinkAmount);
-								otherSnake->Shrink(growShrinkAmount);
-								return;
-							}
-							else {
-								snake->Collision(ECollisionType::e_snake);
-								return;
-							}
-						}
-					}
-					//If head on collisions, then both die
-					//If gobble mode, the snake eats the entire snake
-					if (snake->GetHeadPosition() == otherSnake->GetHeadPosition()) {
-						if (snake->GetIsGobbleMode()) {
-							snake->Grow((otherSnake->GetSnakeSegments().size()));
-							otherSnake->Collision(ECollisionType::e_snake);
-							return;
-						}
-						snake->Collision(ECollisionType::e_snake);
-						otherSnake->Collision(ECollisionType::e_snake);
-						return;
-					}
-				}
-			}
+		//Check AI Collisions with Other snakes
+		aiSnake->CheckCollision();
+		//Check AI collisions with the Walls
+		if (!aiSnake->GetIsDead() && (aiSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
+			aiSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
+			aiSnake->GetHeadPosition().y == m_topWall.m_position.y ||
+			aiSnake->GetHeadPosition().y == m_bottomWall.m_position.y)) {
+			aiSnake->Collision(ECollisionType::e_wall);
+			//return;
 		}
 	}
 }
@@ -168,29 +150,40 @@ void Game::RandomiseFood(Food* foodToRandomise)
 }
 
 void Game::Update() {
-	std::cout << m_snakes.size() << std::endl;
-
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
 	if (rand() % 10 == 0) {
-		for(auto* snake : m_snakes) {
-			if (!snake->GetIsDead() && snake->GetIsGobbleMode()) {
-				std::cout << "GOBBLE MODE OVER" << std::endl;
-				snake->SetIsGobbleMode(false);
+		//Check player first
+		if (m_playerSnake->GetIsGobbleMode() && !m_playerSnake->GetIsDead()) {
+			std::cout << "GOBBLE MODE OVER" << std::endl;
+
+			m_playerSnake->SetIsGobbleMode(false);
+		}
+		else {
+			//reset the AI snakes
+			for (AISnake* aiSnake : m_AISnakes) {
+				if (!aiSnake->GetIsDead() && aiSnake->GetIsGobbleMode()) {
+					std::cout << "GOBBLE MODE OVER" << std::endl;
+
+					aiSnake->SetIsGobbleMode(false);
+				}
 			}
 		}
 	}
 
-	for (auto* food : m_foodArray) {
+	for (Food* food : m_foodArray) {
 		food->Render(m_window);
 	}
 
-	for (auto* snake : m_snakes)
-	{
+
+	for (AISnake* aiSnake : m_AISnakes) {
 		//only move if alive
-		if (!snake->GetIsDead()) {
-			snake->Update(m_window);
+		if (!aiSnake->GetIsDead()) {
+			aiSnake->ChooseDirection();
+			aiSnake->Update(m_window);
 		}
 	}
+
+	m_playerSnake->Update(m_window);
 
 	//Draw the Walls
 	m_window.draw(m_topWall.m_wall);
@@ -202,5 +195,5 @@ void Game::Update() {
 
 void Game::Input() const
 {
-	//m_snakes->Input();
+	m_playerSnake->Input();
 }
