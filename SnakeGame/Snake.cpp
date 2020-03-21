@@ -5,8 +5,11 @@
 #include "Constants.h"
 
 void Snake::Update(sf::RenderWindow& window) {
-	Move();
-	Render(window);
+	if (!IsDead()) {
+		m_score += 1;
+		Move();
+		Render(window);
+	}
 }
 
 

@@ -6,7 +6,6 @@ UPDATE AND THEN RENDER
 CHANGE VS SETTINGS
 */
 Game::Game(sf::RenderWindow& window, sf::Font& font) : m_window(window), m_font(font) {
-
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -22,6 +21,24 @@ Game::Game(sf::RenderWindow& window, sf::Font& font) : m_window(window), m_font(
 		m_snakes.push_back(new AISnake());
 	}
 
+	//populate the score UI
+	for(unsigned int i = 0; i < m_snakes.size(); ++i)
+	{
+		sf::Text playerText;
+		playerText.setFont(font);
+		std::string textToDisplay = "Player";
+		textToDisplay += std::to_string(i + 1) + ":";
+		playerText.setString(textToDisplay);
+		playerText.setFillColor(sf::Color::White);
+		playerText.setCharacterSize(25);
+
+		//Work out where they will be positioned
+		playerText.setPosition(sf::Vector2f(Constants::k_screenWidth - 150, i * Constants::k_gridSize));
+		m_scores.push_back(playerText);
+	}
+
+	
+	//make the snakes know where food is on the screen
 	for (auto* snake : m_snakes)
 	{
 		for (auto* food : m_foodArray)
@@ -131,6 +148,15 @@ void Game::RandomiseFood(Food* foodToRandomise)
 	}
 }
 
+void Game::UpdateScores()
+{
+	for(unsigned int i = 0; i < m_snakes.size(); ++i)
+	{
+		std::string textToDisplay = "Player" + std::to_string(i + 1) + ":" + std::to_string(m_snakes[i]->GetScore());
+		m_scores[i].setString(textToDisplay);
+	}
+}
+
 
 void Game::Play()
 {
@@ -191,10 +217,9 @@ void Game::Update() {
 	}
 
 
-	for (unsigned int i = 0; i < m_snakes.size(); ++i)
+	for (auto* snake : m_snakes)
 	{
-		m_snakes[i]->Update(m_window);
-		std::cout << "Player " << i + 1 << " Score: " << m_snakes[i]->GetScore() << std::endl;
+		snake->Update(m_window);
 	}
 
 	//Draw the Walls
@@ -202,6 +227,13 @@ void Game::Update() {
 	m_window.draw(m_bottomWall.m_wall);
 	m_window.draw(m_leftWall.m_wall);
 	m_window.draw(m_rightWall.m_wall);
+
+	UpdateScores();
+	//Draw the score UI
+	for(const auto& score : m_scores)
+	{
+		m_window.draw(score);
+	}
 
 }
 

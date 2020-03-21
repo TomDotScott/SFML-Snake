@@ -24,6 +24,9 @@ private:
 	sf::Font m_font;
 	
 	std::vector<Snake*> m_snakes;
+
+	//The scores of the players
+	std::vector<sf::Text> m_scores;
 	
 	Food* m_foodArray[5]; //C Array - C++ Array
 	
@@ -40,6 +43,9 @@ private:
 
 	//ensure that food doesn't overlap
 	void RandomiseFood(Food* foodToRandomise);
+
+	//Display the scores on screen
+	void UpdateScores();
 	
 public:
 	void Update();
