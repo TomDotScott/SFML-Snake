@@ -2,10 +2,6 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 
-int Food::RandomRange(int min, int max) {
-	return min + rand() % ((max + 1) - min);
-}
-
 Food::Food() {
 	m_type = eFoodType::e_standard;
 	Randomise();
@@ -41,17 +37,19 @@ void Food::RandomisePosition() {
 	//Find a random grid position
 	//generate column number
 
-	int randomNumber{ RandomRange(4, static_cast<int>((Constants::k_screenWidth - 100) / Constants::k_snakeBlockSize)) };
+	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
 
-	m_position.x = randomNumber * 25 >= Constants::k_screenWidth - 100
-		? Constants::k_screenWidth - 100
-		: randomNumber * 25;
+	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 400) / Constants::k_snakeBlockSize) };
 
-	randomNumber = RandomRange(4, static_cast<int>((Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize));
+	m_position.x = randomNumber * Constants::k_gridSize >= Constants::k_screenWidth - 200
+						? Constants::k_screenWidth - 200
+						: randomNumber * Constants::k_gridSize;
 
-	m_position.y = randomNumber * 25 >= Constants::k_screenHeight - 100
-		? Constants::k_screenHeight - 100
-		: randomNumber * 25;
+	randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize);
+	
+	m_position.y = randomNumber * Constants::k_gridSize >= Constants::k_screenHeight - 100
+						? Constants::k_screenHeight - 100
+						: randomNumber * Constants::k_gridSize;
 
 	std::cout << "FOOD LOCATION: " << m_position.x << " " << m_position.y << std::endl;
 

@@ -41,8 +41,6 @@ protected:
 	
 	void Render(sf::RenderWindow& window) override final;
 
-	static int RandomRange(int min, int max);
-
 	//A store of all of the food on screen to help with decision making
 	std::vector<Food*> m_food;
 	

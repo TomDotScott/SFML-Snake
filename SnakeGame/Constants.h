@@ -1,10 +1,10 @@
 #pragma once
 namespace Constants {
-	const int k_screenHeight{ 600 };
+	const int k_screenHeight{ 800 };
 	
-	const int k_screenWidth{ 800 };
+	const int k_screenWidth{ 600 };
 	
-	const int k_snakeBlockSize{ 20 };
+	const int k_snakeBlockSize{ 15 };
 	
 	const int k_snakeSegmentDistance{ 5 };
 	

@@ -4,10 +4,6 @@
 #include <assert.h>
 #include "Constants.h"
 
-int Snake::RandomRange(int min, int max) {
-	return min + rand() % ((max + 1) - min);
-}
-
 void Snake::Update(sf::RenderWindow& window) {
 	Move();
 	Render(window);

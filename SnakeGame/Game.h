@@ -27,13 +27,13 @@ private:
 	sf::RenderWindow& m_window;
 
 	//TOP
-	Wall m_topWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth, sf::Vector2f(0, 0)) };
+	Wall m_topWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth - 200, sf::Vector2f(0, 0)) };
 	//LEFT
 	Wall m_leftWall{ Wall(Constants::k_screenHeight, Constants::k_gridSize, sf::Vector2f(0, 0)) };
 	//BOTTOM
-	Wall m_bottomWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth, sf::Vector2f(0, Constants::k_screenHeight - Constants::k_gridSize)) };
+	Wall m_bottomWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth - 200, sf::Vector2f(0, Constants::k_screenHeight - Constants::k_gridSize)) };
 	//RIGHT
-	Wall m_rightWall{ Wall(Constants::k_screenHeight, 100, sf::Vector2f(Constants::k_screenWidth - Constants::k_gridSize, 0)) };
+	Wall m_rightWall{ Wall(Constants::k_screenHeight, Constants::k_gridSize, sf::Vector2f(Constants::k_screenWidth - 200 - Constants::k_gridSize, 0)) };
 
 	//ensure that food doesn't overlap
 	void RandomiseFood(Food* foodToRandomise);

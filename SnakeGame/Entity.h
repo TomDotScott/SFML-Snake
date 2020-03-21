@@ -4,6 +4,8 @@ class Entity {
 protected:
 	sf::Color m_colour;
 	sf::Vector2f m_position;
+
+	static int RandomRange(const int min, const int max);
 public:
 	virtual ~Entity();
 	//Makes this the default constructor

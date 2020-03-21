@@ -13,8 +13,6 @@ class Food : public Entity {
 private:
 	sf::CircleShape m_circle;
 
-	int RandomRange(int min, int max);
-
 	eFoodType m_type;
 
 	int m_id{ RandomRange(0, 1000) };
