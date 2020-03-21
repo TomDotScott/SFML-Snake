@@ -33,9 +33,16 @@ Game::Game(sf::RenderWindow& window, sf::Font& font) : m_window(window), m_font(
 		playerText.setCharacterSize(25);
 
 		//Work out where they will be positioned
-		playerText.setPosition(sf::Vector2f(Constants::k_screenWidth - 150, i * Constants::k_gridSize));
+		playerText.setPosition(sf::Vector2f(Constants::k_screenWidth - 175, (i * Constants::k_gridSize) + 10));
 		m_scores.push_back(playerText);
 	}
+
+	//configure Gobble mode text
+	m_gobbleModeText.setFont(font);
+	m_gobbleModeText.setString("GOBBLE MODE!");
+	m_gobbleModeText.setCharacterSize(15);
+	m_gobbleModeText.setFillColor(sf::Color::Yellow);
+	m_gobbleModeText.setPosition(Constants::k_screenWidth - 175, Constants::k_screenHeight - 200);
 
 	
 	//make the snakes know where food is on the screen
@@ -201,8 +208,10 @@ void Game::Play()
 }
 
 void Game::Update() {
+	bool gobble{ false };
+	
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
-	if (rand() % 10 == 0) {
+	if (rand() % 25 == 0) {
 		for (auto* snake : m_snakes) {
 			if (!snake->IsDead() && snake->GetIsGobbleMode()) {
 				std::cout << "GOBBLE MODE OVER" << std::endl;
@@ -219,6 +228,10 @@ void Game::Update() {
 
 	for (auto* snake : m_snakes)
 	{
+		if(snake->GetIsGobbleMode())
+		{
+			gobble = true;
+		}
 		snake->Update(m_window);
 	}
 
@@ -233,6 +246,10 @@ void Game::Update() {
 	for(const auto& score : m_scores)
 	{
 		m_window.draw(score);
+		if(gobble)
+		{
+			m_window.draw(m_gobbleModeText);
+		}
 	}
 
 }

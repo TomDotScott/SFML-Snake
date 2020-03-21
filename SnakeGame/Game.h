@@ -27,6 +27,9 @@ private:
 
 	//The scores of the players
 	std::vector<sf::Text> m_scores;
+
+	//Gobble Mode text
+	sf::Text m_gobbleModeText;
 	
 	Food* m_foodArray[5]; //C Array - C++ Array
 	
