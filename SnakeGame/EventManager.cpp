@@ -1,4 +1,8 @@
 #include "EventManager.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
 EventManager::EventManager() : m_hasFocus(true)
 {
 	LoadBindings();
@@ -113,6 +117,52 @@ void EventManager::Update()
 		}
 	}
 	
+}
+
+void EventManager::LoadBindings()
+{
+	std::string delimiter = ":";
+
+	std::ifstream bindings;
+	bindings.open("keys.cfg");
+	if(!bindings.is_open())
+	{
+		std::cout << "FAILED LOADING KEY BINDINGS" << std::endl;
+		return;
+	}
+
+	std::string line;
+	while(std::getline(bindings, line))
+	{
+		std::stringstream keystream(line);
+		std::string callbackName;
+		keystream >> callbackName;
+		auto* bind = new Binding(callbackName);
+		while(!keystream.eof())
+		{
+			std::string keyVal;
+			keystream >> keyVal;
+			int start{ 0 };
+			unsigned int end{ keyVal.find(delimiter) };
+			if(end == std::string::npos)
+			{
+				delete bind;
+				bind = nullptr;
+				break;
+			}
+			eEventType type = eEventType(std::stoi(keyVal.substr(start, 
+				end - start)));
+			int code = std::stoi(keyVal.substr(end + delimiter.length(), 
+				keyVal.find(delimiter, end + delimiter.length())));
+			EventInfo eventInfo;
+			eventInfo.m_code = code;
+
+			bind->BindEvent(type, eventInfo);
+		}
+		if (!AddBinding(bind)) { delete bind; }
+		bind = nullptr;
+	}
+	bindings.close();
 }
 
 
