@@ -1,11 +1,17 @@
 #include "Game.h"
 #include <iostream>
 /* TO DO
-VIRTUAL SNAKE ON SNAKECOLLISION
-UPDATE AND THEN RENDER
-CHANGE VS SETTINGS
+ STATES!:
+ * START MENU
+ * PAUSE MENU
+ * GAMEOVER MENU
+TIDY UP AND DO PROPER UI
+HIGHSCORE SAVING
+MAKE SNAKES AWARE OF OTHER SNAKES IN PATHFINDING
+CLEAR UP WARNINGS
 */
-Game::Game(sf::RenderWindow& window, sf::Font& font) : m_window(window), m_font(font) {
+
+Game::Game(sf::RenderWindow& window, sf::Font& font) : m_font(font), m_window(window)  {
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
