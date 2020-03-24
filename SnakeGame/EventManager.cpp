@@ -1,4 +1,6 @@
 #include "EventManager.h"
+
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -125,10 +127,11 @@ void EventManager::LoadBindings()
 
 	std::ifstream bindings;
 	bindings.open("keys.cfg");
+	//stop if the file can't be opened
 	if(!bindings.is_open())
 	{
 		std::cout << "FAILED LOADING KEY BINDINGS" << std::endl;
-		return;
+		assert(false);
 	}
 
 	std::string line;
@@ -138,6 +141,7 @@ void EventManager::LoadBindings()
 		std::string callbackName;
 		keystream >> callbackName;
 		auto* bind = new Binding(callbackName);
+		//read the entire file
 		while(!keystream.eof())
 		{
 			std::string keyVal;
@@ -159,6 +163,7 @@ void EventManager::LoadBindings()
 
 			bind->BindEvent(type, eventInfo);
 		}
+		//Add the key-binding to the event manager
 		if (!AddBinding(bind)) { delete bind; }
 		bind = nullptr;
 	}
