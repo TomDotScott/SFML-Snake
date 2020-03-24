@@ -36,5 +36,86 @@ bool EventManager::RemoveBinding(const std::string& _name)
 	return true;
 }
 
+//Iterates through each binding and through each event in the binding 
+void EventManager::HandleEvent(sf::Event& _event)
+{
+	//Handle SFML Events
+	for(auto& binding : m_bindings)
+	{
+		Binding* bind = binding.second;
+		for(auto& event : bind->m_events)
+		{
+			const auto sfmlEvent = static_cast<eEventType>(_event.type);
+			if (event.first != sfmlEvent) { continue; }
+			if(sfmlEvent == eEventType::eKeyUp || sfmlEvent == eEventType::eKeyDown)
+			{
+				if(event.second.m_code == _event.key.code)
+				{
+					//It's a matching keycode so increase the count
+					if(bind->m_details.m_keyCode != -1)
+					{
+						bind->m_details.m_keyCode = event.second.m_code;
+					}
+					++(bind->m_eventCount);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void EventManager::Update()
+{
+	//only update if it's the active window
+	if (!m_hasFocus) { return; }
+
+	//iterate over bindings and events
+	for(auto& b_itr : m_bindings)
+	{
+		Binding* bind = b_itr.second;
+		for(auto& e_itr : bind->m_events)
+		{
+			//only interested in mouse and keyboard, as they need realtime input
+			switch (e_itr.first)
+			{
+			case eEventType::Keyboard:
+				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(e_itr.second.m_code)))
+				{
+					if(bind->m_details.m_keyCode != -1)
+					{
+						bind->m_details.m_keyCode = e_itr.second.m_code;
+					}
+					++(bind->m_eventCount);
+				}
+				break;
+			case eEventType::Mouse:
+				if(sf::Mouse::isButtonPressed(sf::Mouse::Button(e_itr.second.m_code)))
+				{
+					if(bind->m_details.m_keyCode != -1)
+					{
+						bind->m_details.m_keyCode = e_itr.second.m_code;
+					}
+					++(bind->m_eventCount);
+				}
+				break;
+			default: break;
+			}
+			if(bind->m_events.size() == bind->m_eventCount)
+			{
+				auto c_itr = m_callbacks.find(bind->m_name);
+				if(c_itr != m_callbacks.end())
+				{
+					c_itr->second(&bind->m_details);
+				}
+			}
+			bind->m_eventCount = 0;
+			bind->m_details.Clear();
+		}
+	}
+	
+}
+
+
+
 
 

@@ -14,6 +14,7 @@ enum class eEventType
 	MouseLeft = sf::Event::MouseLeft,
 	Closed = sf::Event::Closed,
 	Keyboard = sf::Event::Count + 1,
+	Mouse,
 };
 
 struct EventInfo
@@ -92,7 +93,7 @@ public:
 		m_callbacks.erase(_name);
 	}
 
-	void HandleEvent();
+	void HandleEvent(sf::Event& _event);
 
 	void Update();
 
