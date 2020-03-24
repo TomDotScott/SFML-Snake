@@ -77,7 +77,7 @@ public:
 	~EventManager();
 
 	bool AddBinding(const Binding* _binding);
-	bool RemoveBinding(const std::string _name);
+	bool RemoveBinding(const std::string& _name);
 	void SetFocus(const bool& _focus);
 
 	template<class T>
