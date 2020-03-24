@@ -1,17 +1,17 @@
-#include "Game.h"
+#include "State_Game.h"
 #include <iostream>
 /* TO DO
  STATES!:
  * START MENU
  * PAUSE MENU
- * GAMEOVER MENU
+ * GAME-OVER MENU
 TIDY UP AND DO PROPER UI
-HIGHSCORE SAVING
-MAKE SNAKES AWARE OF OTHER SNAKES IN PATHFINDING
+HIGH-SCORE SAVING
+MAKE SNAKES AWARE OF OTHER SNAKES IN PATH-FINDING
 CLEAR UP WARNINGS
 */
 
-Game::Game(sf::RenderWindow& window, sf::Font& font) : m_font(font), m_window(window)  {
+State_Game::State_Game(sf::RenderWindow& window, sf::Font& font) : m_font(font), m_window(window)  {
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -61,7 +61,7 @@ Game::Game(sf::RenderWindow& window, sf::Font& font) : m_font(font), m_window(wi
 	}
 }
 
-Game::~Game() {
+State_Game::~State_Game() {
 	for (Food* food : m_foodArray) {
 		delete food;
 	}
@@ -74,7 +74,7 @@ Game::~Game() {
 
 }
 
-void Game::CheckCollisions() {
+void State_Game::CheckCollisions() {
 	for (auto* currentSnake : m_snakes) {
 		//only check collisions if the snake is alive
 		if (!currentSnake->IsDead()) {
@@ -139,7 +139,7 @@ void Game::CheckCollisions() {
 	}
 }
 
-void Game::RandomiseFood(Food* foodToRandomise)
+void State_Game::RandomiseFood(Food* foodToRandomise)
 {
 	//Check that food doesn't spawn on top of each other
 	bool isOverlapping = true;
@@ -161,7 +161,7 @@ void Game::RandomiseFood(Food* foodToRandomise)
 	}
 }
 
-void Game::UpdateScores()
+void State_Game::UpdateScores()
 {
 	for(unsigned int i = 0; i < m_snakes.size(); ++i)
 	{
@@ -171,7 +171,7 @@ void Game::UpdateScores()
 }
 
 
-void Game::Play()
+void State_Game::Play()
 {
 	sf::Clock clock;
 	
@@ -213,7 +213,7 @@ void Game::Play()
 	std::cout << "SnakeGame: Finished" << std::endl;
 }
 
-void Game::Update() {
+void State_Game::Update() {
 	bool gobble{ false };
 	
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
@@ -260,7 +260,7 @@ void Game::Update() {
 
 }
 
-void Game::Input() const
+void State_Game::Input() const
 {
 	//access the player's input function
 	for (auto* snake : m_snakes)

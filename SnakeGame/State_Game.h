@@ -17,7 +17,7 @@ struct Wall {
 	}
 };
 
-class Game {
+class State_Game {
 private:
 
 	//the font for the UI
@@ -54,7 +54,7 @@ public:
 	void Update();
 	void Play();
 	void Input() const;
-	explicit Game(sf::RenderWindow& window, sf::Font& font);
-	~Game();
+	explicit State_Game(sf::RenderWindow& window, sf::Font& font);
+	~State_Game();
 	void CheckCollisions();
 };
