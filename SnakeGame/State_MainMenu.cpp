@@ -80,6 +80,7 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 		case 0:
 			//play the game...
 			core_state.SetState(new State_Game());
+			current_state = eCurrentState::e_Game;
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
@@ -100,9 +101,10 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 
 
 void State_MainMenu::Destroy(sf::RenderWindow* _window) {
-	delete m_font;
-	delete m_title;
-	delete m_play;
-	delete m_quit;
+	m_font = nullptr;
+	m_title = nullptr;
+	m_play = nullptr;
+	m_quit = nullptr;
+	std::cout << "Destroyed" << std::endl;
 	std::cout << "Destroyed" << std::endl;
 }

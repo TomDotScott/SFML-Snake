@@ -28,12 +28,13 @@ public:
 	void Destroy(sf::RenderWindow* _window) override;
 
 	//GAME METHODS
-	void Input() const;
+	void GetInput() const;
 	void CheckCollisions();
-	State_Game();
 	
 private:
-
+	//the game tick
+	sf::Clock m_clock;
+	
 	//the font for the UI
 	sf::Font m_font;
 	

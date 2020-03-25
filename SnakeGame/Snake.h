@@ -57,6 +57,8 @@ public:
 
 	bool IsDead() const { return m_dead; }
 
+	void Render(sf::RenderWindow& _window) override final;
+	
 	SnakeSegments GetSnakeSegments() const { return m_segments; }
 protected:
 	EDirection m_direction{ EDirection::e_right };
@@ -70,8 +72,6 @@ protected:
 	bool m_dead{ false };
 
 	void Move() override;
-	
-	void Render(sf::RenderWindow& _window) override final;
 
 	int m_score{ 0 };
 	

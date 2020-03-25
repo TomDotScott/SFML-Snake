@@ -14,13 +14,23 @@
 
 StateManager core_state;
 bool quit_game;
+eCurrentState current_state;
+
+void GameLoop(sf::RenderWindow& _window)
+{
+	// We must clear the window each time around the loop
+	_window.clear();
+	core_state.Update();
+	core_state.Render();
+
+	// Get the window to display its contents
+	_window.display();
+}
+
 
 int main()
 {
-	// Initialise the resources needed for the states
-	
-	
-	
+	// Initialise the resources needed for the states	
 	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
 
 	//seed the random number generator
@@ -33,7 +43,7 @@ int main()
 		std::cout << "FILE COULDN'T BE LOADED" << std::endl;
 		assert(false);
 	}
-	
+
 	sf::Clock clock;
 
 	core_state.SetWindow(&window);
@@ -41,6 +51,7 @@ int main()
 	core_state.SetFont(&font);
 
 	core_state.SetState(new State_MainMenu());
+	current_state = eCurrentState::e_MainMenu;
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -53,22 +64,24 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-		// while (clock.getElapsedTime() >= sf::milliseconds(250)) {
+		if (current_state == eCurrentState::e_Game)
+		{
+			while (clock.getElapsedTime() >= sf::milliseconds(250)) {
 
-			// We must clear the window each time around the loop
-			window.clear();
-			core_state.Update();
-			core_state.Render();
-
-			// Get the window to display its contents
-			window.display();
-			clock.restart();
-		//}
+				GameLoop(window);
+				clock.restart();
+			}
+		}
+		else {
+			GameLoop(window);
+		}
 
 		if (quit_game) {
 			window.close();
 		}
 	}
+
+	std::cout << "Snake Game: Ended" << std::endl;
 
 	return 0;
 }

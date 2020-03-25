@@ -15,7 +15,7 @@ CLEAR UP WARNINGS
 void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 {
 	m_font = *_font;
-	
+
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -68,9 +68,9 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 void State_Game::Update(sf::RenderWindow* _window) {
 	m_gobble = false;
 
-	Input();
+	GetInput();
 	CheckCollisions();
-	
+
 	for (auto* snake : m_snakes)
 	{
 		if (snake->GetIsGobbleMode())
@@ -79,7 +79,7 @@ void State_Game::Update(sf::RenderWindow* _window) {
 		}
 		snake->Update(*_window);
 	}
-	
+
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
 	if (rand() % 25 == 0 && m_gobble) {
 		for (auto* snake : m_snakes) {
@@ -91,15 +91,23 @@ void State_Game::Update(sf::RenderWindow* _window) {
 		}
 	}
 
+
 	UpdateScores();
 }
 
 void State_Game::Render(sf::RenderWindow* _window)
 {
+	//Render the food
 	for (Food* food : m_foodArray) {
 		food->Render(*_window);
 	}
-	
+
+	//Render the snakes
+	for(Snake* snake : m_snakes)
+	{
+		snake->Render(*_window);
+	}
+
 	//Draw the score UI
 	for (const auto& score : m_scores)
 	{
@@ -220,14 +228,14 @@ void State_Game::RandomiseFood(Food* _foodToRandomise)
 
 void State_Game::UpdateScores()
 {
-	for(unsigned int i = 0; i < m_snakes.size(); ++i)
+	for (unsigned int i = 0; i < m_snakes.size(); ++i)
 	{
 		std::string textToDisplay = "Player" + std::to_string(i + 1) + ":" + std::to_string(m_snakes[i]->GetScore());
 		m_scores[i].setString(textToDisplay);
 	}
 }
 
-void State_Game::Input() const
+void State_Game::GetInput() const
 {
 	//access the player's input function
 	for (auto* snake : m_snakes)

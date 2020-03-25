@@ -8,7 +8,6 @@ void Snake::Update(sf::RenderWindow& _window) {
 	if (!IsDead()) {
 		m_score += 1;
 		Move();
-		Render(_window);
 	}
 }
 

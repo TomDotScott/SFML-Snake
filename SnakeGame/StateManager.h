@@ -1,6 +1,13 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
+//Tracks the current state of the game
+//Has a global variable attached
+enum class eCurrentState
+{
+	e_MainMenu, e_Game
+};
+
 //Every state needs to be able to do these 4 things
 //If an object can't, it's not a state
 class BaseState
@@ -11,7 +18,6 @@ public:
 	virtual void Render(sf::RenderWindow* _window) = 0;
 	virtual void Destroy(sf::RenderWindow* _window) = 0;
 };
-
 
 //StateManager keeps track of the current game state
 class StateManager
@@ -32,4 +38,5 @@ private:
 
 extern StateManager core_state;
 extern bool quit_game;
+extern eCurrentState current_state;
 
