@@ -46,8 +46,6 @@ private:
 	sf::Text m_gobbleModeText;
 	
 	std::array<Food*, Constants::k_foodAmount> m_foodArray{};
-	
-	sf::RenderWindow& m_window;
 
 	bool m_gobble{ false };
 	

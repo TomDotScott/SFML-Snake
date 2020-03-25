@@ -79,7 +79,7 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 		{
 		case 0:
 			//play the game...
-			//core_state.SetState(new State_Game());
+			core_state.SetState(new State_Game());
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:

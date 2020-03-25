@@ -77,7 +77,7 @@ void State_Game::Update(sf::RenderWindow* _window) {
 		{
 			m_gobble = true;
 		}
-		snake->Update(m_window);
+		snake->Update(*_window);
 	}
 	
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
