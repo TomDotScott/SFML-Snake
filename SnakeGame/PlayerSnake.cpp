@@ -6,18 +6,18 @@ PlayerSnake::PlayerSnake() {
 	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 400) / Constants::k_snakeBlockSize) };
 	
 	if (randomNumber * Constants::k_gridSize >= Constants::k_screenWidth - 200) {
-		m_position.x = Constants::k_screenWidth - 200;
+		m_position.x = static_cast<float>(Constants::k_screenWidth - 200);
 	}
 	else {
-		m_position.x = randomNumber * Constants::k_gridSize;
+		m_position.x = static_cast<float>(randomNumber * Constants::k_gridSize);
 	}
 
 	randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize);
 	if (randomNumber * Constants::k_gridSize >= Constants::k_screenHeight - 100) {
-		m_position.y = Constants::k_screenHeight - 100;
+		m_position.y = static_cast<float>(Constants::k_screenHeight - 100);
 	}
 	else {
-		m_position.y = randomNumber * Constants::k_gridSize;
+		m_position.y = static_cast<float>(randomNumber * Constants::k_gridSize);
 	}
 
 	m_segments.push_back(m_position);

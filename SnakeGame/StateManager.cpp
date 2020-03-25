@@ -4,8 +4,9 @@
 
 StateManager::StateManager()
 {
-	std::cout << "STATEMANAGER CREATED" << std::endl;
+	std::cout << "STATE MANAGER CREATED" << std::endl;
 	m_state = nullptr;
+	m_window = nullptr;
 	m_font = nullptr;
 }
 

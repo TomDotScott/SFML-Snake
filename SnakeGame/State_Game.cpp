@@ -43,7 +43,7 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 		playerText.setCharacterSize(25);
 
 		//Work out where they will be positioned
-		playerText.setPosition(sf::Vector2f(Constants::k_screenWidth - 175, (i * Constants::k_gridSize) + 10));
+		playerText.setPosition(sf::Vector2f(static_cast<float>(Constants::k_screenWidth - 175), static_cast<float>((i * Constants::k_gridSize) + 10)));
 		m_scores.push_back(playerText);
 	}
 
@@ -190,7 +190,7 @@ void State_Game::CheckCollisions() {
 					//If gobble mode, the snake eats the entire snake
 					if (currentSnake->GetHeadPosition() == otherSnake->GetHeadPosition()) {
 						if (currentSnake->GetIsGobbleMode()) {
-							currentSnake->Grow((otherSnake->GetSnakeSegments().size()));
+							currentSnake->Grow(static_cast<const int>((otherSnake->GetSnakeSegments().size())));
 							otherSnake->Collision(ECollisionType::e_snake);
 							return;
 						}

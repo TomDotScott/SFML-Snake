@@ -42,14 +42,14 @@ void Food::RandomisePosition() {
 	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 400) / Constants::k_snakeBlockSize) };
 
 	m_position.x = randomNumber * Constants::k_gridSize >= Constants::k_screenWidth - 200
-						? Constants::k_screenWidth - 200
-						: randomNumber * Constants::k_gridSize;
+						? static_cast<float>(Constants::k_screenWidth - 200)
+						: static_cast<float>(randomNumber * Constants::k_gridSize);
 
 	randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize);
 	
 	m_position.y = randomNumber * Constants::k_gridSize >= Constants::k_screenHeight - 100
-						? Constants::k_screenHeight - 100
-						: randomNumber * Constants::k_gridSize;
+						? static_cast<float>(Constants::k_screenHeight - 100)
+						: static_cast<float>(randomNumber * Constants::k_gridSize);
 
 	m_circle.setPosition(m_position);
 }

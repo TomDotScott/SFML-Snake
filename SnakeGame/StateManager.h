@@ -31,9 +31,9 @@ public:
 	void Render() const;
 	~StateManager();
 private:
-	sf::RenderWindow* m_window;
-	BaseState* m_state;
-	sf::Font* m_font;
+	sf::RenderWindow* m_window { nullptr };
+	BaseState* m_state { nullptr };
+	sf::Font* m_font { nullptr };
 };
 
 extern StateManager core_state;
