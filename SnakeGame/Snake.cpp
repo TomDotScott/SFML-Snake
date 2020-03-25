@@ -4,20 +4,20 @@
 #include <assert.h>
 #include "Constants.h"
 
-void Snake::Update(sf::RenderWindow& window) {
+void Snake::Update(sf::RenderWindow& _window) {
 	if (!IsDead()) {
 		m_score += 1;
 		Move();
-		Render(window);
+		Render(_window);
 	}
 }
 
 
-void Snake::Render(sf::RenderWindow& window) {
+void Snake::Render(sf::RenderWindow& _window) {
 	if (!m_dead) {
 		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr) {
 			m_rectangle.setPosition(sf::Vector2f(itr->x, itr->y));
-			window.draw(m_rectangle);
+			_window.draw(m_rectangle);
 		}
 	}
 }
@@ -54,20 +54,20 @@ void Snake::Move() {
 	m_segments.push_front(sf::Vector2f(m_position.x, m_position.y));
 }
 
-void Snake::Grow(const int amount) {
-	for (int i{ 0 }; i < amount; ++i) {
+void Snake::Grow(const int _amount) {
+	for (int i{ 0 }; i < _amount; ++i) {
 		m_segments.push_back(sf::Vector2f(m_position.x, m_position.y));
 	}
-	m_score += 10 * amount;
+	m_score += 10 * _amount;
 }
 
 //Find the point where a snake intersects and returns the position in the linked list.
 //This point - the overall size will be the grow amount of the snake that collided with it
-int Snake::FindGobblePoint(sf::Vector2f gobbleSnakeHead) const {
+int Snake::FindGobblePoint(sf::Vector2f _gobbleSnakeHead) const {
 	if (!m_dead) {
 		int counter{ 0 };
 		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr) {
-			if (sf::Vector2f(itr->x, itr->y) == gobbleSnakeHead) {
+			if (sf::Vector2f(itr->x, itr->y) == _gobbleSnakeHead) {
 				return counter;
 			}
 			counter++;
@@ -76,8 +76,8 @@ int Snake::FindGobblePoint(sf::Vector2f gobbleSnakeHead) const {
 	return -1;
 }
 
-void Snake::Shrink(const int amount) {
-	unsigned const int newSize = static_cast<signed int>(m_segments.size()) - amount;
+void Snake::Shrink(const int _amount) {
+	unsigned const int newSize = static_cast<signed int>(m_segments.size()) - _amount;
 	while (m_segments.size() != newSize) {
 		m_segments.pop_back();
 	}
@@ -94,9 +94,9 @@ void Snake::CheckCollision() {
 	}
 }
 
-void Snake::Collision(const ECollisionType collisionType) {
+void Snake::Collision(const ECollisionType _collisionType) {
 	if (!m_dead) {
-		switch (collisionType) {
+		switch (_collisionType) {
 		case ECollisionType::e_wall:
 			std::cout << "I HIT A WALL" << std::endl;
 			m_dead = true;
@@ -117,12 +117,12 @@ void Snake::Collision(const ECollisionType collisionType) {
 	}
 }
 
-void Snake::Collision(Food* food)
+void Snake::Collision(Food* _food)
 {
-	if (food->GetType() == eFoodType::e_gobble) {
+	if (_food->GetType() == eFoodType::e_gobble) {
 		m_gobbleMode = true;
 		std::cout << "GOBBLE MODE!" << std::endl;
 	}
-	const int growAmount{ food->GetGrowAmount() };
+	const int growAmount{ _food->GetGrowAmount() };
 	Grow(growAmount);
 }

@@ -6,7 +6,7 @@
 class BaseState
 {
 public:
-	virtual void Initialize(sf::RenderWindow* _window) = 0;
+	virtual void Initialize(sf::RenderWindow* _window, sf::Font* _font) = 0;
 	virtual void Update(sf::RenderWindow* _window) = 0;
 	virtual void Render(sf::RenderWindow* _window) = 0;
 	virtual void Destroy(sf::RenderWindow* _window) = 0;
@@ -20,12 +20,14 @@ public:
 	StateManager();
 	void SetWindow(sf::RenderWindow* _window);
 	void SetState(BaseState* _state);
+	void SetFont(sf::Font* _font);
 	void Update() const;
 	void Render() const;
 	~StateManager();
 private:
 	sf::RenderWindow* m_window;
 	BaseState* m_state;
+	sf::Font* m_font;
 };
 
 extern StateManager core_state;

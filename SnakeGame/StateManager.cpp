@@ -1,8 +1,12 @@
 ﻿#include "StateManager.h"
 
+#include <iostream>
+
 StateManager::StateManager()
 {
+	std::cout << "STATEMANAGER CREATED" << std::endl;
 	m_state = nullptr;
+	m_font = nullptr;
 }
 
 void StateManager::SetWindow(sf::RenderWindow* _window)
@@ -19,8 +23,13 @@ void StateManager::SetState(BaseState* _state)
 	m_state = _state;
 	if(m_state != nullptr)
 	{
-		m_state->Initialize(m_window);
+		m_state->Initialize(m_window, m_font);
 	}
+}
+
+void StateManager::SetFont(sf::Font* _font)
+{
+	m_font = _font;
 }
 
 void StateManager::Update() const

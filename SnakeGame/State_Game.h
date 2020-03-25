@@ -5,20 +5,33 @@
 #include "Entity.h"
 #include "Food.h"
 #include <array>
+#include "StateManager.h"
 
 struct Wall {
+	Wall(const float _height, const float _width, const sf::Vector2f _position) : m_height(_height), m_width(_width), m_position(_position) {
+		m_wall = sf::RectangleShape(sf::Vector2f(_width, _height));
+		m_wall.setFillColor(m_colour);
+		m_wall.setPosition(m_position);
+	}
 	float m_height, m_width;
 	sf::Vector2f m_position;
 	sf::RectangleShape m_wall;
 	sf::Color m_colour = sf::Color::White;
-	Wall(const float height, const float width, const sf::Vector2f position) : m_height(height), m_width(width), m_position(position) {
-		m_wall = sf::RectangleShape(sf::Vector2f(width, height));
-		m_wall.setFillColor(m_colour);
-		m_wall.setPosition(m_position);
-	}
 };
 
-class State_Game {
+class State_Game : public BaseState {
+public:
+	//BASESTATE METHODS
+	void Initialize(sf::RenderWindow* _window, sf::Font* _font) override;
+	void Update(sf::RenderWindow* _window) override;
+	void Render(sf::RenderWindow* _window) override;
+	void Destroy(sf::RenderWindow* _window) override;
+
+	//GAME METHODS
+	void Input() const;
+	void CheckCollisions();
+	State_Game();
+	
 private:
 
 	//the font for the UI
@@ -36,6 +49,8 @@ private:
 	
 	sf::RenderWindow& m_window;
 
+	bool m_gobble{ false };
+	
 	//TOP
 	Wall m_topWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth - 200, sf::Vector2f(0, 0)) };
 	//LEFT
@@ -46,16 +61,10 @@ private:
 	Wall m_rightWall{ Wall(Constants::k_screenHeight, Constants::k_gridSize, sf::Vector2f(Constants::k_screenWidth - 200 - Constants::k_gridSize, 0)) };
 
 	//ensure that food doesn't overlap
-	void RandomiseFood(Food* foodToRandomise);
+	void RandomiseFood(Food* _foodToRandomise);
 
 	//Display the scores on screen
 	void UpdateScores();
 	
-public:
-	void Update();
-	void Play();
-	void Input() const;
-	explicit State_Game(sf::RenderWindow& window, sf::Font& font);
-	~State_Game();
-	void CheckCollisions();
+
 };

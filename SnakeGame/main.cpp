@@ -1,6 +1,7 @@
 // SFML header file for graphics, there are also ones for Audio, Window, System and Network
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "StateManager.h"
 #include "Food.h"
 #include "State_Game.h"
 #include "Snake.h"
@@ -9,25 +10,65 @@
 #include <assert.h>
 #include <time.h>
 #include "Constants.h"
+#include "State_MainMenu.h"
 
-int main() {	
+StateManager core_state;
+bool quit_game;
+
+int main()
+{
+	// Initialise the resources needed for the states
+	
+	
+	
+	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
+
 	//seed the random number generator
-	std::srand(static_cast<unsigned int>(time(NULL)));
-
-    sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
+	std::srand(static_cast<unsigned int>(time(nullptr)));
 
 	//Load in the font and make sure it has loaded properly
 	sf::Font font;
 	if (!font.loadFromFile("Resources/Graphics/gamefont.ttf"))
 	{
+		std::cout << "FILE COULDN'T BE LOADED" << std::endl;
 		assert(false);
 	}
+	
+	sf::Clock clock;
 
-	//Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
+	core_state.SetWindow(&window);
 
-	State_Game* game = new State_Game(window, font);
+	core_state.SetFont(&font);
 
-	game->Play();
+	core_state.SetState(new State_MainMenu());
 
-    return 0;
+	// run the program as long as the window is open
+	while (window.isOpen())
+	{
+		// check all the window's events that were triggered since the last iteration of the loop
+		sf::Event event{};
+		while (window.pollEvent(event))
+		{
+			// "close requested" event: we close the window
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+		// while (clock.getElapsedTime() >= sf::milliseconds(250)) {
+
+			// We must clear the window each time around the loop
+			window.clear();
+			core_state.Update();
+			core_state.Render();
+
+			// Get the window to display its contents
+			window.display();
+			clock.restart();
+		//}
+
+		if (quit_game) {
+			window.close();
+		}
+	}
+
+	return 0;
 }

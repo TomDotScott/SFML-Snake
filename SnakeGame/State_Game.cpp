@@ -11,7 +11,11 @@ MAKE SNAKES AWARE OF OTHER SNAKES IN PATH-FINDING
 CLEAR UP WARNINGS
 */
 
-State_Game::State_Game(sf::RenderWindow& window, sf::Font& font) : m_font(font), m_window(window)  {
+//BASESTATE METHODS
+void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
+{
+	m_font = *_font;
+	
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -28,10 +32,10 @@ State_Game::State_Game(sf::RenderWindow& window, sf::Font& font) : m_font(font),
 	}
 
 	//populate the score UI
-	for(unsigned int i = 0; i < m_snakes.size(); ++i)
+	for (unsigned int i = 0; i < m_snakes.size(); ++i)
 	{
 		sf::Text playerText;
-		playerText.setFont(font);
+		playerText.setFont(m_font);
 		std::string textToDisplay = "Player";
 		textToDisplay += std::to_string(i + 1) + ":";
 		playerText.setString(textToDisplay);
@@ -44,13 +48,13 @@ State_Game::State_Game(sf::RenderWindow& window, sf::Font& font) : m_font(font),
 	}
 
 	//configure Gobble mode text
-	m_gobbleModeText.setFont(font);
+	m_gobbleModeText.setFont(m_font);
 	m_gobbleModeText.setString("GOBBLE MODE!");
 	m_gobbleModeText.setCharacterSize(15);
 	m_gobbleModeText.setFillColor(sf::Color::Yellow);
 	m_gobbleModeText.setPosition(Constants::k_screenWidth - 175, Constants::k_screenHeight - 200);
 
-	
+
 	//make the snakes know where food is on the screen
 	for (auto* snake : m_snakes)
 	{
@@ -61,7 +65,60 @@ State_Game::State_Game(sf::RenderWindow& window, sf::Font& font) : m_font(font),
 	}
 }
 
-State_Game::~State_Game() {
+void State_Game::Update(sf::RenderWindow* _window) {
+	m_gobble = false;
+
+	Input();
+	CheckCollisions();
+	
+	for (auto* snake : m_snakes)
+	{
+		if (snake->GetIsGobbleMode())
+		{
+			m_gobble = true;
+		}
+		snake->Update(m_window);
+	}
+	
+	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
+	if (rand() % 25 == 0 && m_gobble) {
+		for (auto* snake : m_snakes) {
+			if (!snake->IsDead() && snake->GetIsGobbleMode()) {
+				std::cout << "GOBBLE MODE OVER" << std::endl;
+				snake->SetIsGobbleMode(false);
+				break;
+			}
+		}
+	}
+
+	UpdateScores();
+}
+
+void State_Game::Render(sf::RenderWindow* _window)
+{
+	for (Food* food : m_foodArray) {
+		food->Render(*_window);
+	}
+	
+	//Draw the score UI
+	for (const auto& score : m_scores)
+	{
+		_window->draw(score);
+		if (m_gobble)
+		{
+			_window->draw(m_gobbleModeText);
+		}
+	}
+
+	//Draw the Walls
+	_window->draw(m_topWall.m_wall);
+	_window->draw(m_bottomWall.m_wall);
+	_window->draw(m_leftWall.m_wall);
+	_window->draw(m_rightWall.m_wall);
+}
+
+void State_Game::Destroy(sf::RenderWindow* _window)
+{
 	for (Food* food : m_foodArray) {
 		delete food;
 	}
@@ -70,10 +127,10 @@ State_Game::~State_Game() {
 	{
 		delete snake;
 	}
-
-
 }
 
+
+//GAME METHODS
 void State_Game::CheckCollisions() {
 	for (auto* currentSnake : m_snakes) {
 		//only check collisions if the snake is alive
@@ -139,23 +196,23 @@ void State_Game::CheckCollisions() {
 	}
 }
 
-void State_Game::RandomiseFood(Food* foodToRandomise)
+void State_Game::RandomiseFood(Food* _foodToRandomise)
 {
 	//Check that food doesn't spawn on top of each other
 	bool isOverlapping = true;
 	while (isOverlapping) {
-		foodToRandomise->Randomise();
+		_foodToRandomise->Randomise();
 		//Check the randomised position
 		for (const Food* food : m_foodArray) {
 			//make sure the food isn't getting compared to itself!
-			if (*food != *foodToRandomise) {
-				if (foodToRandomise->GetPosition() != food->GetPosition()) {
+			if (*food != *_foodToRandomise) {
+				if (_foodToRandomise->GetPosition() != food->GetPosition()) {
 					isOverlapping = false;
 					break;
 				}
 			}
 			else {
-				foodToRandomise->Randomise();
+				_foodToRandomise->Randomise();
 			}
 		}
 	}
@@ -168,96 +225,6 @@ void State_Game::UpdateScores()
 		std::string textToDisplay = "Player" + std::to_string(i + 1) + ":" + std::to_string(m_snakes[i]->GetScore());
 		m_scores[i].setString(textToDisplay);
 	}
-}
-
-
-void State_Game::Play()
-{
-	sf::Clock clock;
-	
-	// We can still output to the console window
-	std::cout << "SnakeGame: Starting" << std::endl;
-
-	// Main loop that continues until we call window.close()
-	while (m_window.isOpen()) {
-		// Handle any pending SFML events
-		// These cover keyboard, mouse,joystick etc.
-		sf::Event event{};
-		while (m_window.pollEvent(event)) {
-			switch (event.type) {
-			case sf::Event::Closed:
-				m_window.close();
-				break;
-			default:
-				break;
-			}
-		}
-
-		//input and collisions should be done outside of the game tick
-		Input();
-
-
-		while (clock.getElapsedTime() >= sf::milliseconds(250)) {
-
-			// We must clear the window each time around the loop
-			m_window.clear();
-			CheckCollisions();
-			Update();
-
-			// Get the window to display its contents
-			m_window.display();
-			clock.restart();
-		}
-	}
-
-	std::cout << "SnakeGame: Finished" << std::endl;
-}
-
-void State_Game::Update() {
-	bool gobble{ false };
-	
-	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
-	if (rand() % 25 == 0) {
-		for (auto* snake : m_snakes) {
-			if (!snake->IsDead() && snake->GetIsGobbleMode()) {
-				std::cout << "GOBBLE MODE OVER" << std::endl;
-				snake->SetIsGobbleMode(false);
-				break;
-			}
-		}
-	}
-
-	for (Food* food : m_foodArray) {
-		food->Render(m_window);
-	}
-
-
-	for (auto* snake : m_snakes)
-	{
-		if(snake->GetIsGobbleMode())
-		{
-			gobble = true;
-		}
-		snake->Update(m_window);
-	}
-
-	//Draw the Walls
-	m_window.draw(m_topWall.m_wall);
-	m_window.draw(m_bottomWall.m_wall);
-	m_window.draw(m_leftWall.m_wall);
-	m_window.draw(m_rightWall.m_wall);
-
-	UpdateScores();
-	//Draw the score UI
-	for(const auto& score : m_scores)
-	{
-		m_window.draw(score);
-		if(gobble)
-		{
-			m_window.draw(m_gobbleModeText);
-		}
-	}
-
 }
 
 void State_Game::Input() const

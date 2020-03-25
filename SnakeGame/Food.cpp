@@ -10,7 +10,7 @@ Food::Food() {
 
 Food::~Food() = default;
 
-Food::Food(sf::Color colour, sf::Vector2f position) : Entity(colour, position), m_type(eFoodType::e_standard) {
+Food::Food(sf::Color _colour, sf::Vector2f _position) : Entity(_colour, _position), m_type(eFoodType::e_standard) {
 	Randomise();
 	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
 }
@@ -54,7 +54,7 @@ void Food::RandomisePosition() {
 	m_circle.setPosition(m_position);
 }
 
-void Food::Render(sf::RenderWindow& window) {
+void Food::Render(sf::RenderWindow& _window) {
 	switch (m_type)
 	{
 	case eFoodType::e_standard:
@@ -71,5 +71,5 @@ void Food::Render(sf::RenderWindow& window) {
 	}
 	m_circle.setPosition(m_position);
 	m_circle.setFillColor(m_colour);
-	window.draw(m_circle);
+	_window.draw(m_circle);
 }

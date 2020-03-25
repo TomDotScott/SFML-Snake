@@ -10,27 +10,16 @@ enum class eFoodType {
 };
 
 class Food : public Entity {
-private:
-	sf::CircleShape m_circle;
-
-	eFoodType m_type;
-
-	int m_id{ RandomRange(0, 1000) };
-	
-	void RandomisePosition();
-
 public:
 	Food();
 
 	~Food();
-	
+
 	void Randomise();
 
-	int GetID() const { return m_id; }
+	void Render(sf::RenderWindow& _window) override;
 
-	void Render(sf::RenderWindow& window) override;
-
-	Food(sf::Color colour, sf::Vector2f position);
+	Food(sf::Color _colour, sf::Vector2f _position);
 
 	sf::Vector2f GetPosition() const { return m_position; }
 
@@ -48,16 +37,28 @@ public:
 		return 0;
 	}
 
+	int GetID() const { return m_id; }
+	
 	eFoodType GetType() const { return m_type; }
+private:
+	sf::CircleShape m_circle;
+
+	int m_id = RandomRange(0, 1000000);
+	
+	eFoodType m_type;
+	
+	void RandomisePosition();
+
+
 };
 
-inline bool operator==(const Food& lhs, const Food& rhs) {
+inline bool operator==(const Food& _lhs, const Food& _rhs) {
 	/* do actual comparison */
-	if(lhs.GetID() == rhs.GetID())
+	if(_lhs.GetID() == _rhs.GetID())
 	{
 		return true;
 	}
 	return false;
 }
 
-inline bool operator!=(const Food& lhs, const Food& rhs) { return !(lhs == rhs); }
+inline bool operator!=(const Food& _lhs, const Food& _rhs) { return !(_lhs == _rhs); }
