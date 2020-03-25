@@ -8,13 +8,13 @@ enum class eEventType
 {
 	eKeyDown = sf::Event::KeyPressed,
 	eKeyUp = sf::Event::KeyReleased,
-	GainedFocus = sf::Event::GainedFocus,
-	LostFocus = sf::Event::LostFocus,
-	MouseEntered = sf::Event::MouseEntered,
-	MouseLeft = sf::Event::MouseLeft,
-	Closed = sf::Event::Closed,
-	Keyboard = sf::Event::Count + 1,
-	Mouse,
+	eGainedFocus = sf::Event::GainedFocus,
+	eLostFocus = sf::Event::LostFocus,
+	eMouseEntered = sf::Event::MouseEntered,
+	eMouseLeft = sf::Event::MouseLeft,
+	eClosed = sf::Event::Closed,
+	eKeyboard = sf::Event::Count + 1,
+	eMouse,
 };
 
 struct EventInfo
