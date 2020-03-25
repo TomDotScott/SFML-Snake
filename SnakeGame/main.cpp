@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Food.h"
-#include "Game.h"
+#include "State_Game.h"
 #include "Snake.h"
 #include "Entity.h"
 #include <vector>
@@ -25,7 +25,7 @@ int main() {
 
 	//Snake* snake = new Snake(sf::Color(255, 0, 0), sf::Vector2f(400, 300), 10, 10, sf::Vector2f(0.1, 0.1));
 
-	Game* game = new Game(window, font);
+	State_Game* game = new State_Game(window, font);
 
 	game->Play();
 

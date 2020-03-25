@@ -4,6 +4,7 @@
 #include "AISnake.h"
 #include "Entity.h"
 #include "Food.h"
+#include <array>
 
 struct Wall {
 	float m_height, m_width;
@@ -31,7 +32,7 @@ private:
 	//Gobble Mode text
 	sf::Text m_gobbleModeText;
 	
-	Food* m_foodArray[5]; //C Array - C++ Array
+	std::array<Food*, Constants::k_foodAmount> m_foodArray{};
 	
 	sf::RenderWindow& m_window;
 

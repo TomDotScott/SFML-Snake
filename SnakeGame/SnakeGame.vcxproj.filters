@@ -45,17 +45,8 @@
     <ClCompile Include="AISnake.cpp">
       <Filter>Source Files\Snakes</Filter>
     </ClCompile>
-    <ClCompile Include="BaseState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="StateManager.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
     <ClCompile Include="State_Game.cpp">
       <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,17 +68,8 @@
     <ClInclude Include="Snake.h">
       <Filter>Header Files\Snakes</Filter>
     </ClInclude>
-    <ClInclude Include="BaseState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="StateManager.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
     <ClInclude Include="State_Game.h">
       <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
