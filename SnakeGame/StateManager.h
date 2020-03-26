@@ -5,7 +5,7 @@
 //Has a global variable attached
 enum class eCurrentState
 {
-	e_MainMenu, e_Game
+	e_MainMenu, e_Game, e_GameOver
 };
 
 //Every state needs to be able to do these 4 things

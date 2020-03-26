@@ -106,5 +106,4 @@ void State_MainMenu::Destroy(sf::RenderWindow* _window) {
 	m_play = nullptr;
 	m_quit = nullptr;
 	std::cout << "Destroyed" << std::endl;
-	std::cout << "Destroyed" << std::endl;
 }

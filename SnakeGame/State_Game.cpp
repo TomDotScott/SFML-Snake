@@ -1,5 +1,8 @@
 #include "State_Game.h"
 #include <iostream>
+
+#include "State_GameOver.h"
+
 /* TO DO
  STATES!:
  * START MENU
@@ -93,6 +96,12 @@ void State_Game::Update(sf::RenderWindow* _window) {
 
 
 	UpdateScores();
+	//If the player has died, end the game
+	if(m_snakes[0]->IsDead())
+	{
+		current_state = eCurrentState::e_GameOver;
+		core_state.SetState(new State_GameOver());
+	}
 }
 
 void State_Game::Render(sf::RenderWindow* _window)

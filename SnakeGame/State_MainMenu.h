@@ -16,7 +16,7 @@ private:
 	//deal with user selections
 	int m_selected { 0 };
 	//deal with user inputs
-	bool m_upKey{ true };
+	bool m_upKey{ false };
 	bool m_downKey{ false };
 };
 

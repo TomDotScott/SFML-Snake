@@ -1,5 +1,7 @@
 #pragma once
+#include <array>
 #include "StateManager.h"
+
 class State_GameOver : public BaseState
 {
 public:
@@ -7,5 +9,21 @@ public:
 	void Update(sf::RenderWindow* _window) override;
 	void Render(sf::RenderWindow* _window) override;
 	void Destroy(sf::RenderWindow* _window) override;
+private:
+	sf::Text* m_title{ nullptr };
+	sf::Text* m_playAgain{ nullptr };
+	sf::Text* m_quit{ nullptr };
+	sf::Text* m_lastScore{ nullptr };
+	sf::Text* m_highScore{ nullptr };
+	sf::Font* m_font = { nullptr };
+	
+	int m_selected{ 0 };
+	
+	std::string m_lastScoreValue;
+	std::string m_highScoreValue;
+	
+	
+	bool m_upKey{ false };
+	bool m_downKey{ false };
 };
 
