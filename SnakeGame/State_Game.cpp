@@ -6,10 +6,6 @@
 #include "State_GameOver.h"
 
 /* TO DO
- STATES!:
- * START MENU
- * PAUSE MENU
- * GAME-OVER MENU
 TIDY UP AND DO PROPER UI
 HIGH-SCORE SAVING
 MAKE SNAKES AWARE OF OTHER SNAKES IN PATH-FINDING
@@ -52,13 +48,17 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 		m_scores.push_back(playerText);
 	}
 
-	//configure Gobble mode text
-	m_gobbleModeText.setFont(m_font);
-	m_gobbleModeText.setString("GOBBLE MODE!");
-	m_gobbleModeText.setCharacterSize(15);
-	m_gobbleModeText.setFillColor(sf::Color::Yellow);
-	m_gobbleModeText.setPosition(Constants::k_screenWidth - 175, Constants::k_screenHeight - 200);
+	//Initialise Gobble mode text
+	m_gobbleModeText = new sf::Text("Gobble Mode!", m_font, 20U);
+	m_gobbleModeText->setOrigin(m_gobbleModeText->getGlobalBounds().width / 2, m_gobbleModeText->getGlobalBounds().height / 2);
+	m_gobbleModeText->setFillColor(sf::Color::Yellow);
+	m_gobbleModeText->setPosition(Constants::k_screenWidth - 100, Constants::k_screenHeight - 200);
 
+	//Initialise Pause Text
+	m_pausedText = new sf::Text("Paused", m_font, 128U);
+	m_pausedText->setOrigin(m_pausedText->getGlobalBounds().width / 2, m_pausedText->getGlobalBounds().height / 2);
+	m_pausedText->setFillColor(sf::Color::Red);
+	m_pausedText->setPosition(Constants::k_screenWidth / 2, Constants::k_screenHeight / 2);
 
 	//make the snakes know where food is on the screen
 	for (auto* snake : m_snakes)
@@ -71,39 +71,42 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 }
 
 void State_Game::Update(sf::RenderWindow* _window) {
-	m_gobble = false;
-
 	GetInput();
-	CheckCollisions();
+	//only play the game if it is paused
+	if (!m_paused) {
+		m_gobble = false;
 
-	for (auto* snake : m_snakes)
-	{
-		if (snake->GetIsGobbleMode())
+		CheckCollisions();
+
+		for (auto* snake : m_snakes)
 		{
-			m_gobble = true;
+			if (snake->GetIsGobbleMode())
+			{
+				m_gobble = true;
+			}
+			snake->Update(*_window);
 		}
-		snake->Update(*_window);
-	}
 
-	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
-	if (rand() % 25 == 0 && m_gobble) {
-		for (auto* snake : m_snakes) {
-			if (!snake->IsDead() && snake->GetIsGobbleMode()) {
-				std::cout << "GOBBLE MODE OVER" << std::endl;
-				snake->SetIsGobbleMode(false);
-				break;
+		//GOBBLE MODE. After a random amount of time, stop Gobble Mode
+		if (rand() % 25 == 0 && m_gobble) {
+			for (auto* snake : m_snakes) {
+				if (!snake->IsDead() && snake->GetIsGobbleMode()) {
+					std::cout << "GOBBLE MODE OVER" << std::endl;
+					snake->SetIsGobbleMode(false);
+					break;
+				}
 			}
 		}
-	}
 
 
-	UpdateScores();
-	//If the player has died, end the game
-	if(m_snakes[0]->IsDead())
-	{
-		SaveScores();
-		current_state = eCurrentState::e_GameOver;
-		core_state.SetState(new State_GameOver());
+		UpdateScores();
+		//If the player has died, end the game
+		if (m_snakes[0]->IsDead())
+		{
+			SaveScores();
+			current_state = eCurrentState::e_GameOver;
+			core_state.SetState(new State_GameOver());
+		}
 	}
 }
 
@@ -120,21 +123,27 @@ void State_Game::Render(sf::RenderWindow* _window)
 		snake->Render(*_window);
 	}
 
-	//Draw the score UI
+	//Draw the UI
 	for (const auto& score : m_scores)
 	{
 		_window->draw(score);
-		if (m_gobble)
-		{
-			_window->draw(m_gobbleModeText);
-		}
 	}
 
+	if (m_gobble)
+	{
+		_window->draw(*m_gobbleModeText);
+	}
+	
 	//Draw the Walls
 	_window->draw(m_topWall.m_wall);
 	_window->draw(m_bottomWall.m_wall);
 	_window->draw(m_leftWall.m_wall);
 	_window->draw(m_rightWall.m_wall);
+
+	if(m_paused)
+	{
+		_window->draw(*m_pausedText);
+	}
 }
 
 void State_Game::Destroy(sf::RenderWindow* _window)
@@ -247,8 +256,14 @@ void State_Game::UpdateScores()
 	}
 }
 
-void State_Game::GetInput() const
+void State_Game::GetInput()
 {
+	//pause and un-pause the game if escape is pressed
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+	{
+		m_paused = !m_paused;
+		std::cout << (m_paused ? "PAUSED" : "UNPAUSED") << std::endl;
+	}
 	//access the player's input function
 	for (auto* snake : m_snakes)
 	{

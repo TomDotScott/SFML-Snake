@@ -28,7 +28,7 @@ public:
 	void Destroy(sf::RenderWindow* _window) override;
 
 	//GAME METHODS
-	void GetInput() const;
+	void GetInput();
 	void CheckCollisions();
 	
 private:
@@ -44,11 +44,13 @@ private:
 	std::vector<sf::Text> m_scores;
 
 	//Gobble Mode text
-	sf::Text m_gobbleModeText;
+	sf::Text* m_gobbleModeText;
+	sf::Text* m_pausedText;
 	
 	std::array<Food*, Constants::k_foodAmount> m_foodArray{};
 
 	bool m_gobble{ false };
+	bool m_paused{ false };
 	
 	//TOP
 	Wall m_topWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth - 200, sf::Vector2f(0, 0)) };
