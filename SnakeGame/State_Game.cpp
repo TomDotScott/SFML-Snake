@@ -1,4 +1,6 @@
 #include "State_Game.h"
+
+#include <fstream>
 #include <iostream>
 
 #include "State_GameOver.h"
@@ -99,6 +101,7 @@ void State_Game::Update(sf::RenderWindow* _window) {
 	//If the player has died, end the game
 	if(m_snakes[0]->IsDead())
 	{
+		SaveScores();
 		current_state = eCurrentState::e_GameOver;
 		core_state.SetState(new State_GameOver());
 	}
@@ -256,4 +259,34 @@ void State_Game::GetInput() const
 			return;
 		}
 	}
+}
+
+void State_Game::SaveScores()
+{
+	std::string score, highScore;
+	
+	//READ THE FILE
+	std::ifstream infile("Resources/Scores.txt");
+	if(!infile.is_open())
+	{
+		assert(false);
+	}
+	infile >> score >> highScore;
+	infile.close();
+
+	//Check if the player has set a new highscore
+	score = std::to_string(m_snakes[0]->GetScore());
+	if (std::stoi(highScore) < std::stoi(score))
+	{
+		highScore = score;
+	}
+	
+	std::ofstream outfile("Resources/Scores.txt");
+	if(!outfile.is_open())
+	{
+		assert(false);
+	}
+	outfile << score << std::endl;
+	outfile << highScore << std::endl;
+	outfile.close();
 }

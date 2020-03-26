@@ -29,7 +29,7 @@ void State_GameOver::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	{
 		assert(false);
 	}
-
+	file.close();
 	
 	/*MAIN TITLE TEXT*/
 	m_title = new sf::Text("Game Over", *m_font, 80U);

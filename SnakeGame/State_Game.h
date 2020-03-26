@@ -64,6 +64,8 @@ private:
 
 	//Display the scores on screen
 	void UpdateScores();
-	
+
+	void SaveScores();
+
 
 };
