@@ -160,6 +160,7 @@
     <ClCompile Include="PlayerSnake.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="State_GameOver.cpp" />
     <ClCompile Include="State_MainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +172,7 @@
     <ClInclude Include="PlayerSnake.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="State_GameOver.h" />
     <ClInclude Include="State_MainMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
