@@ -14,6 +14,7 @@ void Snake::Update(sf::RenderWindow& _window) {
 
 void Snake::Render(sf::RenderWindow& _window) {
 	if (!m_dead) {
+		m_rectangle.setFillColor(m_gobbleMode ? m_gobbleColour : m_defaultColour);
 		if (!m_segments.IsEmpty()) {
 			auto* currentNode = m_segments.GetHead();
 			for(int i = 0; i < m_segments.Size(); ++i)

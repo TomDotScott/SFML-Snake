@@ -3,7 +3,7 @@
 #include <iostream>
 
 AISnake::AISnake() {
-	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
+	m_defaultColour = sf::Color(sf::Color::Blue);
 
 	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 400) / Constants::k_snakeBlockSize) };
 
@@ -56,7 +56,7 @@ void AISnake::Update(sf::RenderWindow& _window) {
 		m_score += 1;
 		ChooseDirection();
 		Move();
-		Render(_window);
+		//Render(_window);
 	}
 }
 

@@ -57,9 +57,13 @@ public:
 	bool IsDead() const { return m_dead; }
 
 	void Render(sf::RenderWindow& _window) override final;
-	
+
 	List GetSnakeSegments() const { return m_segments; }
 protected:
+
+	sf::Color m_gobbleColour{ sf::Color::Yellow };
+	sf::Color m_defaultColour{ sf::Color::Red };
+	
 	EDirection m_direction{ EDirection::e_right };
 
 	sf::RectangleShape m_rectangle;
