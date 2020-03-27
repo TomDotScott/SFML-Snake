@@ -26,12 +26,12 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 		i = food;
 	}
 
-	/*
+	
 	//populate the snake Vector
 	for (int i = 0; i < Constants::k_AISnakeAmount; ++i) {
 		std::cout << "AI SNAKE CREATED" << std::endl;
 		m_snakes.push_back(new AISnake());
-	}*/
+	}
 	
 	
 	//populate the score UI
