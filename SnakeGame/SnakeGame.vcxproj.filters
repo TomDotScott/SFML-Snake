@@ -13,80 +13,104 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Snakes">
-      <UniqueIdentifier>{4f659434-e5ef-4ba7-a04c-5e3bc1f54e04}</UniqueIdentifier>
+    <Filter Include="Header Files\Game Structure">
+      <UniqueIdentifier>{95639214-248b-4430-95a0-d6d1b0b0c9ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Snakes">
-      <UniqueIdentifier>{14c3bfe6-274b-4209-927e-bf1cf1813a4b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\States">
+    <Filter Include="Header Files\Game Structure\States">
       <UniqueIdentifier>{59ca0ecb-3a8a-4a1e-8f98-708d2fae7ec6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\States">
+    <Filter Include="Header Files\Game Structure\Linked List">
+      <UniqueIdentifier>{ef1ca21b-331f-48eb-9533-37a8c534fb36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Structure">
+      <UniqueIdentifier>{d88e037f-596c-46e3-9996-3ce2367555a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Structure\States">
       <UniqueIdentifier>{6d89d3dd-9ad8-4192-b511-6e2592981e26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Structure\Linked List">
+      <UniqueIdentifier>{e0fe113d-f51d-4aca-a5d6-ebeb6aa5e930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{0cdde51b-a9de-4ebc-b57d-83cd493bcf8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Snakes">
+      <UniqueIdentifier>{4f659434-e5ef-4ba7-a04c-5e3bc1f54e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities">
+      <UniqueIdentifier>{183c83b9-1a4b-44a4-8f60-b4d0dec4e6a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\Snakes">
+      <UniqueIdentifier>{14c3bfe6-274b-4209-927e-bf1cf1813a4b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Food.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerSnake.cpp">
-      <Filter>Source Files\Snakes</Filter>
+      <Filter>Source Files\Entities\Snakes</Filter>
     </ClCompile>
     <ClCompile Include="Snake.cpp">
-      <Filter>Source Files\Snakes</Filter>
+      <Filter>Source Files\Entities\Snakes</Filter>
     </ClCompile>
     <ClCompile Include="AISnake.cpp">
-      <Filter>Source Files\Snakes</Filter>
+      <Filter>Source Files\Entities\Snakes</Filter>
     </ClCompile>
     <ClCompile Include="State_Game.cpp">
-      <Filter>Source Files\States</Filter>
+      <Filter>Source Files\Game Structure\States</Filter>
     </ClCompile>
     <ClCompile Include="StateManager.cpp">
-      <Filter>Source Files\States</Filter>
+      <Filter>Source Files\Game Structure\States</Filter>
     </ClCompile>
     <ClCompile Include="State_MainMenu.cpp">
-      <Filter>Source Files\States</Filter>
+      <Filter>Source Files\Game Structure\States</Filter>
     </ClCompile>
     <ClCompile Include="State_GameOver.cpp">
-      <Filter>Source Files\States</Filter>
+      <Filter>Source Files\Game Structure\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Food.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Food.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AISnake.h">
-      <Filter>Header Files\Snakes</Filter>
+      <Filter>Header Files\Entities\Snakes</Filter>
     </ClInclude>
     <ClInclude Include="PlayerSnake.h">
-      <Filter>Header Files\Snakes</Filter>
+      <Filter>Header Files\Entities\Snakes</Filter>
     </ClInclude>
     <ClInclude Include="Snake.h">
-      <Filter>Header Files\Snakes</Filter>
+      <Filter>Header Files\Entities\Snakes</Filter>
     </ClInclude>
     <ClInclude Include="State_Game.h">
-      <Filter>Header Files\States</Filter>
+      <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
     <ClInclude Include="StateManager.h">
-      <Filter>Header Files\States</Filter>
+      <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
     <ClInclude Include="State_MainMenu.h">
-      <Filter>Header Files\States</Filter>
+      <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
     <ClInclude Include="State_GameOver.h">
+      <Filter>Header Files\Game Structure\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Food.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

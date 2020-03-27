@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="AISnake.cpp" />
     <ClCompile Include="Food.cpp" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="State_Game.cpp" />
     <ClCompile Include="main.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="AISnake.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Food.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State_Game.h" />
     <ClInclude Include="PlayerSnake.h" />
