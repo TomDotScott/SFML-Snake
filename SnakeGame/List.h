@@ -7,6 +7,9 @@ struct Node
 {
 	friend class List;
 	Node(sf::Vector2f _position, Node* _previousNode, Node* _nextNode) : m_position(_position), m_previousNode(_previousNode), m_nextNode(_nextNode){}
+
+	bool NextNodeAvailable() const { return m_nextNode; }
+	
 	sf::Vector2f m_position;
 	Node* m_previousNode;
 	Node* m_nextNode;
@@ -18,15 +21,17 @@ public:
 	List();
 	List(const sf::Vector2f _position);
 	~List();
+	void PopFront();
 	void PushFront(const sf::Vector2f _segmentPosition);
 	void PushBack(const sf::Vector2f _segmentPosition);
 	void PopBack();
+	void Clear() const;
 	sf::Vector2f Front() const;
+	sf::Vector2f Back() const;
 	bool IsEmpty() const;
 	int Size() const;
 
-	friend std::ostream& operator<<(std::ostream& _os, List _list);
-	
+	friend std::ostream& operator<<(std::ostream& _os, List _list);	
 	Node* GetHead() const { return m_head; }
 	Node* GetTail() const { return m_tail; }
 
@@ -34,4 +39,5 @@ public:
 private:
 	Node* m_head;
 	Node* m_tail;
+	int m_size{ 0 };
 };

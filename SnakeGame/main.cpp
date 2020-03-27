@@ -31,26 +31,6 @@ void GameLoop(sf::RenderWindow& _window)
 
 int main()
 {
-	List list(sf::Vector2f(1, 2));
-
-	list.PushFront(sf::Vector2f(3, 4));
-
-	list.PushFront(sf::Vector2f(5, 6));
-
-	list.PushFront(sf::Vector2f(7, 8));
-
-	list.PushBack(sf::Vector2f(8, 9));
-
-	list.PushFront(sf::Vector2f(10, 11));
-
-	std::cout << "HEAD: " << list.GetHead()->m_position.x << " " << list.GetHead()->m_position.y << std::endl;
-	std::cout << "TAIL: " << list.GetTail()->m_position.x << " " << list.GetTail()->m_position.y << std::endl;
-
-	std::cout << list << std::endl;
-	std::cout << "SIZE: " << list.Size() << std::endl;
-
-	
-	/*
 	// Initialise the resources needed for the states	
 	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
 
@@ -103,6 +83,6 @@ int main()
 	}
 
 	std::cout << "Snake Game: Ended" << std::endl;
-	*/
+	
 	return 0;
 }

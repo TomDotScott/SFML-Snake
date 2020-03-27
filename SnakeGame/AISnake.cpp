@@ -22,9 +22,9 @@ AISnake::AISnake() {
 		m_position.y = static_cast<float>(randomNumber * Constants::k_gridSize);
 	}
 
-	m_segments.push_back(m_position);
-	m_segments.push_back(sf::Vector2f(m_position.x, (m_position.y)));
-	m_segments.push_back(sf::Vector2f(m_position.x - Constants::k_gridSize, (m_position.y)));
+	m_segments.PushBack(m_position);
+	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)));
+	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gridSize, (m_position.y)));
 
 	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
 	m_rectangle.setFillColor(m_colour);
@@ -36,16 +36,16 @@ void AISnake::ChooseDirection() {
 		FindFood();
 
 		//Make decisions based on the closest food
-		if (m_foodList.front().x < m_position.x && m_direction != EDirection::e_right) {
+		if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
 			m_direction = EDirection::e_left;
 		}
-		else if (m_foodList.front().x > m_position.x && m_direction != EDirection::e_left) {
+		else if (m_foodList.Front().x > m_position.x && m_direction != EDirection::e_left) {
 			m_direction = EDirection::e_right;
 		}
-		else if (m_foodList.front().y > m_position.y && m_direction != EDirection::e_up) {
+		else if (m_foodList.Front().y > m_position.y && m_direction != EDirection::e_up) {
 			m_direction = EDirection::e_down;
 		}
-		else if (m_foodList.front().y < m_position.y && m_direction != EDirection::e_down) {
+		else if (m_foodList.Front().y < m_position.y && m_direction != EDirection::e_down) {
 			m_direction = EDirection::e_up;
 		}
 	}
@@ -60,21 +60,14 @@ void AISnake::Update(sf::RenderWindow& _window) {
 	}
 }
 
-void AISnake::CheckCollision()
-{
-	if (!m_dead) {
-		CheckCollisionAgainstSelf();
-	}
-}
-
 void AISnake::FindFood()
 {
 	//Clear the list of food positions
-	m_foodList.clear();
+	m_foodList.Clear();
 	
 	sf::Vector2f closestFood = m_food[0]->GetPosition();
 	
-	m_foodList.push_front(closestFood);
+	m_foodList.PushFront(closestFood);
 
 	//Vector AB = b - a
 	//Magnitude = x^2 + y^2
@@ -103,32 +96,27 @@ void AISnake::FindFood()
 			//reset the closest food
 			closestFood = currentFoodPosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
-			m_foodList.push_front(closestFood);
+			m_foodList.PushFront(closestFood);
 
 			//check that the closest food isn't in any of the segments
-			for(const sf::Vector2f& segment : m_segments) {
-				if(segment == closestFood) {
-					m_foodList.pop_front();
+
+			auto* currentNode = m_foodList.GetHead();
+			while(currentNode->m_nextNode)
+			{
+				if(currentNode->m_position == closestFood)
+				{
+					m_foodList.PopFront();
 				}
 			}
 			
+			/*for(const sf::Vector2f& segment : m_segments) {
+				if(segment == closestFood) {
+					m_foodList.pop_front();
+				}
+			}*/
+			
 		}
-		m_foodList.push_back(currentFoodPosition);
+		m_foodList.PushBack(currentFoodPosition);
 	}
 	
-}
-
-void AISnake::CheckCollisionAgainstSelf()
-{
-	if (!m_dead) {
-		int counter{ 0 };
-		for (sf::Vector2f& segment : m_segments)
-		{
-			if (segment == m_position && counter != 0)
-			{
-				Collision(ECollisionType::e_self);
-			}
-			++counter;
-		}
-	}
 }

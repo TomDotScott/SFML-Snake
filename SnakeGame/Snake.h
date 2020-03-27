@@ -1,10 +1,9 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
-#include <list>
 #include "Food.h"
+#include "List.h"
 
-using SnakeSegments = std::list<sf::Vector2f>;
 
 //Holds the directions that the snake can travel in
 enum class EDirection {
@@ -59,13 +58,13 @@ public:
 
 	void Render(sf::RenderWindow& _window) override final;
 	
-	SnakeSegments GetSnakeSegments() const { return m_segments; }
+	List GetSnakeSegments() const { return m_segments; }
 protected:
 	EDirection m_direction{ EDirection::e_right };
 
 	sf::RectangleShape m_rectangle;
 
-	SnakeSegments m_segments;
+	List m_segments;
 
 	bool m_gobbleMode{ false };
 

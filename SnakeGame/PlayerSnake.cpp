@@ -20,9 +20,9 @@ PlayerSnake::PlayerSnake() {
 		m_position.y = static_cast<float>(randomNumber * Constants::k_gridSize);
 	}
 
-	m_segments.push_back(m_position);
-	m_segments.push_back(sf::Vector2f(m_position.x, (m_position.y)));
-	m_segments.push_back(sf::Vector2f(m_position.x - Constants::k_gridSize, (m_position.y)));
+	m_segments.PushBack(m_position);
+	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)));
+	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gridSize, (m_position.y)));
 
 	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
 	m_rectangle.setFillColor(m_colour);
