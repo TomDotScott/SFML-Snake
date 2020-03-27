@@ -25,9 +25,11 @@ public:
 	bool IsEmpty() const;
 	int Size() const;
 
-	friend std::ostream& operator<<(std::ostream& os, List list);
+	friend std::ostream& operator<<(std::ostream& _os, List _list);
 	
 	Node* GetHead() const { return m_head; }
+	Node* GetTail() const { return m_tail; }
+
 	
 private:
 	Node* m_head;
