@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "Constants.h"
 
-void Snake::Update(sf::RenderWindow& _window) {
+void Snake::Update() {
 	if (!IsDead()) {
 		m_score += 1;
 		Move();

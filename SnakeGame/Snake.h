@@ -32,7 +32,7 @@ public:
 
 	void Shrink(const int _amount);
 
-	virtual void Update(sf::RenderWindow& _window);
+	virtual void Update();
 
 	virtual void CheckCollision();
 

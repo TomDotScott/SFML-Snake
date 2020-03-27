@@ -5,7 +5,7 @@ public:
 	AISnake();
 	void ChooseDirection();
 	
-	void Update(sf::RenderWindow& _window) override;
+	void Update() override;
 
 	//Cycle through the food on the screen to find the closest food to the snake
 	void FindFood();

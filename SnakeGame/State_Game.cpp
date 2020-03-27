@@ -60,7 +60,7 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 	m_pausedText = new sf::Text("Paused", m_font, 128U);
 	m_pausedText->setOrigin(m_pausedText->getGlobalBounds().width / 2, m_pausedText->getGlobalBounds().height / 2);
 	m_pausedText->setFillColor(sf::Color::Red);
-	m_pausedText->setPosition(Constants::k_screenWidth / 2, Constants::k_screenHeight / 2);
+	m_pausedText->setPosition(static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.f);
 
 	//make the snakes know where food is on the screen
 	for (auto* snake : m_snakes)
@@ -86,7 +86,7 @@ void State_Game::Update(sf::RenderWindow* _window) {
 			{
 				m_gobble = true;
 			}
-			snake->Update(*_window);
+			snake->Update();
 		}
 
 		//GOBBLE MODE. After a random amount of time, stop Gobble Mode
@@ -183,20 +183,41 @@ void State_Game::CheckCollisions() {
 					return;
 				}
 			}
-			/*
+			
 			//Check against other snakes
 			for (auto* otherSnake : m_snakes) {
 				if (!otherSnake->IsDead() && (otherSnake != currentSnake)) {
-					//Check each segment of the snake against the heads of the other snakes
-					for (auto& snakeSegment : currentSnake->GetSnakeSegments()) {
-						if (snakeSegment == otherSnake->GetHeadPosition()) {
+					//Check each segment of the current snake against the heads of the other snakes
+					auto currentSegment = currentSnake->GetSnakeSegments().GetHead();
+					for (int i = 0; i < currentSnake->GetSnakeSegments().Size(); ++i)
+					{
+						//Check each segment against the heads of the other snakes
+						if (currentSegment->m_position == otherSnake->GetHeadPosition())
+						{
+							//if it's a head on collision then both snakes die
+							if (currentSnake->GetHeadPosition() == currentSegment->m_position)
+							{
+								if (currentSnake->GetIsGobbleMode()) {
+									currentSnake->Grow(static_cast<const int>((otherSnake->GetSnakeSegments().Size())));
+									otherSnake->Collision(ECollisionType::e_snake);
+									return;
+								}
+								currentSnake->Collision(ECollisionType::e_snake);
+								otherSnake->Collision(ECollisionType::e_snake);
+								return;
+							}
 							otherSnake->Collision(ECollisionType::e_snake);
-							return;
 						}
+						currentSegment = currentSegment->m_nextNode;
 					}
-					//Check if the snake has hit another snake's body
-					for (auto& otherSegment : otherSnake->GetSnakeSegments()) {
-						if (otherSegment == currentSnake->GetHeadPosition()) {
+					
+					//Check if the current snake has hit another snake's body
+					auto otherSegment = otherSnake->GetSnakeSegments().GetHead();
+
+					for (int i = 0; i < otherSnake->GetSnakeSegments().Size(); ++i)
+					{
+						if(otherSegment->m_position == currentSnake->GetHeadPosition())
+						{
 							//If it's gobble mode, make sure not to kill the player on collision
 							if (currentSnake->GetIsGobbleMode()) {
 								const int growShrinkAmount{ otherSnake->FindGobblePoint(currentSnake->GetHeadPosition()) };
@@ -209,21 +230,10 @@ void State_Game::CheckCollisions() {
 								return;
 							}
 						}
-					}
-					//If head on collisions, then both die
-					//If gobble mode, the snake eats the entire snake
-					if (currentSnake->GetHeadPosition() == otherSnake->GetHeadPosition()) {
-						if (currentSnake->GetIsGobbleMode()) {
-							currentSnake->Grow(static_cast<const int>((otherSnake->GetSnakeSegments().size())));
-							otherSnake->Collision(ECollisionType::e_snake);
-							return;
-						}
-						//currentSnake->Collision(ECollisionType::e_snake);
-						//otherSnake->Collision(ECollisionType::e_snake);
-						return;
+						otherSegment = otherSegment->m_nextNode;
 					}
 				}
-			}*/
+			}
 		}
 	}
 }

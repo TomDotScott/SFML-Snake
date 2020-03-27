@@ -51,12 +51,11 @@ void AISnake::ChooseDirection() {
 	}
 }
 
-void AISnake::Update(sf::RenderWindow& _window) {
+void AISnake::Update() {
 	if (!m_dead) {
 		m_score += 1;
 		ChooseDirection();
 		Move();
-		//Render(_window);
 	}
 }
 
