@@ -99,9 +99,9 @@ void AISnake::FindFood()
 			m_foodList.PushFront(closestFood);
 
 			//check that the closest food isn't in any of the segments
-
-			auto* currentNode = m_foodList.GetHead();
-			for(int i = 0; i < m_foodList.Size(); ++i)
+			
+			auto* currentNode = m_segments.GetHead();
+			for(int i = 0; i < m_segments.Size(); ++i)
 			{
 				if(currentNode->m_position == closestFood)
 				{
