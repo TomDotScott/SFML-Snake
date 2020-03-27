@@ -76,7 +76,7 @@
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="List.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Game Structure\Linked List</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +111,7 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="List.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Game Structure\Linked List</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

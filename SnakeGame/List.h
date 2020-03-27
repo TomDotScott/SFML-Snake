@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <SFML/System/Vector2.hpp>
 
 //Doubly linked list, so we need reference to previous and next node
@@ -23,8 +24,12 @@ public:
 	sf::Vector2f Front() const;
 	bool IsEmpty() const;
 	int Size() const;
+
+	friend std::ostream& operator<<(std::ostream& os, List list);
+	
+	Node* GetHead() const { return m_head; }
+	
 private:
 	Node* m_head;
 	Node* m_tail;
 };
-

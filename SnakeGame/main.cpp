@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <time.h>
 #include "Constants.h"
+#include "List.h"
 #include "State_MainMenu.h"
 
 StateManager core_state;
@@ -30,6 +31,8 @@ void GameLoop(sf::RenderWindow& _window)
 
 int main()
 {
+	List list(sf::Vector2f(10, 10));
+	std::cout << list;
 	/*
 	// Initialise the resources needed for the states	
 	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
