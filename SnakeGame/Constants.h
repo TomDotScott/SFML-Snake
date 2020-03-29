@@ -16,6 +16,6 @@ namespace Constants {
 	const int k_specialGrowAmount{ 3 };
 	const int k_gobbleGrowAmount{ 5 };
 
-	const int k_AISnakeAmount{ 2 };
+	const int k_AISnakeAmount{ 5 };
 	const int k_foodAmount{ 5 };
 }

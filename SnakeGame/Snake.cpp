@@ -14,11 +14,18 @@ void Snake::Update() {
 
 void Snake::Render(sf::RenderWindow& _window) {
 	if (!m_dead) {
-		m_rectangle.setFillColor(m_gobbleMode ? m_gobbleColour : m_defaultColour);
 		if (!m_segments.IsEmpty()) {
 			auto* currentNode = m_segments.GetHead();
 			for(int i = 0; i < m_segments.Size(); ++i)
 			{
+				//Colour the head a different colour
+				if(i == 0)
+				{
+					m_rectangle.setFillColor(sf::Color::Green);
+				}else
+				{
+					m_rectangle.setFillColor(m_gobbleMode ? m_gobbleColour : m_defaultColour);
+				}
 				m_rectangle.setPosition(currentNode->m_position);
 				_window.draw(m_rectangle);
 				currentNode = currentNode->m_nextNode;

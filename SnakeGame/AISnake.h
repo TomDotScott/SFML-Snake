@@ -20,11 +20,12 @@ private:
 	void FindHighestFood();
 	
 	//Checks if the food is in the same position as one of the segments of the snake
-	bool IsFoodOverlapping(sf::Vector2f _foodPosition) const;
+	bool IsOverlapping(sf::Vector2f _position) const;
 
 	//Checks if there is a snake in the way to the food
 	bool IsSnakeInWay() const;
 
 	//Check if the snake's body is in the way
-	bool IsSelfInWay() const;
+	//Returns the direction the body is in
+	EDirection SelfInWay() const;
 };

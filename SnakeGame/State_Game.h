@@ -9,7 +9,7 @@
 
 struct Wall {
 	Wall(const float _height, const float _width, const sf::Vector2f _position) : m_height(_height), m_width(_width), m_position(_position) {
-		m_wall = sf::RectangleShape(sf::Vector2f(_width, _height));
+		m_wall = sf::RectangleShape(sf::Vector2f(m_width, m_height));
 		m_wall.setFillColor(m_colour);
 		m_wall.setPosition(m_position);
 	}

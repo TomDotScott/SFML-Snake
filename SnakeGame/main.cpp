@@ -67,7 +67,7 @@ int main()
 		}
 		if (current_state == eCurrentState::e_Game)
 		{
-			while (clock.getElapsedTime() >= sf::milliseconds(200)) {
+			while (clock.getElapsedTime() >= sf::milliseconds(250)) {
 
 				GameLoop(window);
 				clock.restart();
