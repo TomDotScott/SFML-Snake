@@ -65,12 +65,20 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 	m_pausedText->setFillColor(sf::Color::Red);
 	m_pausedText->setPosition(static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.f);
 
-	//make the snakes know where food is on the screen
+	//make the snakes know where the food and other snakes are on the screen
 	for (auto* snake : m_snakes)
 	{
 		for (auto* food : m_foodArray)
 		{
 			snake->SetFood(food);
+		}
+
+		for(auto* otherSnake : m_snakes)
+		{
+			if(snake != otherSnake)
+			{
+				snake->SetOtherSnake(otherSnake);
+			}
 		}
 	}
 }

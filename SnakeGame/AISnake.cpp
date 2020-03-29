@@ -60,8 +60,18 @@ void AISnake::FindFood()
 	//Find the highest food
 	FindHighestFood();
 	//if there is a snake in the way, revert to going to the closest
+	if(IsSnakeInWay())
+	{
+		std::cout << "THERE'S A SNAKE IN MY WAY, I AM GOING TO MY CLOSEST FOOD" << std::endl;
+		FindClosestFood();
+	}
 	//if there is a snake in the way, choose the first food that has nobody heading towards it
-	
+	if(IsSnakeInWay())
+	{
+		std::cout << "THERE'S A SNAKE IN MY WAY, I AM GOING TO FOOD THAT HAS NOBODY IN THE WAY" << std::endl;
+		const int randomFood = RandomRange(0, Constants::k_foodAmount - 1);
+		m_foodList.PushFront(m_food[randomFood]->GetPosition());
+	}
 }
 
 void AISnake::FindClosestFood()
@@ -168,6 +178,22 @@ bool AISnake::IsFoodOverlapping(sf::Vector2f _foodPosition) const
 		if (currentNode->m_position == _foodPosition)
 		{
 			return true;
+		}
+	}
+	return false;
+}
+
+bool AISnake::IsSnakeInWay() const
+{
+	for(auto* snake : m_otherSnakes)
+	{
+		//make sure the snake is alive
+		if (!snake->IsDead()) {
+			//If the x or y co-ordinates of the other snake's segments are the same as the chosen food, it is in the way
+			if (snake->GetHeadPosition().x == m_foodList.Front().x || snake->GetHeadPosition().y == m_foodList.Front().y)
+			{
+				return true;
+			}
 		}
 	}
 	return false;

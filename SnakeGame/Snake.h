@@ -52,7 +52,9 @@ public:
 
 	void SetIsGobbleMode(const bool& _isGobbleMode) { m_gobbleMode = _isGobbleMode; }
 
-	void SetFood(Food* food) { m_food.push_back(food); }
+	void SetFood(Food* _food) { m_food.push_back(_food); }
+
+	void SetOtherSnake(Snake* _snake) { m_otherSnakes.push_back(_snake); }
 
 	bool IsDead() const { return m_dead; }
 
@@ -80,5 +82,8 @@ protected:
 	
 	//A store of all of the food on screen to help with decision making
 	std::vector<Food*> m_food;
+
+	//A store of all of the other snakes on screen to help with decision making
+	std::vector<Snake*> m_otherSnakes;
 
 };
