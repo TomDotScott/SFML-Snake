@@ -103,7 +103,7 @@ void State_Game::Update(sf::RenderWindow* _window) {
 		//GOBBLE MODE. After a random amount of time, stop Gobble Mode
 		if (rand() % 25 == 0 && m_gobble) {
 			for (auto* snake : m_snakes) {
-				if (!snake->IsDead() && snake->GetIsGobbleMode()) {
+				if (snake->GetIsGobbleMode()) {
 					std::cout << "GOBBLE MODE OVER" << std::endl;
 					snake->SetIsGobbleMode(false);
 					break;

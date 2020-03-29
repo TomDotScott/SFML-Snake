@@ -60,6 +60,8 @@ public:
 
 	void Render(sf::RenderWindow& _window) override final;
 
+	EDirection GetDirection() const { return m_direction; }
+	
 	List GetSnakeSegments() const { return m_segments; }
 protected:
 

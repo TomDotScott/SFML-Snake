@@ -22,6 +22,9 @@ private:
 	//Checks if the food is in the same position as one of the segments of the snake
 	bool IsFoodOverlapping(sf::Vector2f _foodPosition) const;
 
-	//Checks if there is a snake in the way
+	//Checks if there is a snake in the way to the food
 	bool IsSnakeInWay() const;
+
+	//Check if the snake's body is in the way
+	bool IsSelfInWay() const;
 };

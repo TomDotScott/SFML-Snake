@@ -8,7 +8,7 @@ struct Node
 	friend class List;
 	Node(sf::Vector2f _position, Node* _previousNode, Node* _nextNode) : m_position(_position), m_previousNode(_previousNode), m_nextNode(_nextNode){}
 
-	bool NextNodeAvailable() const { return m_nextNode; }
+	bool IsNextNodeAvailable() const { return m_nextNode; }
 	
 	sf::Vector2f m_position;
 	Node* m_previousNode;
@@ -32,7 +32,9 @@ public:
 	int Size() const;
 
 	friend std::ostream& operator<<(std::ostream& _os, List _list);	
+	//Returns the front node
 	Node* GetHead() const { return m_head; }
+	//Returns the back node
 	Node* GetTail() const { return m_tail; }
 
 	
