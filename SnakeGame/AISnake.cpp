@@ -2,25 +2,22 @@
 #include <cmath>
 #include <iostream>
 
+//NEW ALGORITHM - MOVE TOWARDS THE FOOD WITH THE HIGHEST SCORE UNLESS ANOTHER SNAKE IS BLOCKING THE PATH
+
 AISnake::AISnake() {
 	m_defaultColour = sf::Color(sf::Color::Blue);
 
 	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 400) / Constants::k_snakeBlockSize) };
 
-	if (randomNumber * Constants::k_gridSize >= Constants::k_screenWidth - 200) {
-		m_position.x = static_cast<float>(Constants::k_screenWidth - 200);
-	}
-	else {
-		m_position.x = static_cast<float>(randomNumber * Constants::k_gridSize);
-	}
+	m_position.x = static_cast<float>((randomNumber * Constants::k_gridSize >= Constants::k_screenWidth - 200 
+					? Constants::k_screenWidth - 200 
+					: randomNumber * Constants::k_gridSize));
 
 	randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize);
-	if (randomNumber * Constants::k_gridSize >= Constants::k_screenHeight - 100) {
-		m_position.y = static_cast<float>(Constants::k_screenHeight - 100);
-	}
-	else {
-		m_position.y = static_cast<float>(randomNumber * Constants::k_gridSize);
-	}
+	
+	m_position.y = static_cast<float>((randomNumber * Constants::k_gridSize >= Constants::k_screenHeight - 100 
+					? Constants::k_screenHeight - 100 
+					: randomNumber * Constants::k_gridSize));
 
 	m_segments.PushBack(m_position);
 	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)));
@@ -33,8 +30,6 @@ AISnake::AISnake() {
 
 void AISnake::ChooseDirection() {
 	if (!m_dead) {
-		FindFood();
-
 		//Make decisions based on the closest food
 		if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
 			m_direction = EDirection::e_left;
@@ -54,6 +49,7 @@ void AISnake::ChooseDirection() {
 void AISnake::Update() {
 	if (!m_dead) {
 		m_score += 1;
+		FindFood();
 		ChooseDirection();
 		Move();
 	}
@@ -61,61 +57,118 @@ void AISnake::Update() {
 
 void AISnake::FindFood()
 {
+	//Find the highest food
+	FindHighestFood();
+	//if there is a snake in the way, revert to going to the closest
+	//if there is a snake in the way, choose the first food that has nobody heading towards it
+	
+}
+
+void AISnake::FindClosestFood()
+{
 	//Clear the list of food positions
 	m_foodList.Clear();
-	
+
 	sf::Vector2f closestFood = m_food[0]->GetPosition();
-	
+
 	m_foodList.PushFront(closestFood);
 
-	//Vector AB = b - a
-	//Magnitude = x^2 + y^2
-
-	sf::Vector2f positionVectorOfSnakeToFood = 
+	sf::Vector2f positionVectorOfSnakeToFood =
 		sf::Vector2f(closestFood.x - m_position.x, closestFood.y - m_position.y);
-	
+
 	float magnitudeOfClosestFood = positionVectorOfSnakeToFood.x * positionVectorOfSnakeToFood.x
 		+ positionVectorOfSnakeToFood.y * positionVectorOfSnakeToFood.y;
-	
+
 
 	//Find the food that it is closest to
 	for (Food* currentFood : m_food) {
 		const sf::Vector2f currentFoodPosition{ currentFood->GetPosition() };
-		
+
 		//see if the current piece of food is closer by working out the magnitude of the vectors
-		positionVectorOfSnakeToFood = 
+		positionVectorOfSnakeToFood =
 			sf::Vector2f(currentFoodPosition.x - m_position.x, currentFoodPosition.y - m_position.y);
 
 		const float magnitudeOfCurrentFood = positionVectorOfSnakeToFood.x * positionVectorOfSnakeToFood.x
 			+ positionVectorOfSnakeToFood.y * positionVectorOfSnakeToFood.y;
-		
+
 		//If the current piece of food's magnitude is closer than the previous closest piece, it is closer
 		if (magnitudeOfCurrentFood < magnitudeOfClosestFood) {
-			
+
 			//reset the closest food
 			closestFood = currentFoodPosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
 			m_foodList.PushFront(closestFood);
 
 			//check that the closest food isn't in any of the segments
-			
-			auto* currentNode = m_segments.GetHead();
-			for(int i = 0; i < m_segments.Size(); ++i)
+			if (IsFoodOverlapping(closestFood))
 			{
-				if(currentNode->m_position == closestFood)
-				{
-					m_foodList.PopFront();
-				}
+				m_foodList.PopFront();
 			}
-			
-			/*for(const sf::Vector2f& segment : m_segments) {
-				if(segment == closestFood) {
-					m_foodList.pop_front();
-				}
-			}*/
-			
 		}
-		m_foodList.PushBack(currentFoodPosition);
+		//Otherwise, add to the end of the list
+		else {
+			m_foodList.PushBack(currentFoodPosition);
+		}
 	}
+}
+
+void AISnake::FindHighestFood()
+{
+	m_foodList.Clear();
 	
+	//Initialise the highest food to the first bit of food in the food vector
+	Food* highestValueFood = m_food[0];
+
+	//Make the highest the front of the list
+	m_foodList.PushFront(highestValueFood->GetPosition());
+	
+	//Check to see if any food is higher value
+	for(auto* currentFood : m_food)
+	{
+		if(highestValueFood->GetGrowAmount() < currentFood->GetGrowAmount())
+		{
+			m_foodList.PushFront(currentFood->GetPosition());
+			highestValueFood = currentFood;
+		}
+		//If their values are the same, then choose the one that is closer
+		else if(highestValueFood->GetGrowAmount() == currentFood->GetGrowAmount() && !IsFoodOverlapping(currentFood->GetPosition()))
+		{
+			const sf::Vector2f positionVectorOfSnakeToCurrentHighestValueFood = 
+				sf::Vector2f(highestValueFood->GetPosition().x - m_position.x, highestValueFood->GetPosition().y - m_position.y);
+
+			const sf::Vector2f positionVectorOfSnakeToCurrentFood =
+				sf::Vector2f(currentFood->GetPosition().x - m_position.x, currentFood->GetPosition().y - m_position.y);
+
+			const float magnitudeOfSnakeToCurrentHighestValueFood
+				= positionVectorOfSnakeToCurrentHighestValueFood.x * positionVectorOfSnakeToCurrentHighestValueFood.x
+				+ positionVectorOfSnakeToCurrentHighestValueFood.y * positionVectorOfSnakeToCurrentHighestValueFood.y;
+
+			const float magnitudeOfSnakeToCurrentFood
+				= positionVectorOfSnakeToCurrentFood.x * positionVectorOfSnakeToCurrentFood.x
+				+ positionVectorOfSnakeToCurrentFood.y * positionVectorOfSnakeToCurrentFood.y;
+
+			//If the current food is closer, then it goes to the front of the list
+			if(magnitudeOfSnakeToCurrentFood < magnitudeOfSnakeToCurrentHighestValueFood)
+			{
+				m_foodList.PushFront(currentFood->GetPosition());
+			}
+		}
+		else
+		{
+			m_foodList.PushBack(currentFood->GetPosition());
+		}
+	}	
+}
+
+bool AISnake::IsFoodOverlapping(sf::Vector2f _foodPosition) const
+{
+	auto* currentNode = m_segments.GetHead();
+	for (int i = 0; i < m_segments.Size(); ++i)
+	{
+		if (currentNode->m_position == _foodPosition)
+		{
+			return true;
+		}
+	}
+	return false;
 }
