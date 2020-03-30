@@ -20,8 +20,8 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 {
 	m_font = *_font;
 
-	//auto* playerSnake = new PlayerSnake();
-	//m_snakes.push_back(playerSnake);
+	auto* playerSnake = new PlayerSnake();
+	m_snakes.push_back(playerSnake);
 
 	//populate the food array
 	for (auto& i : m_foodArray) {
@@ -114,8 +114,7 @@ void State_Game::Update(sf::RenderWindow* _window) {
 
 		UpdateScores();
 		//If the player has died, end the game
-		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
-		if (m_snakes[0]->IsDead() && playerSnake)
+		if (m_snakes[0]->IsDead())
 		{
 			SaveScores();
 			current_state = eCurrentState::e_GameOver;

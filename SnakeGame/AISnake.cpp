@@ -30,15 +30,14 @@ AISnake::AISnake() {
 
 void AISnake::ChooseDirection() {
 	if (!m_dead) {
-		std::cout << "MY CHOSEN FOOD IS AT " << m_foodList.Front().x << " " << m_foodList.Front().y;
+		std::cout << "MY CHOSEN FOOD IS AT" << m_foodList.Front().x << " " << m_foodList.Front().y << std::endl;
 		//Make decisions based on the closest food
 		if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
 			//If the snake is blocking itself in it's current direction
 			//Randomly choose to go UP or DOWN
-			if (SelfInWay() == EDirection::e_left)
+			if (IsSelfInWay())
 			{
-				//Choose whether to go up or down depending on the height
-				m_direction = m_position.y <= static_cast<float>(Constants::k_screenHeight) / 2.f ? EDirection::e_down : EDirection::e_up;
+				m_direction = RandomRange(0, 1) == 0 ? EDirection::e_up : EDirection::e_down;
 			}
 			else {
 				m_direction = EDirection::e_left;
@@ -47,10 +46,9 @@ void AISnake::ChooseDirection() {
 		else if (m_foodList.Front().x > m_position.x && m_direction != EDirection::e_left) {
 			//If the snake is blocking itself in it's current direction
 			//Randomly choose to go UP or DOWN
-			if (SelfInWay() == EDirection::e_right)
+			if (IsSelfInWay())
 			{
-				//Choose whether to go up or down depending on the height
-				m_direction = m_position.y <= static_cast<float>(Constants::k_screenHeight) / 2.f ? EDirection::e_up : EDirection::e_down;
+				m_direction = RandomRange(0, 1) == 0 ? EDirection::e_up : EDirection::e_down;
 			}
 			else {
 				m_direction = EDirection::e_right;
@@ -59,9 +57,9 @@ void AISnake::ChooseDirection() {
 		else if (m_foodList.Front().y > m_position.y && m_direction != EDirection::e_up) {
 			//If the snake is blocking itself in it's current direction
 			//Randomly choose to go LEFT or RIGHT
-			if (SelfInWay() == EDirection::e_down)
+			if (IsSelfInWay())
 			{
-				m_direction = m_position.x <= Constants::k_screenWidth - 200 ? EDirection::e_right : EDirection::e_left;
+				m_direction = RandomRange(0, 1) == 0 ? EDirection::e_left : EDirection::e_right;
 			}
 			else {
 				m_direction = EDirection::e_down;
@@ -70,33 +68,14 @@ void AISnake::ChooseDirection() {
 		else if (m_foodList.Front().y < m_position.y && m_direction != EDirection::e_down) {
 			//If the snake is blocking itself in it's current direction
 			//Randomly choose to go LEFT or RIGHT
-			if (SelfInWay() == EDirection::e_up)
+			if (IsSelfInWay())
 			{
-				m_direction = m_position.x <= Constants::k_screenWidth - 200 ? EDirection::e_right : EDirection::e_left;
+				m_direction = RandomRange(0, 1) == 0 ? EDirection::e_left : EDirection::e_right;
 			}
 			else {
 				m_direction = EDirection::e_up;
 			}
 		}
-	}
-
-	//FOR DEBUGGING
-	switch (m_direction) {
-	case EDirection::e_left:
-		std::cout << " I AM HEADING LEFT" << std::endl;
-		break;
-	case EDirection::e_right:
-		std::cout << " I AM HEADING RIGHT" << std::endl;
-		break;
-	case EDirection::e_up:
-		std::cout << " I AM HEADING UP" << std::endl;
-
-		break;
-	case EDirection::e_down:
-		std::cout << " I AM HEADING DOWN" << std::endl;
-
-		break;
-	default:;
 	}
 }
 
@@ -111,6 +90,7 @@ void AISnake::Update() {
 
 void AISnake::FindFood()
 {
+
 	//Find the highest food
 	FindHighestFood();
 	//if there is a snake in the way, revert to going to the closest
@@ -121,7 +101,6 @@ void AISnake::FindFood()
 	//if there is a snake in the way, choose the first food that has nobody heading towards it
 	if (IsSnakeInWay())
 	{
-		std::cout << " THERES A SNAKE IN MY WAY! ";
 		const int randomFood = RandomRange(0, Constants::k_foodAmount - 1);
 		m_foodList.PushFront(m_food[randomFood]->GetPosition());
 	}
@@ -164,7 +143,7 @@ void AISnake::FindClosestFood()
 			m_foodList.PushFront(closestFood);
 
 			//check that the closest food isn't in any of the segments
-			if (IsOverlapping(closestFood))
+			if (IsFoodOverlapping(closestFood))
 			{
 				m_foodList.PopFront();
 			}
@@ -195,7 +174,7 @@ void AISnake::FindHighestFood()
 			highestValueFood = currentFood;
 		}
 		//If their values are the same, then choose the one that is closer
-		else if (highestValueFood->GetGrowAmount() == currentFood->GetGrowAmount() && !IsOverlapping(currentFood->GetPosition()))
+		else if (highestValueFood->GetGrowAmount() == currentFood->GetGrowAmount() && !IsFoodOverlapping(currentFood->GetPosition()))
 		{
 			const sf::Vector2f positionVectorOfSnakeToCurrentHighestValueFood =
 				sf::Vector2f(highestValueFood->GetPosition().x - m_position.x, highestValueFood->GetPosition().y - m_position.y);
@@ -224,12 +203,12 @@ void AISnake::FindHighestFood()
 	}
 }
 
-bool AISnake::IsOverlapping(sf::Vector2f _position) const
+bool AISnake::IsFoodOverlapping(sf::Vector2f _foodPosition) const
 {
 	auto* currentNode = m_segments.GetHead();
 	for (int i = 0; i < m_segments.Size(); ++i)
 	{
-		if (currentNode->m_position == _position)
+		if (currentNode->m_position == _foodPosition)
 		{
 			return true;
 		}
@@ -270,7 +249,7 @@ bool AISnake::IsSnakeInWay() const
 	return false;
 }
 
-EDirection AISnake::SelfInWay() const
+bool AISnake::IsSelfInWay() const
 {
 	//Cycle through and see if there's a positive/negative increase in the x or y
 	auto* currentSegment = m_segments.GetHead();
@@ -285,35 +264,35 @@ EDirection AISnake::SelfInWay() const
 		switch (m_direction) {
 		case EDirection::e_left:
 			//If heading left, the body is in the way if it is a negative increase from the head
-			if (deltaX <= 3 * -Constants::k_gridSize)
+			if (deltaX == -Constants::k_gridSize)
 			{
 				std::cout << "I AM BLOCKING MYSELF ON MY LEFT" << std::endl;
 
-				//return EDirection::e_left;
+				return true;
 			}
 			break;
 		case EDirection::e_right:
-			if (deltaX >= 3 * Constants::k_gridSize)
+			if (deltaX == Constants::k_gridSize)
 			{
 				std::cout << "I AM BLOCKING MYSELF ON MY RIGHT" << std::endl;
 
-				//return EDirection::e_right;
+				return true;
 			}
 			break;
 		case EDirection::e_up:
-			if (deltaY <= 3 * -Constants::k_gridSize)
+			if (deltaY == -Constants::k_gridSize)
 			{
 				std::cout << "I AM BLOCKING MYSELF ABOVE ME" << std::endl;
 
-				//return EDirection::e_up;
+				return true;
 			}
 			break;
 		case EDirection::e_down:
-			if (deltaY >= 3 * Constants::k_gridSize)
+			if (deltaY == -Constants::k_gridSize)
 			{
 				std::cout << "I AM BLOCKING MYSELF BELOW ME" << std::endl;
 
-				//return EDirection::e_down;
+				return true;
 			}
 			break;
 		default:
@@ -323,5 +302,5 @@ EDirection AISnake::SelfInWay() const
 		auto* nextNode = currentSegment->m_nextNode;
 		currentSegment = nextNode;
 	}
-	return EDirection::e_none;
+	return false;
 }
