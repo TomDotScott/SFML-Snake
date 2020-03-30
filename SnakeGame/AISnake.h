@@ -7,6 +7,8 @@ public:
 	void Update() override;
 	
 private:
+	bool m_hasMoved{ false };
+	
 	//The front of the list is food the snake is going to move toward
 	List m_foodList{};
 
@@ -20,11 +22,11 @@ private:
 	void FindHighestFood();
 	
 	//Checks if the food is in the same position as one of the segments of the snake
-	bool IsFoodOverlapping(sf::Vector2f _foodPosition) const;
+	bool IsOverlapping(sf::Vector2f _position) const;
 
 	//Checks if there is a snake in the way to the food
 	bool IsSnakeInWay() const;
 
 	//Check if the snake's body is in the way
-	bool IsSelfInWay() const;
+	bool IsSelfInWay(EDirection& _direction) const;
 };
