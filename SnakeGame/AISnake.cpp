@@ -33,10 +33,12 @@ void AISnake::ChooseDirection() {
 		//if the snake is in its own way...
 		//std::cout << "MY CHOSEN FOOD IS AT" << m_foodList.Front().x << " " << m_foodList.Front().y << std::endl;
 		//Make decisions based on the chosen food
+		EDirection newDirection{ EDirection::e_none };
+
 		if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
 			//If the snake is blocking itself in it's current direction
 			std::cout << "LEFT" << std::endl;
-			EDirection newDirection = EDirection::e_left;
+			newDirection = EDirection::e_left;
 			if (IsSelfInWay(newDirection))
 			{
 				std::cout << "I M BLOCKING MYSELF ON THE LEFT ";
@@ -63,7 +65,7 @@ void AISnake::ChooseDirection() {
 		else if (m_foodList.Front().x > m_position.x && m_direction != EDirection::e_left) {
 			std::cout << "RIGHT" << std::endl;
 
-			EDirection newDirection = EDirection::e_right;
+			newDirection = EDirection::e_right;
 			if (IsSelfInWay(newDirection))
 			{
 				std::cout << "I M BLOCKING MYSELF ON THE RIGHT ";
@@ -91,7 +93,7 @@ void AISnake::ChooseDirection() {
 		else if (m_foodList.Front().y > m_position.y && m_direction != EDirection::e_up) {
 			std::cout << "DOWN" << std::endl;
 
-			EDirection newDirection = EDirection::e_down;
+			newDirection = EDirection::e_down;
 			if (IsSelfInWay(newDirection))
 			{
 				std::cout << "I M BLOCKING MYSELF ON THE DOWN ";
@@ -117,7 +119,7 @@ void AISnake::ChooseDirection() {
 		}
 		else if (m_foodList.Front().y < m_position.y && m_direction != EDirection::e_down) {
 			std::cout << "UP" << std::endl;
-			EDirection newDirection = EDirection::e_up;
+			newDirection = EDirection::e_up;
 			if (IsSelfInWay(newDirection))
 			{
 				std::cout << "I M BLOCKING MYSELF ON THE UP ";
@@ -141,7 +143,42 @@ void AISnake::ChooseDirection() {
 				m_hasMoved = true;
 			}
 		}
-
+		//IF THE CLOSEST FOOD IS DIRECTLY BEHIND THEM, SNAKES GET CONFUSED...
+		//if the y's are the same but the xes are different
+		else if (m_foodList.Front().y == m_position.y
+					&& m_foodList.Front().x != m_position.x
+					&& m_direction == EDirection::e_up
+					|| m_direction == EDirection::e_down) {
+			newDirection = EDirection::e_left;
+			//move left or right
+			if(!IsSelfInWay(newDirection))
+			{
+				m_direction = EDirection::e_left;
+				m_hasMoved = true;
+			}else
+			{
+				m_direction = EDirection::e_right;
+				m_hasMoved = true;
+			}
+		}
+		//if the xes are the same but the ys are different
+		else if (m_foodList.Front().x == m_position.x
+					&& m_foodList.Front().y != m_position.y
+					&& m_direction == EDirection::e_left
+					|| m_direction == EDirection::e_right) {
+		newDirection = EDirection::e_up;
+		//move up or down
+		if (!IsSelfInWay(newDirection))
+		{
+			m_direction = EDirection::e_up;
+			m_hasMoved = true;
+		}
+		else
+		{
+			m_direction = EDirection::e_down;
+			m_hasMoved = true;
+		}
+		}
 		std::cout << " I MADE A DECISION" << std::endl;
 	}
 }
