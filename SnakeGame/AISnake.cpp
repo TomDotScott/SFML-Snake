@@ -31,52 +31,118 @@ AISnake::AISnake() {
 void AISnake::ChooseDirection() {
 	if (!m_dead && !m_hasMoved) {
 		//if the snake is in its own way...
-		do {
-			//std::cout << "MY CHOSEN FOOD IS AT" << m_foodList.Front().x << " " << m_foodList.Front().y << std::endl;
-			//Make decisions based on the chosen food
-			if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
-				//If the snake is blocking itself in it's current direction
-				std::cout << "LEFT" << std::endl;
+		//std::cout << "MY CHOSEN FOOD IS AT" << m_foodList.Front().x << " " << m_foodList.Front().y << std::endl;
+		//Make decisions based on the chosen food
+		if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
+			//If the snake is blocking itself in it's current direction
+			std::cout << "LEFT" << std::endl;
+			EDirection newDirection = EDirection::e_left;
+			if (IsSelfInWay(newDirection))
+			{
+				std::cout << "I M BLOCKING MYSELF ON THE LEFT ";
 
-				EDirection newDirection = EDirection::e_left;
-				if (!IsSelfInWay(newDirection))
-				{
-					m_direction = EDirection::e_left;
-					m_hasMoved = true;
-				}
-
-			}
-			else if (m_foodList.Front().x > m_position.x && m_direction != EDirection::e_left) {
-				std::cout << "RIGHT" << std::endl;
-
-				EDirection newDirection = EDirection::e_right;
-				if (!IsSelfInWay(newDirection))
-				{
-					m_direction = EDirection::e_right;
-					m_hasMoved = true;
-				}
-
-			}
-			else if (m_foodList.Front().y > m_position.y && m_direction != EDirection::e_up) {
-				std::cout << "DOWN" << std::endl;
-
-				EDirection newDirection = EDirection::e_down;
-				if (!IsSelfInWay(newDirection))
-				{
-					m_direction = EDirection::e_down;
-					m_hasMoved = true;
-				}
-			}
-			else if (m_foodList.Front().y < m_position.y && m_direction != EDirection::e_down) {
-				std::cout << "UP" << std::endl;
-				EDirection newDirection = EDirection::e_up;
+				//Is blocking on the left so must move up or down
+				newDirection = EDirection::e_up;
 				if (!IsSelfInWay(newDirection))
 				{
 					m_direction = EDirection::e_up;
 					m_hasMoved = true;
 				}
+				else
+				{
+					m_direction = EDirection::e_down;
+					m_hasMoved = true;
+				}
 			}
-		} while (!m_hasMoved);
+			else
+			{
+				m_direction = EDirection::e_left;
+				m_hasMoved = true;
+			}
+		}
+		else if (m_foodList.Front().x > m_position.x && m_direction != EDirection::e_left) {
+			std::cout << "RIGHT" << std::endl;
+
+			EDirection newDirection = EDirection::e_right;
+			if (IsSelfInWay(newDirection))
+			{
+				std::cout << "I M BLOCKING MYSELF ON THE RIGHT ";
+
+				//Is blocking on the right so must move up or down
+				newDirection = EDirection::e_up;
+				if (!IsSelfInWay(newDirection))
+				{
+					m_direction = EDirection::e_up;
+					m_hasMoved = true;
+				}
+				else
+				{
+					m_direction = EDirection::e_down;
+					m_hasMoved = true;
+				}
+			}
+			else
+			{
+				m_direction = EDirection::e_right;
+				m_hasMoved = true;
+			}
+
+		}
+		else if (m_foodList.Front().y > m_position.y && m_direction != EDirection::e_up) {
+			std::cout << "DOWN" << std::endl;
+
+			EDirection newDirection = EDirection::e_down;
+			if (IsSelfInWay(newDirection))
+			{
+				std::cout << "I M BLOCKING MYSELF ON THE DOWN ";
+
+				//Is blocking on the down so must move left or right
+				newDirection = EDirection::e_left;
+				if (!IsSelfInWay(newDirection))
+				{
+					m_direction = EDirection::e_left;
+					m_hasMoved = true;
+				}
+				else
+				{
+					m_direction = EDirection::e_right;
+					m_hasMoved = true;
+				}
+			}
+			else
+			{
+				m_direction = EDirection::e_down;
+				m_hasMoved = true;
+			}
+		}
+		else if (m_foodList.Front().y < m_position.y && m_direction != EDirection::e_down) {
+			std::cout << "UP" << std::endl;
+			EDirection newDirection = EDirection::e_up;
+			if (IsSelfInWay(newDirection))
+			{
+				std::cout << "I M BLOCKING MYSELF ON THE UP ";
+
+				//Is blocking on the up so must move left or right
+				newDirection = EDirection::e_left;
+				if (!IsSelfInWay(newDirection))
+				{
+					m_direction = EDirection::e_left;
+					m_hasMoved = true;
+				}
+				else
+				{
+					m_direction = EDirection::e_right;
+					m_hasMoved = true;
+				}
+			}
+			else
+			{
+				m_direction = EDirection::e_up;
+				m_hasMoved = true;
+			}
+		}
+
+		std::cout << " I MADE A DECISION" << std::endl;
 	}
 }
 
@@ -273,33 +339,34 @@ bool AISnake::IsSelfInWay(EDirection& _direction) const
 	switch (_direction) {
 	case EDirection::e_left:
 		if (IsOverlapping(sf::Vector2f(m_position.x - Constants::k_gridSize, m_position.y))
-			|| IsOverlapping(sf::Vector2f(m_position.x - 2 * Constants::k_gridSize, m_position.y)))
+			/*|| IsOverlapping(sf::Vector2f(m_position.x - 2 * Constants::k_gridSize, m_position.y))*/)
 		{
 			return true;
 		}
 		break;
 	case EDirection::e_right:
 		if (IsOverlapping(sf::Vector2f(m_position.x + Constants::k_gridSize, m_position.y))
-			|| IsOverlapping(sf::Vector2f(m_position.x + 2 * Constants::k_gridSize, m_position.y)))
+			/*|| IsOverlapping(sf::Vector2f(m_position.x + 2 * Constants::k_gridSize, m_position.y))*/)
 		{
 			return true;
 		}
 		break;
 	case EDirection::e_up:
 		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y - Constants::k_gridSize))
-			|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y - 2 * Constants::k_gridSize)))
+			/*|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y - 2 * Constants::k_gridSize))*/)
 		{
 			return true;
 		}
 		break;
 	case EDirection::e_down:
 		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y + Constants::k_gridSize))
-			|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y + 2 * Constants::k_gridSize)))
+			/*|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y + 2 * Constants::k_gridSize))*/)
 		{
 			return true;
 		}
 		break;
-	default:;
+	default:
+		return false;
 	}
 	return false;
 }
