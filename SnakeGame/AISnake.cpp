@@ -44,15 +44,15 @@ void AISnake::ChooseDirection() {
 				std::cout << "I M BLOCKING MYSELF ON THE LEFT ";
 
 				//Is blocking on the left so must move up or down
-				newDirection = EDirection::e_up;
+				newDirection = EDirection::e_down;
 				if (!IsSelfInWay(newDirection))
 				{
-					m_direction = EDirection::e_up;
+					m_direction = EDirection::e_down;
 					m_hasMoved = true;
 				}
 				else
 				{
-					m_direction = EDirection::e_down;
+					m_direction = EDirection::e_up;
 					m_hasMoved = true;
 				}
 			}
@@ -71,15 +71,15 @@ void AISnake::ChooseDirection() {
 				std::cout << "I M BLOCKING MYSELF ON THE RIGHT ";
 
 				//Is blocking on the right so must move up or down
-				newDirection = EDirection::e_up;
+				newDirection = EDirection::e_down;
 				if (!IsSelfInWay(newDirection))
 				{
-					m_direction = EDirection::e_up;
+					m_direction = EDirection::e_down;
 					m_hasMoved = true;
 				}
 				else
 				{
-					m_direction = EDirection::e_down;
+					m_direction = EDirection::e_up;
 					m_hasMoved = true;
 				}
 			}
@@ -166,18 +166,17 @@ void AISnake::ChooseDirection() {
 					&& m_foodList.Front().y != m_position.y
 					&& m_direction == EDirection::e_left
 					|| m_direction == EDirection::e_right) {
-		newDirection = EDirection::e_up;
-		//move up or down
-		if (!IsSelfInWay(newDirection))
-		{
-			m_direction = EDirection::e_up;
-			m_hasMoved = true;
-		}
-		else
-		{
-			m_direction = EDirection::e_down;
-			m_hasMoved = true;
-		}
+			newDirection = EDirection::e_up;
+			//move up or down
+			if (!IsSelfInWay(newDirection))
+			{
+				m_direction = EDirection::e_up;
+				m_hasMoved = true;
+			}else
+			{
+				m_direction = EDirection::e_down;
+				m_hasMoved = true;
+			}
 		}
 		std::cout << " I MADE A DECISION" << std::endl;
 	}
@@ -190,7 +189,6 @@ void AISnake::Update() {
 		FindFood();
 		ChooseDirection();
 		Move();
-
 
 		std::cout << "I AM AT: " << m_position.x << " " << m_position.y << std::endl << "MY CHOSEN FOOD IS AT: " << m_foodList.Front().x << " " << m_foodList.Front().y << std::endl << "I AM MOVING ";
 		if (m_direction == EDirection::e_up)

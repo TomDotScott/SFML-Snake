@@ -5,23 +5,23 @@
 
 #include "State_GameOver.h"
 
-/* TO DO
-IMPROVE PATHFINDING
-	*MAKE SNAKES CHOOSE DESIRED FOOD BASED ON POINT VALUE
-	*MAKE SNAKES AWARE OF OTHER SNAKES
-		*MAKE SNAKES AWARE OF OTHER SNAKES' HEADS
-		*MAKE SNAKES AWARE OF OTHER SNAKES' BODIES
-	*MAKE SNAKES AWARE OF THEMSELVES
-	*
-*/
+/*TODO
+ *FIX PATH-FINDING
+	*AI SNAKES STOP WRAPPING THEMSELVES UP
+	*SOME SORT OF FORWARD-THINKING ALGORITHM
+	*A* OR GREEDY BFS SEARCH
+ *MAKE UI NICER ON THE EYES
+ *FIX BUG WHERE SPACE BAR REMAINS PRESSED BETWEEN STATES
+ */
+
 
 //BASESTATE METHODS
 void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font)
 {
 	m_font = *_font;
 
-	//auto* playerSnake = new PlayerSnake();
-	//m_snakes.push_back(playerSnake);
+	auto* playerSnake = new PlayerSnake();
+	m_snakes.push_back(playerSnake);
 
 	//populate the food array
 	for (auto& i : m_foodArray) {
