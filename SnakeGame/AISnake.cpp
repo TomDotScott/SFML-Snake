@@ -1,6 +1,4 @@
 #include "AISnake.h"
-#include <cmath>
-#include <iostream>
 
 //NEW ALGORITHM - MOVE TOWARDS THE FOOD WITH THE HIGHEST SCORE UNLESS ANOTHER SNAKE IS BLOCKING THE PATH
 
@@ -31,17 +29,14 @@ AISnake::AISnake() {
 void AISnake::ChooseDirection() {
 	if (!m_dead && !m_hasMoved) {
 		//if the snake is in its own way...
-		//std::cout << "MY CHOSEN FOOD IS AT" << m_foodList.Front().x << " " << m_foodList.Front().y << std::endl;
 		//Make decisions based on the chosen food
-		EDirection newDirection{ EDirection::e_none };
+		EDirection newDirection;
 
 		if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
 			//If the snake is blocking itself in it's current direction
-			std::cout << "LEFT" << std::endl;
 			newDirection = EDirection::e_left;
 			if (IsSelfInWay(newDirection))
 			{
-				std::cout << "I M BLOCKING MYSELF ON THE LEFT ";
 
 				//Is blocking on the left so must move up or down
 				newDirection = EDirection::e_down;
@@ -63,12 +58,10 @@ void AISnake::ChooseDirection() {
 			}
 		}
 		else if (m_foodList.Front().x > m_position.x && m_direction != EDirection::e_left) {
-			std::cout << "RIGHT" << std::endl;
 
 			newDirection = EDirection::e_right;
 			if (IsSelfInWay(newDirection))
 			{
-				std::cout << "I M BLOCKING MYSELF ON THE RIGHT ";
 
 				//Is blocking on the right so must move up or down
 				newDirection = EDirection::e_down;
@@ -91,12 +84,10 @@ void AISnake::ChooseDirection() {
 
 		}
 		else if (m_foodList.Front().y > m_position.y && m_direction != EDirection::e_up) {
-			std::cout << "DOWN" << std::endl;
 
 			newDirection = EDirection::e_down;
 			if (IsSelfInWay(newDirection))
 			{
-				std::cout << "I M BLOCKING MYSELF ON THE DOWN ";
 
 				//Is blocking on the down so must move left or right
 				newDirection = EDirection::e_left;
@@ -118,11 +109,9 @@ void AISnake::ChooseDirection() {
 			}
 		}
 		else if (m_foodList.Front().y < m_position.y && m_direction != EDirection::e_down) {
-			std::cout << "UP" << std::endl;
 			newDirection = EDirection::e_up;
 			if (IsSelfInWay(newDirection))
 			{
-				std::cout << "I M BLOCKING MYSELF ON THE UP ";
 
 				//Is blocking on the up so must move left or right
 				newDirection = EDirection::e_left;
@@ -178,7 +167,6 @@ void AISnake::ChooseDirection() {
 				m_hasMoved = true;
 			}
 		}
-		std::cout << " I MADE A DECISION" << std::endl;
 	}
 }
 
@@ -189,26 +177,6 @@ void AISnake::Update() {
 		FindFood();
 		ChooseDirection();
 		Move();
-
-		std::cout << "I AM AT: " << m_position.x << " " << m_position.y << std::endl << "MY CHOSEN FOOD IS AT: " << m_foodList.Front().x << " " << m_foodList.Front().y << std::endl << "I AM MOVING ";
-		if (m_direction == EDirection::e_up)
-		{
-			std::cout << " UP";
-		}
-		else if (m_direction == EDirection::e_down)
-		{
-			std::cout << " DOWN";
-		}
-		else if (m_direction == EDirection::e_left)
-		{
-			std::cout << " LEFT";
-		}
-		else
-		{
-			std::cout << " RIGHT";
-		}
-		std::cout << std::endl << std::endl << std::endl << std::endl;
-
 	}
 }
 
@@ -219,7 +187,6 @@ void AISnake::FindFood()
 	//if there is a snake in the way, revert to going to the closest
 	if (IsSnakeInWay())
 	{
-		std::cout << "THERE S A SNAKE IN MY WAY ";
 		FindClosestFood();
 	}
 }
@@ -356,7 +323,6 @@ bool AISnake::IsSnakeInWay() const
 				if (deltaX <= 3 * Constants::k_gridSize || deltaY <= 3 * Constants::k_gridSize) {
 					if (currentNode->m_position.x == m_foodList.Front().x || currentNode->m_position.y == m_foodList.Front().y)
 					{
-						std::cout << "THERE S A SNAKE IN MY WAY" << std::endl;
 						return true;
 					}
 				}

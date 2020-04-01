@@ -4,19 +4,17 @@ PlayerSnake::PlayerSnake() {
 	m_colour = sf::Color::Red;
 
 	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 400) / Constants::k_snakeBlockSize) };
-	
+
 	if (randomNumber * Constants::k_gridSize >= Constants::k_screenWidth - 200) {
 		m_position.x = static_cast<float>(Constants::k_screenWidth - 200);
-	}
-	else {
+	} else {
 		m_position.x = static_cast<float>(randomNumber * Constants::k_gridSize);
 	}
 
 	randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize);
 	if (randomNumber * Constants::k_gridSize >= Constants::k_screenHeight - 100) {
 		m_position.y = static_cast<float>(Constants::k_screenHeight - 100);
-	}
-	else {
+	} else {
 		m_position.y = static_cast<float>(randomNumber * Constants::k_gridSize);
 	}
 

@@ -5,10 +5,10 @@ public:
 	AISnake();
 	void ChooseDirection();
 	void Update() override;
-	
+
 private:
 	bool m_hasMoved{ false };
-	
+
 	//The front of the list is food the snake is going to move toward
 	List m_foodList{};
 
@@ -20,7 +20,7 @@ private:
 
 	//Finds the food with the highest point value and sets it as the food to move towards
 	void FindHighestFood();
-	
+
 	//Checks if the food is in the same position as one of the segments of the snake
 	bool IsOverlapping(sf::Vector2f _position) const;
 

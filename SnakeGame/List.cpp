@@ -1,27 +1,23 @@
 #include "List.h"
 
-List::List()
-{
-	m_head = new Node(sf::Vector2f(0,0), NULL, NULL);
+List::List() {
+	m_head = new Node(sf::Vector2f(0, 0), NULL, NULL);
 	m_tail = new Node(sf::Vector2f(0, 0), m_head, NULL);
 	m_head->m_nextNode = m_tail;
 }
 
-List::List(const sf::Vector2f _position)
-{
+List::List(const sf::Vector2f _position) {
 	//Initialise the 'Head' of the linked list to the position
 	m_head = new Node(_position, NULL, NULL);
 	m_size = 1;
 	m_tail = m_head;
 }
 
-List::~List()
-{
+List::~List() {
 	Clear();
 }
 
-void List::PopFront()
-{
+void List::PopFront() {
 	Node* newHead = m_head->m_nextNode;
 	delete m_head;
 	m_head = newHead;
@@ -29,8 +25,7 @@ void List::PopFront()
 }
 
 //Pushes an element to the front of the List
-void List::PushFront(const sf::Vector2f _segmentPosition)
-{
+void List::PushFront(const sf::Vector2f _segmentPosition) {
 	//Allocate a new node
 	auto* newNode = new Node(_segmentPosition, NULL, m_head);
 	m_head->m_previousNode = newNode;
@@ -40,8 +35,7 @@ void List::PushFront(const sf::Vector2f _segmentPosition)
 }
 
 //Pushes an element to the back of the list
-void List::PushBack(const sf::Vector2f _segmentPosition)
-{
+void List::PushBack(const sf::Vector2f _segmentPosition) {
 	//Allocate a new node
 	auto* newNode = new Node(_segmentPosition, m_tail, NULL);
 	//make the current tail point to the newly allocated node
@@ -52,8 +46,7 @@ void List::PushBack(const sf::Vector2f _segmentPosition)
 	m_size += 1;
 }
 
-void List::PopBack()
-{
+void List::PopBack() {
 	Node* newTail = m_tail->m_previousNode;
 	delete m_tail;
 	m_tail = newTail;
@@ -61,12 +54,10 @@ void List::PopBack()
 }
 
 //Empty the list
-void List::Clear() const
-{
+void List::Clear() const {
 	//Iterate through and delete each node
 	auto* currentNode = m_head;
-	for(int i = 0; i < m_size; ++i)
-	{
+	for (int i = 0; i < m_size; ++i) {
 		auto* nextNode = currentNode->m_nextNode;
 		currentNode = nullptr;
 		currentNode = nextNode;
@@ -74,32 +65,26 @@ void List::Clear() const
 	}
 }
 
-sf::Vector2f List::Front() const
-{
+sf::Vector2f List::Front() const {
 	return m_head->m_position;
 }
 
-sf::Vector2f List::Back() const
-{
+sf::Vector2f List::Back() const {
 	return m_tail->m_position;
 }
 
-bool List::IsEmpty() const
-{
+bool List::IsEmpty() const {
 	return m_size == 0 ? true : false;
 }
 
-int List::Size() const
-{
+int List::Size() const {
 	return m_size;
 }
 
 
-std::ostream& operator<<(std::ostream& _os, const List _list)
-{
+std::ostream& operator<<(std::ostream& _os, const List _list) {
 	Node* currentNode = _list.GetHead();
-	while (currentNode)
-	{
+	while (currentNode) {
 		if (currentNode->m_previousNode) {
 			_os << "THE PREVIOUS NODE: " << currentNode->m_previousNode->m_position.x << " " << currentNode->m_previousNode->m_position.y << std::endl;
 		}

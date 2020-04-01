@@ -1,7 +1,5 @@
 #include "Snake.h"
 #include "SFML/Graphics.hpp"
-#include <iostream>
-#include <assert.h>
 #include "Constants.h"
 
 void Snake::Update() {
@@ -30,11 +28,6 @@ void Snake::Render(sf::RenderWindow& _window) {
 				currentNode = currentNode->m_nextNode;
 			}
 		}
-		/*
-		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr) {
-			m_rectangle.setPosition(sf::Vector2f(itr->x, itr->y));
-			_window.draw(m_rectangle);
-		}*/
 	}
 }
 
@@ -94,14 +87,6 @@ int Snake::FindGobblePoint(sf::Vector2f _gobbleSnakeHead) const {
 				++counter;
 			}
 		}
-		
-		/*
-		for (auto itr = m_segments.begin(); itr != m_segments.end(); ++itr) {
-			if (sf::Vector2f(itr->x, itr->y) == _gobbleSnakeHead) {
-				return counter;
-			}
-			counter++;
-		}*/
 	}
 	return -1;
 }
@@ -127,35 +112,13 @@ void Snake::CheckCollision() {
 			}
 			currentNode = currentNode->m_nextNode;
 		}
-
-		/*
-		for (sf::Vector2f segment : m_segments) {
-			if (segment == m_position && !m_dead) {
-				Collision(ECollisionType::e_self);
-			}
-		}*/
 	}
 }
 
 void Snake::Collision(const ECollisionType _collisionType) {
 	if (!m_dead) {
-		switch (_collisionType) {
-		case ECollisionType::e_wall:
-			std::cout << "I HIT A WALL" << std::endl;
+		if (_collisionType == ECollisionType::e_wall || _collisionType == ECollisionType::e_snake || _collisionType == ECollisionType::e_self) {
 			m_dead = true;
-			break;
-		case ECollisionType::e_snake:
-			std::cout << "I HIT ANOTHER SNAKE" << std::endl;
-			m_dead = true;
-			break;
-		case ECollisionType::e_self:
-			std::cout << "I HIT MYSELF" << std::endl;
-			m_dead = true;
-			break;
-		case ECollisionType::e_food:
-			break;
-		default:
-			break;
 		}
 	}
 }
@@ -164,7 +127,6 @@ void Snake::Collision(Food* _food)
 {
 	if (_food->GetType() == eFoodType::e_gobble) {
 		m_gobbleMode = true;
-		std::cout << "GOBBLE MODE!" << std::endl;
 	}
 	const int growAmount{ _food->GetGrowAmount() };
 	Grow(growAmount);

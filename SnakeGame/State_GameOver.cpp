@@ -15,22 +15,19 @@ void State_GameOver::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	//Load the highscore and the previous score to display onscreen
 	std::string scores[2];
 	std::ifstream file("Resources/Scores.txt");
-	if(file.is_open())
-	{
-		while(file >> m_lastScoreValue >> m_highScoreValue)
-		{
+	if (file.is_open()) {
+		while (file >> m_lastScoreValue >> m_highScoreValue) {
 			std::string lastScore = "Score: " + m_lastScoreValue;
 			m_lastScore = new sf::Text(lastScore, *m_font, 32U);
-			
+
 			std::string highScore = "Highscore: " + m_highScoreValue;
 			m_highScore = new sf::Text(highScore, *m_font, 32U);
 		}
-	}else
-	{
+	} else {
 		assert(false);
 	}
 	file.close();
-	
+
 	/*MAIN TITLE TEXT*/
 	m_title = new sf::Text("Game Over", *m_font, 80U);
 	//centre the text
@@ -45,7 +42,7 @@ void State_GameOver::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	/*THE SCORE*/
 	m_lastScore->setOrigin(m_lastScore->getGlobalBounds().width / 2, m_lastScore->getGlobalBounds().height / 2);
 	m_lastScore->setPosition(static_cast<float>(_window->getSize().x / 2.f), static_cast<float>(_window->getSize().y / 2.f));
-	
+
 	/*PLAY AGAIN TEXT*/
 	m_playAgain = new sf::Text("Play Again", *m_font, 32U);
 	//centre the text
@@ -61,7 +58,7 @@ void State_GameOver::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	//set the position
 	m_quit->setPosition(static_cast<float>(_window->getSize().x) / 2, static_cast<float>(_window->getSize().y) / 1.25f);
 
-	std::cout << "Initialised" << std::endl;
+	std::cout << "Initialized" << std::endl;
 }
 
 
@@ -72,8 +69,7 @@ void State_GameOver::Render(sf::RenderWindow* _window) {
 
 	if (m_selected == 0) {
 		m_playAgain->setFillColor(sf::Color::Red);
-	}
-	else if (m_selected == 1) {
+	} else if (m_selected == 1) {
 		m_quit->setFillColor(sf::Color::Red);
 	}
 
@@ -87,12 +83,10 @@ void State_GameOver::Render(sf::RenderWindow* _window) {
 
 
 void State_GameOver::Update(sf::RenderWindow* _window) {
-	if (!m_upKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
-	{
+	if (!m_upKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
 		m_selected -= 1;
 	}
-	if (!m_downKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
-	{
+	if (!m_downKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
 		m_selected += 1;
 	}
 	//allow for cycling through options...
@@ -106,8 +100,7 @@ void State_GameOver::Update(sf::RenderWindow* _window) {
 
 	//Select the option using SPACE
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		switch (m_selected)
-		{
+		switch (m_selected) {
 		case 0:
 			//play the game...
 			core_state.SetState(new State_Game());
@@ -138,4 +131,12 @@ void State_GameOver::Destroy(sf::RenderWindow* _window) {
 	m_playAgain = nullptr;
 	m_quit = nullptr;
 	std::cout << "Destroyed" << std::endl;
+}
+
+State_GameOver::~State_GameOver() {
+	m_font = nullptr;
+	m_title = nullptr;
+	m_playAgain = nullptr;
+	m_quit = nullptr;
+	delete this;
 }

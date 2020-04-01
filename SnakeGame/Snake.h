@@ -61,13 +61,13 @@ public:
 	void Render(sf::RenderWindow& _window) override final;
 
 	EDirection GetDirection() const { return m_direction; }
-	
+
 	List GetSnakeSegments() const { return m_segments; }
 protected:
 
 	sf::Color m_gobbleColour{ sf::Color::Yellow };
 	sf::Color m_defaultColour{ sf::Color::Red };
-	
+
 	EDirection m_direction{ EDirection::e_right };
 
 	sf::RectangleShape m_rectangle;
@@ -81,7 +81,7 @@ protected:
 	void Move() override;
 
 	int m_score{ 0 };
-	
+
 	//A store of all of the food on screen to help with decision making
 	std::vector<Food*> m_food;
 

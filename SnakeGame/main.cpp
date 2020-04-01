@@ -4,13 +4,9 @@
 #include "StateManager.h"
 #include "Food.h"
 #include "State_Game.h"
-#include "Snake.h"
-#include "Entity.h"
-#include <vector>
 #include <assert.h>
 #include <time.h>
 #include "Constants.h"
-#include "List.h"
 #include "State_MainMenu.h"
 
 StateManager core_state;

@@ -43,8 +43,7 @@ void State_MainMenu::Render(sf::RenderWindow* _window) {
 
 	if (m_selected == 0) {
 		m_play->setFillColor(sf::Color::Red);
-	}
-	else if (m_selected == 1) {
+	} else if (m_selected == 1) {
 		m_quit->setFillColor(sf::Color::Red);
 	}
 
@@ -56,12 +55,10 @@ void State_MainMenu::Render(sf::RenderWindow* _window) {
 
 
 void State_MainMenu::Update(sf::RenderWindow* _window) {
-	if (!m_upKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
-	{
+	if (!m_upKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
 		m_selected -= 1;
 	}
-	if (!m_downKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
-	{
+	if (!m_downKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
 		m_selected += 1;
 	}
 	//allow for cycling through options...
@@ -75,8 +72,7 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 
 	//Select the option using SPACE
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		switch (m_selected)
-		{
+		switch (m_selected) {
 		case 0:
 			//play the game...
 			core_state.SetState(new State_Game());
@@ -99,6 +95,13 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 	m_downKey = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down);
 }
 
+State_MainMenu::~State_MainMenu() {
+	m_font = nullptr;
+	m_title = nullptr;
+	m_play = nullptr;
+	m_quit = nullptr;
+	delete this;
+}
 
 void State_MainMenu::Destroy(sf::RenderWindow* _window) {
 	m_font = nullptr;

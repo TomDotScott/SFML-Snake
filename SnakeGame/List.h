@@ -3,20 +3,18 @@
 #include <SFML/System/Vector2.hpp>
 
 //Doubly linked list, so we need reference to previous and next node
-struct Node
-{
+struct Node {
 	friend class List;
-	Node(sf::Vector2f _position, Node* _previousNode, Node* _nextNode) : m_position(_position), m_previousNode(_previousNode), m_nextNode(_nextNode){}
+	Node(sf::Vector2f _position, Node* _previousNode, Node* _nextNode) : m_position(_position), m_previousNode(_previousNode), m_nextNode(_nextNode) {}
 
 	bool IsNextNodeAvailable() const { return m_nextNode; }
-	
+
 	sf::Vector2f m_position;
 	Node* m_previousNode;
 	Node* m_nextNode;
 };
 
-class List
-{
+class List {
 public:
 	List();
 	List(const sf::Vector2f _position);
@@ -31,13 +29,13 @@ public:
 	bool IsEmpty() const;
 	int Size() const;
 
-	friend std::ostream& operator<<(std::ostream& _os, List _list);	
+	friend std::ostream& operator<<(std::ostream& _os, List _list);
 	//Returns the front node
 	Node* GetHead() const { return m_head; }
 	//Returns the back node
 	Node* GetTail() const { return m_tail; }
 
-	
+
 private:
 	Node* m_head;
 	Node* m_tail;

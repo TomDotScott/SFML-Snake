@@ -38,15 +38,15 @@ public:
 	}
 
 	int GetID() const { return m_id; }
-	
+
 	eFoodType GetType() const { return m_type; }
 private:
 	sf::CircleShape m_circle;
 
 	int m_id = RandomRange(0, 1000000);
-	
+
 	eFoodType m_type;
-	
+
 	void RandomisePosition();
 
 
@@ -54,8 +54,7 @@ private:
 
 inline bool operator==(const Food& _lhs, const Food& _rhs) {
 	/* do actual comparison */
-	if(_lhs.GetID() == _rhs.GetID())
-	{
+	if (_lhs.GetID() == _rhs.GetID()) {
 		return true;
 	}
 	return false;

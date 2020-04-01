@@ -3,16 +3,19 @@
 
 //Tracks the current state of the game
 //Has a global variable attached
-enum class eCurrentState
-{
+enum class eCurrentState {
 	e_MainMenu, e_Game, e_GameOver
 };
 
-//Every state needs to be able to do these 4 things
+//Every state needs to be able to do these 4 things:
+//*Initialize
+//*Update
+//*Render
+//*Destroy
 //If an object can't, it's not a state
-class BaseState
-{
+class BaseState {
 public:
+	virtual ~BaseState() = default;
 	virtual void Initialize(sf::RenderWindow* _window, sf::Font* _font) = 0;
 	virtual void Update(sf::RenderWindow* _window) = 0;
 	virtual void Render(sf::RenderWindow* _window) = 0;
@@ -20,8 +23,7 @@ public:
 };
 
 //StateManager keeps track of the current game state
-class StateManager
-{
+class StateManager {
 public:
 	StateManager();
 	void SetWindow(sf::RenderWindow* _window);
@@ -31,9 +33,9 @@ public:
 	void Render() const;
 	~StateManager();
 private:
-	sf::RenderWindow* m_window { nullptr };
-	BaseState* m_state { nullptr };
-	sf::Font* m_font { nullptr };
+	sf::RenderWindow* m_window{ nullptr };
+	BaseState* m_state{ nullptr };
+	sf::Font* m_font{ nullptr };
 };
 
 extern StateManager core_state;

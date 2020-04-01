@@ -1,8 +1,5 @@
 #pragma once
 #include "Snake.h"
-#include "PlayerSnake.h"
-#include "AISnake.h"
-#include "Entity.h"
 #include "Food.h"
 #include <array>
 #include "StateManager.h"
@@ -19,7 +16,7 @@ struct Wall {
 	sf::Color m_colour = sf::Color::White;
 };
 
-class State_Game : public BaseState {
+class State_Game final : public BaseState {
 public:
 	//BASESTATE METHODS
 	void Initialize(sf::RenderWindow* _window, sf::Font* _font) override;
@@ -30,28 +27,29 @@ public:
 	//GAME METHODS
 	void GetInput();
 	void CheckCollisions();
-	
+	~State_Game();
+
 private:
 	//the game tick
 	sf::Clock m_clock;
-	
+
 	//the font for the UI
 	sf::Font m_font;
-	
+
 	std::vector<Snake*> m_snakes;
 
 	//The scores of the players
 	std::vector<sf::Text> m_scores;
 
 	//Gobble Mode text
-	sf::Text* m_gobbleModeText;
-	sf::Text* m_pausedText;
-	
+	sf::Text* m_gobbleModeText{ nullptr };
+	sf::Text* m_pausedText{ nullptr };
+
 	std::array<Food*, Constants::k_foodAmount> m_foodArray{};
 
 	bool m_gobble{ false };
 	bool m_paused{ false };
-	
+
 	//TOP
 	Wall m_topWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth - 200, sf::Vector2f(0, 0)) };
 	//LEFT

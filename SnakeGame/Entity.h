@@ -10,7 +10,7 @@ public:
 	//so therefore an Entity cannot exist on its own; it needs to be Food or Snake
 	virtual void Render(sf::RenderWindow& window) = 0;
 	virtual void Move();
-	
+
 protected:
 	sf::Color m_colour;
 	sf::Vector2f m_position;

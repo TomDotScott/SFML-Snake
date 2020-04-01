@@ -2,8 +2,7 @@
 
 Entity::Entity(sf::Color _color, sf::Vector2f _position)
 	: m_colour(_color),
-	m_position(_position)
-{
+	m_position(_position) {
 }
 
 
