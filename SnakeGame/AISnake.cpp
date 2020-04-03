@@ -32,7 +32,7 @@ void AISnake::ChooseDirection() {
 		//Make decisions based on the chosen food
 		EDirection newDirection;
 
-		if (m_foodList.Front().x < m_position.x && m_direction != EDirection::e_right) {
+		if (m_targetList.Front().x < m_position.x && m_direction != EDirection::e_right) {
 			//If the snake is blocking itself in it's current direction
 			newDirection = EDirection::e_left;
 			if (IsSelfInWay(newDirection)) {
@@ -49,7 +49,7 @@ void AISnake::ChooseDirection() {
 				m_direction = EDirection::e_left;
 				m_hasMoved = true;
 			}
-		} else if (m_foodList.Front().x > m_position.x && m_direction != EDirection::e_left) {
+		} else if (m_targetList.Front().x > m_position.x && m_direction != EDirection::e_left) {
 
 			newDirection = EDirection::e_right;
 			if (IsSelfInWay(newDirection)) {
@@ -68,7 +68,7 @@ void AISnake::ChooseDirection() {
 				m_hasMoved = true;
 			}
 
-		} else if (m_foodList.Front().y > m_position.y && m_direction != EDirection::e_up) {
+		} else if (m_targetList.Front().y > m_position.y && m_direction != EDirection::e_up) {
 
 			newDirection = EDirection::e_down;
 			if (IsSelfInWay(newDirection)) {
@@ -86,7 +86,7 @@ void AISnake::ChooseDirection() {
 				m_direction = EDirection::e_down;
 				m_hasMoved = true;
 			}
-		} else if (m_foodList.Front().y < m_position.y && m_direction != EDirection::e_down) {
+		} else if (m_targetList.Front().y < m_position.y && m_direction != EDirection::e_down) {
 			newDirection = EDirection::e_up;
 			if (IsSelfInWay(newDirection)) {
 
@@ -106,8 +106,8 @@ void AISnake::ChooseDirection() {
 		}
 		//IF THE CLOSEST FOOD IS DIRECTLY BEHIND THEM, SNAKES GET CONFUSED...
 		//if the y's are the same but the xes are different
-		else if (m_foodList.Front().y == m_position.y
-			&& m_foodList.Front().x != m_position.x
+		else if (m_targetList.Front().y == m_position.y
+			&& m_targetList.Front().x != m_position.x
 			&& m_direction == EDirection::e_up
 			|| m_direction == EDirection::e_down) {
 			newDirection = EDirection::e_left;
@@ -121,8 +121,8 @@ void AISnake::ChooseDirection() {
 			}
 		}
 		//if the xes are the same but the ys are different
-		else if (m_foodList.Front().x == m_position.x
-			&& m_foodList.Front().y != m_position.y
+		else if (m_targetList.Front().x == m_position.x
+			&& m_targetList.Front().y != m_position.y
 			&& m_direction == EDirection::e_left
 			|| m_direction == EDirection::e_right) {
 			newDirection = EDirection::e_up;
@@ -149,22 +149,28 @@ void AISnake::Update() {
 }
 
 void AISnake::FindFood() {
-	//Find the highest food
-	FindHighestFood();
-	//if there is a snake in the way, revert to going to the closest
-	if (IsSnakeInWay()) {
-		FindClosestFood();
+	//If it's gobble mode, move towards the closest snake
+	if (m_gobbleMode) {
+		FindClosestSnake();
+	}else
+	{
+		//Find the highest food
+		FindHighestFood();
+		//if there is a snake in the way, revert to going to the closest
+		if (IsSnakeInWay()) {
+			FindClosestFood();
+		}
 	}
 }
 
 
 void AISnake::FindClosestFood() {
 	//Clear the list of food positions
-	m_foodList.Clear();
+	m_targetList.Clear();
 
 	sf::Vector2f closestFood = m_food[0]->GetPosition();
 
-	m_foodList.PushFront(closestFood);
+	m_targetList.PushFront(closestFood);
 
 	sf::Vector2f positionVectorOfSnakeToFood =
 		sf::Vector2f(closestFood.x - m_position.x, closestFood.y - m_position.y);
@@ -190,33 +196,75 @@ void AISnake::FindClosestFood() {
 			//reset the closest food
 			closestFood = currentFoodPosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
-			m_foodList.PushFront(closestFood);
+			m_targetList.PushFront(closestFood);
 
 			//check that the closest food isn't in any of the segments
 			if (IsOverlapping(closestFood)) {
-				m_foodList.PopFront();
+				m_targetList.PopFront();
 			}
 		}
 		//Otherwise, add to the end of the list
 		else {
-			m_foodList.PushBack(currentFoodPosition);
+			m_targetList.PushBack(currentFoodPosition);
 		}
 	}
 }
 
+void AISnake::FindClosestSnake() {
+	//Clear the list of food positions
+	m_targetList.Clear();
+
+	sf::Vector2f closestSnake = m_otherSnakes[0]->GetHeadPosition();
+
+	m_targetList.PushFront(closestSnake);
+
+	sf::Vector2f positionVectorOfSnakeToOtherSnake =
+		sf::Vector2f(closestSnake.x - m_position.x, closestSnake.y - m_position.y);
+
+	float magnitudeOfClosestFood = positionVectorOfSnakeToOtherSnake.x * positionVectorOfSnakeToOtherSnake.x
+		+ positionVectorOfSnakeToOtherSnake.y * positionVectorOfSnakeToOtherSnake.y;
+
+
+	//Find the food that it is closest to
+	for (auto* snake : m_otherSnakes) {
+		const sf::Vector2f currentSnakePosition{ snake->GetHeadPosition() };
+
+		//see if the current piece of food is closer by working out the magnitude of the vectors
+		positionVectorOfSnakeToOtherSnake =
+			sf::Vector2f(closestSnake.x - m_position.x, currentSnakePosition.y - m_position.y);
+
+		const float magnitudeOfCurrentFood = positionVectorOfSnakeToOtherSnake.x * positionVectorOfSnakeToOtherSnake.x
+			+ positionVectorOfSnakeToOtherSnake.y * positionVectorOfSnakeToOtherSnake.y;
+
+		//If the current piece of food's magnitude is closer than the previous closest piece, it is closer
+		if (magnitudeOfCurrentFood < magnitudeOfClosestFood) {
+
+			//reset the closest food
+			closestSnake = currentSnakePosition;
+			magnitudeOfClosestFood = magnitudeOfCurrentFood;
+			m_targetList.PushFront(closestSnake);
+		}
+		//Otherwise, add to the end of the list
+		else {
+			m_targetList.PushBack(currentSnakePosition);
+		}
+	}
+}
+
+
 void AISnake::FindHighestFood() {
-	m_foodList.Clear();
+	m_targetList.Clear();
 
 	//Initialise the highest food to the first bit of food in the food vector
 	Food* highestValueFood = m_food[0];
 
 	//Make the highest the front of the list
-	m_foodList.PushFront(highestValueFood->GetPosition());
+	m_targetList.PushFront(highestValueFood->GetPosition());
 
 	//Check to see if any food is higher value
 	for (auto* currentFood : m_food) {
 		if (highestValueFood->GetGrowAmount() < currentFood->GetGrowAmount()) {
-			m_foodList.PushFront(currentFood->GetPosition());
+			m_targetList.PushFront(currentFood->GetPosition());
 			highestValueFood = currentFood;
 		}
 		//If their values are the same, then choose the one that is closer
@@ -237,10 +285,10 @@ void AISnake::FindHighestFood() {
 
 			//If the current food is closer, then it goes to the front of the list
 			if (magnitudeOfSnakeToCurrentFood < magnitudeOfSnakeToCurrentHighestValueFood) {
-				m_foodList.PushFront(currentFood->GetPosition());
+				m_targetList.PushFront(currentFood->GetPosition());
 			}
 		} else {
-			m_foodList.PushBack(currentFood->GetPosition());
+			m_targetList.PushBack(currentFood->GetPosition());
 		}
 	}
 }
@@ -272,7 +320,7 @@ bool AISnake::IsSnakeInWay() const {
 
 				//Only evaluate if close enough
 				if (deltaX == Constants::k_gridSize || deltaY == Constants::k_gridSize) {
-					if (currentNode->m_position.x == m_foodList.Front().x || currentNode->m_position.y == m_foodList.Front().y) {
+					if (currentNode->m_position.x == m_targetList.Front().x || currentNode->m_position.y == m_targetList.Front().y) {
 						return true;
 					}
 				}

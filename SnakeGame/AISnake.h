@@ -9,14 +9,17 @@ public:
 private:
 	bool m_hasMoved{ false };
 
-	//The front of the list is food the snake is going to move toward
-	List m_foodList{};
+	//The front of the list is targets the snake is going to move toward
+	List m_targetList{};
 
 	//Cycle through the food on the screen to find food
 	void FindFood();
 
 	//Finds the closest food to the snake and sets it as the food to move towards
 	void FindClosestFood();
+
+	//Finds the closest snake to the snake and sets it as the food to move toward
+	void FindClosestSnake();
 
 	//Finds the food with the highest point value and sets it as the food to move towards
 	void FindHighestFood();

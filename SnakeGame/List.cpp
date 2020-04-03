@@ -47,10 +47,12 @@ void List::PushBack(const sf::Vector2f _segmentPosition) {
 }
 
 void List::PopBack() {
-	Node* newTail = m_tail->m_previousNode;
-	delete m_tail;
-	m_tail = newTail;
-	m_size -= 1;
+	if (m_tail->m_previousNode != nullptr) {
+		Node* newTail = m_tail->m_previousNode;
+		delete m_tail;
+		m_tail = newTail;
+		m_size -= 1;
+	}
 }
 
 //Empty the list
