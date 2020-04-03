@@ -180,60 +180,6 @@ void State_Game::CheckCollisions() {
 				currentSnake->Collision(ECollisionType::e_wall);
 				return;
 			}
-
-			//Check Against Food
-			for (auto* food : m_foodArray) {
-				if (food->GetPosition() == currentSnake->GetHeadPosition()) {
-					currentSnake->Collision(food);
-					RandomiseFood(food);
-					return;
-				}
-			}
-
-			//Check against other snakes
-			for (auto* otherSnake : m_snakes) {
-				if (!otherSnake->IsDead() && (otherSnake != currentSnake)) {
-					//Check each segment of the current snake against the heads of the other snakes
-					auto currentSegment = currentSnake->GetSnakeSegments().GetHead();
-					for (int i = 0; i < currentSnake->GetSnakeSegments().Size(); ++i) {
-						//Check each segment against the heads of the other snakes
-						if (currentSegment->m_position == otherSnake->GetHeadPosition()) {
-							//if it's a head on collision then both snakes die
-							if (currentSnake->GetHeadPosition() == currentSegment->m_position) {
-								if (currentSnake->GetIsGobbleMode()) {
-									currentSnake->Grow(static_cast<const int>((otherSnake->GetSnakeSegments().Size())));
-									otherSnake->Collision(ECollisionType::e_snake);
-									return;
-								}
-								currentSnake->Collision(ECollisionType::e_snake);
-								otherSnake->Collision(ECollisionType::e_snake);
-								return;
-							}
-							otherSnake->Collision(ECollisionType::e_snake);
-						}
-						currentSegment = currentSegment->m_nextNode;
-					}
-
-					//Check if the current snake has hit another snake's body
-					auto otherSegment = otherSnake->GetSnakeSegments().GetHead();
-
-					for (int i = 0; i < otherSnake->GetSnakeSegments().Size(); ++i) {
-						if (otherSegment->m_position == currentSnake->GetHeadPosition()) {
-							//If it's gobble mode, make sure not to kill the player on collision
-							if (currentSnake->GetIsGobbleMode()) {
-								const int growShrinkAmount{ otherSnake->FindGobblePoint(currentSnake->GetHeadPosition()) };
-								currentSnake->Grow(growShrinkAmount);
-								otherSnake->Shrink(growShrinkAmount);
-								return;
-							} else {
-								currentSnake->Collision(ECollisionType::e_snake);
-								return;
-							}
-						}
-						otherSegment = otherSegment->m_nextNode;
-					}
-				}
-			}
 		}
 	}
 }

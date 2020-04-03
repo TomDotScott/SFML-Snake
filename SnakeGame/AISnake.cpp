@@ -1,7 +1,5 @@
 #include "AISnake.h"
 
-//NEW ALGORITHM - MOVE TOWARDS THE FOOD WITH THE HIGHEST SCORE UNLESS ANOTHER SNAKE IS BLOCKING THE PATH
-
 AISnake::AISnake() {
 	m_defaultColour = sf::Color(sf::Color::Blue);
 

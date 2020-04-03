@@ -34,7 +34,14 @@ public:
 
 	virtual void Update();
 
-	virtual void CheckCollision();
+	
+	void CheckCollisions();
+	
+	void CheckCollisionsAgainstSelf();
+	
+	void CheckCollisionsAgainstFood();
+	
+	void CheckCollisionsAgainstOtherSnakes();
 
 	//for colliding with other snakes, itself and walls
 	void Collision(ECollisionType _collisionType);

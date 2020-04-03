@@ -2,13 +2,21 @@
 #include "SFML/Graphics.hpp"
 #include "Constants.h"
 
+Snake::Snake() {
+	//Set random colours for the AI Snakes
+	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
+
+	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
+	m_rectangle.setFillColor(m_colour);
+	m_rectangle.setPosition(m_position);
+}
+
 void Snake::Update() {
 	if (!IsDead()) {
 		m_score += m_gobbleMode ? 2 : 1;
 		Move();
 	}
 }
-
 
 void Snake::Render(sf::RenderWindow& _window) {
 	if (!m_dead) {
@@ -26,15 +34,6 @@ void Snake::Render(sf::RenderWindow& _window) {
 			}
 		}
 	}
-}
-
-Snake::Snake() {
-	//Set random colours for the AI Snakes
-	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
-
-	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
-	m_rectangle.setFillColor(m_colour);
-	m_rectangle.setPosition(m_position);
 }
 
 void Snake::Move() {
@@ -55,7 +54,7 @@ void Snake::Move() {
 		break;
 	}
 
-	CheckCollision();
+	CheckCollisions();
 	m_segments.PopBack();
 	m_segments.PushFront(sf::Vector2f(m_position.x, m_position.y));
 }
@@ -95,8 +94,15 @@ void Snake::Shrink(const int _amount) {
 	}
 }
 
-//check whether a snake has collided with itself
-void Snake::CheckCollision() {
+//check the snake's collisions
+void Snake::CheckCollisions() {
+	CheckCollisionsAgainstSelf();
+	CheckCollisionsAgainstFood();
+	CheckCollisionsAgainstOtherSnakes();
+}
+
+void Snake::CheckCollisionsAgainstSelf()
+{
 	if (m_direction != EDirection::e_none && !m_segments.IsEmpty()) {
 		auto* currentNode = m_segments.GetHead();
 		for (int i = 0; i < m_segments.Size(); ++i) {
@@ -108,9 +114,71 @@ void Snake::CheckCollision() {
 	}
 }
 
+void Snake::CheckCollisionsAgainstFood()
+{
+	//Check Against Food
+	for (auto* food : m_food) {
+		if (food->GetPosition() == m_position) {
+			Collision(food);
+			food->Randomise();
+		}
+	}
+}
+
+void Snake::CheckCollisionsAgainstOtherSnakes()
+{
+	//Check against other snakes
+	for (auto* otherSnake : m_otherSnakes) {
+		if (!otherSnake->IsDead()) {
+			//Check each segment of the current snake against the heads of the other snakes
+			auto currentSegment = m_segments.GetHead();
+			for (int i = 0; i < m_segments.Size(); ++i) {
+				//Check each segment against the heads of the other snakes
+				if (currentSegment->m_position == otherSnake->GetHeadPosition()) {
+					//if it's a head on collision then both snakes die
+					if (m_position == currentSegment->m_position) {
+						//If it's gobble mode, the entire other snake gets eaten
+						if (m_gobbleMode) {
+							Grow(static_cast<const int>((otherSnake->GetSnakeSegments().Size())));
+							otherSnake->Collision(ECollisionType::e_snake);
+							return;
+						}
+						Collision(ECollisionType::e_snake);
+						otherSnake->Collision(ECollisionType::e_snake);
+						return;
+					}
+					otherSnake->Collision(ECollisionType::e_snake);
+				}
+				currentSegment = currentSegment->m_nextNode;
+			}
+
+			//Check if the snake has hit another snake's body
+			auto otherSegment = otherSnake->GetSnakeSegments().GetHead();
+			for (int i = 0; i < otherSnake->GetSnakeSegments().Size(); ++i) {
+				if (otherSegment->m_position == m_position) {
+					//If it's gobble mode, make sure not to kill the player on collision
+					if (m_gobbleMode) {
+						const int growShrinkAmount{ otherSnake->FindGobblePoint(m_position) };
+						Grow(growShrinkAmount);
+						otherSnake->Shrink(growShrinkAmount);
+						return;
+					} else {
+						Collision(ECollisionType::e_snake);
+						return;
+					}
+				}
+				otherSegment = otherSegment->m_nextNode;
+			}
+		}
+	}
+}
+
+
 void Snake::Collision(const ECollisionType _collisionType) {
 	if (!m_dead) {
-		if (_collisionType == ECollisionType::e_wall || _collisionType == ECollisionType::e_snake || _collisionType == ECollisionType::e_self) {
+		if (_collisionType == ECollisionType::e_wall 
+			|| _collisionType == ECollisionType::e_snake 
+			|| _collisionType == ECollisionType::e_self) {
 			m_dead = true;
 		}
 	}

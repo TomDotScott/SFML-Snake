@@ -84,7 +84,7 @@ int List::Size() const {
 }
 
 
-std::ostream& operator<<(std::ostream& _os, const List _list) {
+std::ostream& operator<<(std::ostream& _os, const List& _list) {
 	Node* currentNode = _list.GetHead();
 	while (currentNode) {
 		if (currentNode->m_previousNode) {
