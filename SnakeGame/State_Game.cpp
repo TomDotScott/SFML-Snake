@@ -273,6 +273,8 @@ void State_Game::HandleInput() {
 	}
 	//access the player's input function
 	for (auto* snake : m_snakes) {
+		//There is only ever one player snake
+		//If it can be cast to the PlayerSnake type then we have the player
 		auto* playerSnake = dynamic_cast<PlayerSnake*>(snake);
 		if (playerSnake) {
 			if (m_upKey && playerSnake->GetDirection() != EDirection::e_down) {
@@ -291,7 +293,6 @@ void State_Game::HandleInput() {
 				playerSnake->SetDirection(EDirection::e_right);
 				m_rightKey = false;
 			}
-
 			return;
 		}
 	}

@@ -4,7 +4,7 @@
 
 void Snake::Update() {
 	if (!IsDead()) {
-		m_score += 1;
+		m_score += m_gobbleMode ? 2 : 1;
 		Move();
 	}
 }
@@ -14,13 +14,10 @@ void Snake::Render(sf::RenderWindow& _window) {
 	if (!m_dead) {
 		if (!m_segments.IsEmpty()) {
 			auto* currentNode = m_segments.GetHead();
-			for(int i = 0; i < m_segments.Size(); ++i)
-			{
-				if(i == 0)
-				{
+			for (int i = 0; i < m_segments.Size(); ++i) {
+				if (i == 0) {
 					m_rectangle.setFillColor(sf::Color::White);
-				}
-				else {
+				} else {
 					m_rectangle.setFillColor(m_gobbleMode ? m_gobbleColour : m_defaultColour);
 				}
 				m_rectangle.setPosition(currentNode->m_position);
@@ -67,7 +64,7 @@ void Snake::Grow(const int _amount) {
 	for (int i{ 0 }; i < _amount; ++i) {
 		m_segments.PushBack(sf::Vector2f(m_position.x, m_position.y));
 	}
-	m_score += 10 * _amount;
+	m_score += (!m_gobbleMode ? 10 : 20) * _amount;
 }
 
 //Find the point where a snake intersects and returns the position in the linked list.
@@ -77,10 +74,8 @@ int Snake::FindGobblePoint(sf::Vector2f _gobbleSnakeHead) const {
 		int counter{ 0 };
 		if (!m_segments.IsEmpty()) {
 			auto* currentNode = m_segments.GetHead();
-			while (currentNode->m_nextNode)
-			{
-				if (currentNode->m_position == _gobbleSnakeHead)
-				{
+			while (currentNode->m_nextNode) {
+				if (currentNode->m_position == _gobbleSnakeHead) {
 					return counter;
 				}
 				currentNode = currentNode->m_nextNode;
@@ -104,10 +99,8 @@ void Snake::Shrink(const int _amount) {
 void Snake::CheckCollision() {
 	if (m_direction != EDirection::e_none && !m_segments.IsEmpty()) {
 		auto* currentNode = m_segments.GetHead();
-		for (int i = 0; i < m_segments.Size(); ++i)
-		{
-			if (currentNode->m_position == m_position && !IsDead())
-			{
+		for (int i = 0; i < m_segments.Size(); ++i) {
+			if (currentNode->m_position == m_position && !IsDead()) {
 				Collision(ECollisionType::e_self);
 			}
 			currentNode = currentNode->m_nextNode;
@@ -123,8 +116,7 @@ void Snake::Collision(const ECollisionType _collisionType) {
 	}
 }
 
-void Snake::Collision(Food* _food)
-{
+void Snake::Collision(Food* _food) {
 	if (_food->GetType() == eFoodType::e_gobble) {
 		m_gobbleMode = true;
 	}
