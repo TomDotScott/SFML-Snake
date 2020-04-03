@@ -16,6 +16,7 @@ void StateManager::SetWindow(sf::RenderWindow* _window) {
 void StateManager::SetState(BaseState* _state) {
 	if (m_state != nullptr) {
 		m_state->Destroy(m_window);
+		delete m_state;
 	}
 	m_state = _state;
 	if (m_state != nullptr) {

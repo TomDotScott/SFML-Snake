@@ -13,8 +13,6 @@ class Food : public Entity {
 public:
 	Food();
 
-	~Food();
-
 	void Randomise();
 
 	void Render(sf::RenderWindow& _window) override;

@@ -129,13 +129,16 @@ void State_GameOver::Destroy(sf::RenderWindow* _window) {
 	m_title = nullptr;
 	m_playAgain = nullptr;
 	m_quit = nullptr;
+	m_highScore = nullptr;
+	m_lastScore = nullptr;
 	std::cout << "Destroyed" << std::endl;
 }
 
 State_GameOver::~State_GameOver() {
-	m_font = nullptr;
-	m_title = nullptr;
-	m_playAgain = nullptr;
-	m_quit = nullptr;
-	delete this;
+	delete m_font;
+	delete m_title;
+	delete m_playAgain;
+	delete m_quit;
+	delete m_highScore;
+	delete m_lastScore;
 }

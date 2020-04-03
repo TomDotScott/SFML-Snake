@@ -21,9 +21,9 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	m_snakes.push_back(playerSnake);
 
 	//populate the food array
-	for (auto& i : m_foodArray) {
+	for (int i = 0; i < Constants::k_foodAmount; ++i) {
 		Food* food = new Food();
-		i = food;
+		m_foodArray[i] = food;
 	}
 
 
@@ -144,12 +144,14 @@ void State_Game::Render(sf::RenderWindow* _window) {
 
 void State_Game::Destroy(sf::RenderWindow* _window) {
 	for (Food* food : m_foodArray) {
-		delete food;
+		food = nullptr;
 	}
 
 	for (auto* snake : m_snakes) {
-		delete snake;
+		snake = nullptr;
 	}
+	m_gobbleModeText = nullptr;
+	m_pausedText = nullptr;
 }
 
 State_Game::~State_Game() {
@@ -160,7 +162,8 @@ State_Game::~State_Game() {
 	for (auto* snake : m_snakes) {
 		delete snake;
 	}
-	delete this;
+	delete m_gobbleModeText;
+	delete m_pausedText;
 }
 
 

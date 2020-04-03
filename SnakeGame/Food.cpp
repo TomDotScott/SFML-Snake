@@ -8,8 +8,6 @@ Food::Food() {
 	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);
 }
 
-Food::~Food() = default;
-
 Food::Food(sf::Color _colour, sf::Vector2f _position) : Entity(_colour, _position), m_type(eFoodType::e_standard) {
 	Randomise();
 	m_circle = sf::CircleShape(static_cast<float>(Constants::k_snakeBlockSize) / 2);

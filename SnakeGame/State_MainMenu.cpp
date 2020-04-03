@@ -94,11 +94,10 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 }
 
 State_MainMenu::~State_MainMenu() {
-	m_font = nullptr;
-	m_title = nullptr;
-	m_play = nullptr;
-	m_quit = nullptr;
-	delete this;
+	delete m_font;
+	delete m_title;
+	delete m_play;
+	delete m_quit;
 }
 
 void State_MainMenu::Destroy(sf::RenderWindow* _window) {
