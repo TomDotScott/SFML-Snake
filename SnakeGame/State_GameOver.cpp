@@ -109,8 +109,10 @@ void State_GameOver::Update(sf::RenderWindow* _window) {
 			break;
 		case 1:
 			//quit to titles...
-			current_state = eCurrentState::e_MainMenu;
 			core_state.SetState(new State_MainMenu());
+			current_state = eCurrentState::e_MainMenu;
+			std::cout << "GOING BACK TO THE MAIN MENU" << std::endl;
+			break;
 		default:
 			break;
 		}
