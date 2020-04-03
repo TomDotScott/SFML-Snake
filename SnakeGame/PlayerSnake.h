@@ -4,5 +4,5 @@ class PlayerSnake :
 	public Snake {
 public:
 	PlayerSnake();
-	void Input();
+	void SetDirection(const EDirection& _direction) { m_direction = _direction; }
 };

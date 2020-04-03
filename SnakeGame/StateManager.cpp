@@ -27,23 +27,19 @@ void StateManager::SetFont(sf::Font* _font) {
 	m_font = _font;
 }
 
-void StateManager::Input(sf::RenderWindow* _window) {
-	sf::Event event{};
-	while (_window->pollEvent(event)) {
-		switch (event.type) {
-		case sf::Event::KeyReleased:
-			m_state->SetUpKey(event.key.code == sf::Keyboard::Up ? true : false);
-			m_state->SetDownKey(event.key.code == sf::Keyboard::Down ? true : false);
-			m_state->SetLeftKey(event.key.code == sf::Keyboard::Left ? true : false);
-			m_state->SetRightKey(event.key.code == sf::Keyboard::Right ? true : false);
-			m_state->SetEscapeKey(event.key.code == sf::Keyboard::Escape ? true : false);
-			m_state->SetSpaceKey(event.key.code == sf::Keyboard::Space ? true : false);
-
-		default:
-			break;
-		}
+void StateManager::Input(sf::Event& _event) const {
+	switch (_event.type) {
+	case sf::Event::KeyReleased:
+		m_state->SetUpKey(_event.key.code == sf::Keyboard::Up ? true : false);
+		m_state->SetDownKey(_event.key.code == sf::Keyboard::Down ? true : false);
+		m_state->SetLeftKey(_event.key.code == sf::Keyboard::Left ? true : false);
+		m_state->SetRightKey(_event.key.code == sf::Keyboard::Right ? true : false);
+		m_state->SetEscapeKey(_event.key.code == sf::Keyboard::Escape ? true : false);
+		m_state->SetSpaceKey(_event.key.code == sf::Keyboard::Space ? true : false);
+		break;
+	default:
+		break;
 	}
-	if (m_upKey) { std::cout << "UP KEY PRESSED"; }
 }
 
 void StateManager::Update() const {

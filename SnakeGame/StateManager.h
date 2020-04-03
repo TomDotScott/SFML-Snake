@@ -22,11 +22,11 @@ public:
 	virtual void Destroy(sf::RenderWindow* _window) = 0;
 
 	void SetUpKey(const bool& _upKey) { m_upKey = _upKey; }
-	void SetDownKey(const bool& _upKey) { m_upKey = _upKey; }
-	void SetLeftKey(const bool& _upKey) { m_upKey = _upKey; }
-	void SetRightKey(const bool& _upKey) { m_upKey = _upKey; }
-	void SetEscapeKey(const bool& _upKey) { m_upKey = _upKey; }
-	void SetSpaceKey(const bool& _upKey) { m_upKey = _upKey; }
+	void SetDownKey(const bool& _downKey) { m_downKey = _downKey; }
+	void SetLeftKey(const bool& _leftKey) { m_leftKey = _leftKey; }
+	void SetRightKey(const bool& _rightKey) { m_rightKey = _rightKey; }
+	void SetEscapeKey(const bool& _escapeKey) { m_escapeKey = _escapeKey; }
+	void SetSpaceKey(const bool& _spaceKey) { m_spaceKey = _spaceKey; }
 
 protected:
 	bool m_upKey = false;
@@ -44,7 +44,7 @@ public:
 	void SetWindow(sf::RenderWindow* _window);
 	void SetState(BaseState* _state);
 	void SetFont(sf::Font* _font);
-	void Input(sf::RenderWindow* _window);
+	void Input(sf::Event& _event) const;
 	void Update() const;
 	void Render() const;
 	~StateManager();

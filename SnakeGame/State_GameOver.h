@@ -20,10 +20,5 @@ private:
 
 	std::string m_lastScoreValue;
 	std::string m_highScoreValue;
-
-
-	bool m_upKey{ false };
-	bool m_downKey{ false };
-	bool m_spaceKey{ false };
 };
 

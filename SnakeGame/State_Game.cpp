@@ -10,7 +10,6 @@
 	*SOME SORT OF FORWARD-THINKING ALGORITHM
 	*A* OR GREEDY BFS SEARCH
  *MAKE UI NICER ON THE EYES
- *FIX BUG WHERE SPACE BAR REMAINS PRESSED BETWEEN STATES
  */
 
 
@@ -76,7 +75,7 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 }
 
 void State_Game::Update(sf::RenderWindow* _window) {
-	GetInput();
+	HandleInput();
 	//only play the game if it is paused
 	if (!m_paused) {
 		m_gobble = false;
@@ -263,16 +262,33 @@ void State_Game::UpdateScores() {
 	}
 }
 
-void State_Game::GetInput() {
+void State_Game::HandleInput() {
 	//pause and un-pause the game if escape is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+	if (m_escapeKey) {
 		m_paused = !m_paused;
+		m_escapeKey = false;
 	}
 	//access the player's input function
 	for (auto* snake : m_snakes) {
 		auto* playerSnake = dynamic_cast<PlayerSnake*>(snake);
 		if (playerSnake) {
-			playerSnake->Input();
+			if (m_upKey && playerSnake->GetDirection() != EDirection::e_down) {
+				playerSnake->SetDirection(EDirection::e_up);
+				m_upKey = false;
+			}
+			if (m_downKey && playerSnake->GetDirection() != EDirection::e_up) {
+				playerSnake->SetDirection(EDirection::e_down);
+				m_downKey = false;
+			}
+			if (m_leftKey && playerSnake->GetDirection() != EDirection::e_right) {
+				playerSnake->SetDirection(EDirection::e_left);
+				m_leftKey = false;
+			}
+			if (m_rightKey && playerSnake->GetDirection() != EDirection::e_left) {
+				playerSnake->SetDirection(EDirection::e_right);
+				m_rightKey = false;
+			}
+
 			return;
 		}
 	}

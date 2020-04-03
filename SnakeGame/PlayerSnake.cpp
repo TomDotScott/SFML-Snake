@@ -26,22 +26,3 @@ PlayerSnake::PlayerSnake() {
 	m_rectangle.setFillColor(m_colour);
 	m_rectangle.setPosition(m_position);
 }
-
-void::PlayerSnake::Input() {
-	//if the left arrow is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && m_direction != EDirection::e_right) {
-		m_direction = EDirection::e_left;
-	}
-	//right arrow
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && m_direction != EDirection::e_left) {
-		m_direction = EDirection::e_right;
-	}
-	//if the up arrow is pressed
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_direction != EDirection::e_down) {
-		m_direction = EDirection::e_up;
-	}
-	//down arrow
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && m_direction != EDirection::e_up) {
-		m_direction = EDirection::e_down;
-	}
-}

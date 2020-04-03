@@ -83,13 +83,14 @@ void State_GameOver::Render(sf::RenderWindow* _window) {
 
 
 void State_GameOver::Update(sf::RenderWindow* _window) {
-	GetInput();
-	
-	if (!m_upKey && m_downKey) {
+	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
+		m_upKey = false;
 	}
-	if (!m_downKey && m_upKey) {
+	
+	if (m_downKey && !m_upKey) {
 		m_selected += 1;
+		m_downKey = false;
 	}
 	//allow for cycling through options...
 	if (m_selected > 1) {
@@ -101,7 +102,8 @@ void State_GameOver::Update(sf::RenderWindow* _window) {
 	}
 
 	//Select the option using SPACE
-	if (m_spaceKey) {
+	if (m_spaceKey && !m_upKey && !m_downKey) {
+		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:
 			//play the game...

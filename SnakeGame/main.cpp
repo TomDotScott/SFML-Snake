@@ -29,7 +29,7 @@ int main()
 {
 	// Initialise the resources needed for the states	
 	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
-
+	
 	//seed the random number generator
 	std::srand(static_cast<unsigned int>(time(nullptr)));
 
@@ -60,6 +60,10 @@ int main()
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
+			
+			//Handle Input outside of the game loops
+			core_state.Input(event);
+
 		}
 		if (current_state == eCurrentState::e_Game)
 		{
@@ -76,8 +80,9 @@ int main()
 		if (quit_game) {
 			window.close();
 		}
+		
 	}
-
+	
 	std::cout << "Snake Game: Ended" << std::endl;
 	
 	return 0;

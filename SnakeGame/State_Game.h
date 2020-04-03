@@ -25,7 +25,7 @@ public:
 	void Destroy(sf::RenderWindow* _window) override;
 
 	//GAME METHODS
-	void GetInput();
+	void HandleInput();
 	void CheckCollisions();
 	~State_Game();
 

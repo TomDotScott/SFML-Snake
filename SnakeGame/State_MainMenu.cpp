@@ -55,12 +55,16 @@ void State_MainMenu::Render(sf::RenderWindow* _window) {
 
 
 void State_MainMenu::Update(sf::RenderWindow* _window) {
-	if (!m_upKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
+		m_upKey = false;
 	}
-	if (!m_downKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+	
+	if (m_downKey && !m_upKey) {
 		m_selected += 1;
+		m_downKey = false;
 	}
+	
 	//allow for cycling through options...
 	if (m_selected > 1) {
 		m_selected = 0;
@@ -71,7 +75,8 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 	}
 
 	//Select the option using SPACE
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (m_spaceKey && !m_upKey && !m_downKey) {
+		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:
 			//play the game...
@@ -86,13 +91,6 @@ void State_MainMenu::Update(sf::RenderWindow* _window) {
 			break;
 		}
 	}
-
-
-	//detect whether the up arrow has been pressed or not...
-	m_upKey = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up);
-
-	//same for Down Key
-	m_downKey = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down);
 }
 
 State_MainMenu::~State_MainMenu() {
