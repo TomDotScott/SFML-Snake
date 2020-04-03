@@ -24,5 +24,6 @@ private:
 
 	bool m_upKey{ false };
 	bool m_downKey{ false };
+	bool m_spaceKey{ false };
 };
 

@@ -83,10 +83,12 @@ void State_GameOver::Render(sf::RenderWindow* _window) {
 
 
 void State_GameOver::Update(sf::RenderWindow* _window) {
-	if (!m_upKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+	GetInput();
+	
+	if (!m_upKey && m_downKey) {
 		m_selected -= 1;
 	}
-	if (!m_downKey && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+	if (!m_downKey && m_upKey) {
 		m_selected += 1;
 	}
 	//allow for cycling through options...
@@ -99,7 +101,7 @@ void State_GameOver::Update(sf::RenderWindow* _window) {
 	}
 
 	//Select the option using SPACE
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (m_spaceKey) {
 		switch (m_selected) {
 		case 0:
 			//play the game...
@@ -117,13 +119,6 @@ void State_GameOver::Update(sf::RenderWindow* _window) {
 			break;
 		}
 	}
-
-
-	//detect whether the up arrow has been pressed or not...
-	m_upKey = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up);
-
-	//same for Down Key
-	m_downKey = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down);
 }
 
 

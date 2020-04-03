@@ -20,6 +20,21 @@ public:
 	virtual void Update(sf::RenderWindow* _window) = 0;
 	virtual void Render(sf::RenderWindow* _window) = 0;
 	virtual void Destroy(sf::RenderWindow* _window) = 0;
+
+	void SetUpKey(const bool& _upKey) { m_upKey = _upKey; }
+	void SetDownKey(const bool& _upKey) { m_upKey = _upKey; }
+	void SetLeftKey(const bool& _upKey) { m_upKey = _upKey; }
+	void SetRightKey(const bool& _upKey) { m_upKey = _upKey; }
+	void SetEscapeKey(const bool& _upKey) { m_upKey = _upKey; }
+	void SetSpaceKey(const bool& _upKey) { m_upKey = _upKey; }
+
+protected:
+	bool m_upKey = false;
+	bool m_downKey = false;
+	bool m_leftKey = false;
+	bool m_rightKey = false;
+	bool m_escapeKey = false;
+	bool m_spaceKey = false;
 };
 
 //StateManager keeps track of the current game state
@@ -29,6 +44,7 @@ public:
 	void SetWindow(sf::RenderWindow* _window);
 	void SetState(BaseState* _state);
 	void SetFont(sf::Font* _font);
+	void Input(sf::RenderWindow* _window);
 	void Update() const;
 	void Render() const;
 	~StateManager();

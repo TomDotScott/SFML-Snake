@@ -78,9 +78,6 @@
     <ClCompile Include="List.cpp">
       <Filter>Source Files\Game Structure\Linked List</Filter>
     </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -115,9 +112,6 @@
     </ClInclude>
     <ClInclude Include="List.h">
       <Filter>Header Files\Game Structure\Linked List</Filter>
-    </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
