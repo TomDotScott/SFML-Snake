@@ -39,15 +39,15 @@ public:
 
 	eFoodType GetType() const { return m_type; }
 private:
-	sf::CircleShape m_circle;
+	
+	//the textures
+	sf::Texture m_standardTexture;
+	sf::Texture m_specialTexture;
+	sf::Texture m_gobbleTexture;
 
 	int m_id = RandomRange(0, 1000000);
 
 	eFoodType m_type;
-
-	void RandomisePosition();
-
-
 };
 
 inline bool operator==(const Food& _lhs, const Food& _rhs) {

@@ -54,9 +54,9 @@ private:
 	//LEFT
 	Wall m_leftWall{ Wall({0, 0}, "left_right_wall.png") };
 	//BOTTOM
-	Wall m_bottomWall{ Wall({0, Constants::k_screenHeight - Constants::k_gridSize}, "top_bottom_wall.png") };
+	Wall m_bottomWall{ Wall({0, Constants::k_screenHeight - Constants::k_gameGridCellSize}, "top_bottom_wall.png") };
 	//RIGHT
-	Wall m_rightWall{ Wall({Constants::k_screenWidth - 200 - Constants::k_gridSize, 0}, "left_right_wall.png") };
+	Wall m_rightWall{ Wall({Constants::k_screenWidth - 200 - Constants::k_gameGridCellSize, 0}, "left_right_wall.png") };
 
 	//ensure that food doesn't overlap
 	void RandomiseFood(Food* _foodToRandomise);

@@ -12,9 +12,12 @@ public:
 	virtual void Move();
 
 protected:
+
+	void RandomisePosition();
+	
 	sf::Color m_colour;
 	sf::Vector2f m_position;
-
+	sf::Sprite m_sprite;
 	static int RandomRange(const int _min, const int _max);
 };
 

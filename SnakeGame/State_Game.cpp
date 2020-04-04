@@ -5,6 +5,8 @@
 #include "State_GameOver.h"
 
 /*TODO
+ *FIX BUG WHERE SPRITES AREN'T PROPERLY ALIGNED ON THE GAME GRID
+ *FIX SPRITES WHEN SNAKES TURN
  *FIX PATH-FINDING
 	*AI SNAKES STOP WRAPPING THEMSELVES UP
 	*SOME SORT OF FORWARD-THINKING ALGORITHM
@@ -44,7 +46,7 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 		playerText.setCharacterSize(25);
 
 		//Work out where they will be positioned
-		playerText.setPosition(sf::Vector2f(static_cast<float>(Constants::k_screenWidth - 175), static_cast<float>((i * Constants::k_gridSize) + 10)));
+		playerText.setPosition(sf::Vector2f(static_cast<float>(Constants::k_screenWidth - 175), static_cast<float>((i * Constants::k_gameGridCellSize) + 10)));
 		m_scores.push_back(playerText);
 	}
 

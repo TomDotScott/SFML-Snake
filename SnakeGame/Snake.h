@@ -26,7 +26,7 @@ struct Segment {
 
 class Snake : public Entity {
 public:
-	Snake();
+	Snake() = default;
 
 	void Grow(const int _amount);
 
@@ -95,4 +95,11 @@ protected:
 	//A store of all of the other snakes on screen to help with decision making
 	std::vector<Snake*> m_otherSnakes;
 
+	//The textures...
+	sf::Texture m_headTexture;
+	sf::Texture m_deadTexture;
+
+	sf::Texture m_bodyTexture;
+	sf::Texture m_tailTexture;
+	
 };

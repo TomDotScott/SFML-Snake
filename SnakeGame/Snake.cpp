@@ -2,15 +2,6 @@
 #include "SFML/Graphics.hpp"
 #include "Constants.h"
 
-Snake::Snake() {
-	//Set random colours for the AI Snakes
-	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
-
-	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
-	m_rectangle.setFillColor(m_colour);
-	m_rectangle.setPosition(m_position);
-}
-
 void Snake::Update() {
 	if (!IsDead()) {
 		m_score += m_gobbleMode ? 2 : 1;
@@ -24,12 +15,35 @@ void Snake::Render(sf::RenderWindow& _window) {
 			auto* currentNode = m_segments.GetHead();
 			for (int i = 0; i < m_segments.Size(); ++i) {
 				if (i == 0) {
-					m_rectangle.setFillColor(sf::Color::White);
+					m_sprite.setTexture(m_headTexture);
+
+				} else if (i < m_segments.Size() - 1) {
+					m_sprite.setTexture(m_bodyTexture);
+
 				} else {
-					m_rectangle.setFillColor(m_gobbleMode ? m_gobbleColour : m_defaultColour);
+					m_sprite.setTexture(m_tailTexture);
 				}
-				m_rectangle.setPosition(currentNode->m_position);
-				_window.draw(m_rectangle);
+
+				m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
+
+				//Change rotation depending on direction
+				switch (m_direction) {
+				case EDirection::e_left:
+					m_sprite.setRotation(90);
+					break;
+				case EDirection::e_right:
+					m_sprite.setRotation(-90);
+					break;
+				case EDirection::e_up:
+					m_sprite.setRotation(180);
+					break;
+				case EDirection::e_down:
+					m_sprite.setRotation(0);
+					break;
+				default:;
+				}
+				m_sprite.setPosition(currentNode->m_position);
+				_window.draw(m_sprite);
 				currentNode = currentNode->m_nextNode;
 			}
 		}
@@ -39,16 +53,16 @@ void Snake::Render(sf::RenderWindow& _window) {
 void Snake::Move() {
 	switch (m_direction) {
 	case EDirection::e_left:
-		m_position.x -= (Constants::k_gridSize);
+		m_position.x -= (Constants::k_gameGridCellSize);
 		break;
 	case EDirection::e_right:
-		m_position.x += (Constants::k_gridSize);
+		m_position.x += (Constants::k_gameGridCellSize);
 		break;
 	case EDirection::e_up:
-		m_position.y -= (Constants::k_gridSize);
+		m_position.y -= (Constants::k_gameGridCellSize);
 		break;
 	case EDirection::e_down:
-		m_position.y += (Constants::k_gridSize);
+		m_position.y += (Constants::k_gameGridCellSize);
 		break;
 	default:
 		break;
@@ -101,8 +115,7 @@ void Snake::CheckCollisions() {
 	CheckCollisionsAgainstOtherSnakes();
 }
 
-void Snake::CheckCollisionsAgainstSelf()
-{
+void Snake::CheckCollisionsAgainstSelf() {
 	if (m_direction != EDirection::e_none && !m_segments.IsEmpty()) {
 		auto* currentNode = m_segments.GetHead();
 		for (int i = 0; i < m_segments.Size(); ++i) {
@@ -114,8 +127,7 @@ void Snake::CheckCollisionsAgainstSelf()
 	}
 }
 
-void Snake::CheckCollisionsAgainstFood()
-{
+void Snake::CheckCollisionsAgainstFood() {
 	//Check Against Food
 	for (auto* food : m_food) {
 		if (food->GetPosition() == m_position) {
@@ -125,8 +137,7 @@ void Snake::CheckCollisionsAgainstFood()
 	}
 }
 
-void Snake::CheckCollisionsAgainstOtherSnakes()
-{
+void Snake::CheckCollisionsAgainstOtherSnakes() {
 	//Check against other snakes
 	for (auto* otherSnake : m_otherSnakes) {
 		if (!otherSnake->IsDead()) {
@@ -176,8 +187,8 @@ void Snake::CheckCollisionsAgainstOtherSnakes()
 
 void Snake::Collision(const ECollisionType _collisionType) {
 	if (!m_dead) {
-		if (_collisionType == ECollisionType::e_wall 
-			|| _collisionType == ECollisionType::e_snake 
+		if (_collisionType == ECollisionType::e_wall
+			|| _collisionType == ECollisionType::e_snake
 			|| _collisionType == ECollisionType::e_self) {
 			m_dead = true;
 		}

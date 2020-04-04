@@ -3,25 +3,17 @@
 AISnake::AISnake() {
 	m_defaultColour = sf::Color(sf::Color::Blue);
 
-	int randomNumber{ RandomRange(4, static_cast<int>(Constants::k_screenWidth - 400) / Constants::k_snakeBlockSize) };
-
-	m_position.x = static_cast<float>((randomNumber * Constants::k_gridSize >= Constants::k_screenWidth - 200
-		? Constants::k_screenWidth - 200
-		: randomNumber * Constants::k_gridSize));
-
-	randomNumber = RandomRange(4, static_cast<int>(Constants::k_screenHeight - 100) / Constants::k_snakeBlockSize);
-
-	m_position.y = static_cast<float>((randomNumber * Constants::k_gridSize >= Constants::k_screenHeight - 100
-		? Constants::k_screenHeight - 100
-		: randomNumber * Constants::k_gridSize));
+	RandomisePosition();
 
 	m_segments.PushBack(m_position);
 	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)));
-	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gridSize, (m_position.y)));
+	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, (m_position.y)));
 
-	m_rectangle = sf::RectangleShape(sf::Vector2f(static_cast<float>(Constants::k_snakeBlockSize), static_cast<float>(Constants::k_snakeBlockSize)));
-	m_rectangle.setFillColor(m_colour);
-	m_rectangle.setPosition(m_position);
+	//load the textures
+	m_headTexture.loadFromFile("Resources/Graphics/Snake_AI_Head.png");
+	m_bodyTexture.loadFromFile("Resources/Graphics/Snake_AI_Body.png");
+	m_tailTexture.loadFromFile("Resources/Graphics/Snake_AI_Tail.png");
+	m_deadTexture.loadFromFile("Resources/Graphics/Snake_AI_Dead.png");
 }
 
 void AISnake::ChooseDirection() {
@@ -317,7 +309,7 @@ bool AISnake::IsSnakeInWay() const {
 				const float deltaY = segmentPosition.y - m_position.y;
 
 				//Only evaluate if close enough
-				if (deltaX == Constants::k_gridSize || deltaY == Constants::k_gridSize) {
+				if (deltaX == Constants::k_gameGridCellSize || deltaY == Constants::k_gameGridCellSize) {
 					if (currentNode->m_position.x == m_targetList.Front().x || currentNode->m_position.y == m_targetList.Front().y) {
 						return true;
 					}
@@ -334,25 +326,25 @@ bool AISnake::IsSelfInWay(EDirection& _direction) const {
 	//Cycle through 2 grids in front of the snake and see if it overlaps
 	switch (_direction) {
 	case EDirection::e_left:
-		if (IsOverlapping(sf::Vector2f(m_position.x - Constants::k_gridSize, m_position.y))
+		if (IsOverlapping(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, m_position.y))
 			/*|| IsOverlapping(sf::Vector2f(m_position.x - 2 * Constants::k_gridSize, m_position.y))*/) {
 			return true;
 		}
 		break;
 	case EDirection::e_right:
-		if (IsOverlapping(sf::Vector2f(m_position.x + Constants::k_gridSize, m_position.y))
+		if (IsOverlapping(sf::Vector2f(m_position.x + Constants::k_gameGridCellSize, m_position.y))
 			/*|| IsOverlapping(sf::Vector2f(m_position.x + 2 * Constants::k_gridSize, m_position.y))*/) {
 			return true;
 		}
 		break;
 	case EDirection::e_up:
-		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y - Constants::k_gridSize))
+		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y - Constants::k_gameGridCellSize))
 			/*|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y - 2 * Constants::k_gridSize))*/) {
 			return true;
 		}
 		break;
 	case EDirection::e_down:
-		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y + Constants::k_gridSize))
+		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y + Constants::k_gameGridCellSize))
 			/*|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y + 2 * Constants::k_gridSize))*/) {
 			return true;
 		}
