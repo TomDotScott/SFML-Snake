@@ -5,12 +5,13 @@ AISnake::AISnake() {
 
 	RandomisePosition();
 
-	m_segments.PushBack(m_position);
-	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)));
-	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, (m_position.y)));
+	m_segments.PushBack(m_position, m_direction);
+	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)), m_direction);
+	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, (m_position.y)), m_direction);
 
 	//load the textures
 	m_headTexture.loadFromFile("Resources/Graphics/Snake_AI_Head.png");
+	m_bendTexture.loadFromFile("Resources/Graphics/Snake_AI_Bend.png");
 	m_bodyTexture.loadFromFile("Resources/Graphics/Snake_AI_Body.png");
 	m_tailTexture.loadFromFile("Resources/Graphics/Snake_AI_Tail.png");
 	m_deadTexture.loadFromFile("Resources/Graphics/Snake_AI_Dead.png");
@@ -160,7 +161,7 @@ void AISnake::FindClosestFood() {
 
 	sf::Vector2f closestFood = m_food[0]->GetPosition();
 
-	m_targetList.PushFront(closestFood);
+	m_targetList.PushFront(closestFood, m_direction);
 
 	sf::Vector2f positionVectorOfSnakeToFood =
 		sf::Vector2f(closestFood.x - m_position.x, closestFood.y - m_position.y);
@@ -186,7 +187,7 @@ void AISnake::FindClosestFood() {
 			//reset the closest food
 			closestFood = currentFoodPosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
-			m_targetList.PushFront(closestFood);
+			m_targetList.PushFront(closestFood, EDirection::e_none);
 
 			//check that the closest food isn't in any of the segments
 			if (IsOverlapping(closestFood)) {
@@ -195,7 +196,7 @@ void AISnake::FindClosestFood() {
 		}
 		//Otherwise, add to the end of the list
 		else {
-			m_targetList.PushBack(currentFoodPosition);
+			m_targetList.PushBack(currentFoodPosition, EDirection::e_none);
 		}
 	}
 }
@@ -206,7 +207,7 @@ void AISnake::FindClosestSnake() {
 
 	sf::Vector2f closestSnake = m_otherSnakes[0]->GetHeadPosition();
 
-	m_targetList.PushFront(closestSnake);
+	m_targetList.PushFront(closestSnake, EDirection::e_none);
 
 	sf::Vector2f positionVectorOfSnakeToOtherSnake =
 		sf::Vector2f(closestSnake.x - m_position.x, closestSnake.y - m_position.y);
@@ -232,11 +233,11 @@ void AISnake::FindClosestSnake() {
 			//reset the closest food
 			closestSnake = currentSnakePosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
-			m_targetList.PushFront(closestSnake);
+			m_targetList.PushFront(closestSnake, EDirection::e_none);
 		}
 		//Otherwise, add to the end of the list
 		else {
-			m_targetList.PushBack(currentSnakePosition);
+			m_targetList.PushBack(currentSnakePosition, EDirection::e_none);
 		}
 	}
 }
@@ -249,12 +250,12 @@ void AISnake::FindHighestFood() {
 	Food* highestValueFood = m_food[0];
 
 	//Make the highest the front of the list
-	m_targetList.PushFront(highestValueFood->GetPosition());
+	m_targetList.PushFront(highestValueFood->GetPosition(), EDirection::e_none);
 
 	//Check to see if any food is higher value
 	for (auto* currentFood : m_food) {
 		if (highestValueFood->GetGrowAmount() < currentFood->GetGrowAmount()) {
-			m_targetList.PushFront(currentFood->GetPosition());
+			m_targetList.PushFront(currentFood->GetPosition(), EDirection::e_none);
 			highestValueFood = currentFood;
 		}
 		//If their values are the same, then choose the one that is closer
@@ -275,10 +276,10 @@ void AISnake::FindHighestFood() {
 
 			//If the current food is closer, then it goes to the front of the list
 			if (magnitudeOfSnakeToCurrentFood < magnitudeOfSnakeToCurrentHighestValueFood) {
-				m_targetList.PushFront(currentFood->GetPosition());
+				m_targetList.PushFront(currentFood->GetPosition(), EDirection::e_none);
 			}
 		} else {
-			m_targetList.PushBack(currentFood->GetPosition());
+			m_targetList.PushBack(currentFood->GetPosition(), EDirection::e_none);
 		}
 	}
 }

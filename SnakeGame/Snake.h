@@ -4,12 +4,6 @@
 #include "Food.h"
 #include "List.h"
 
-
-//Holds the directions that the snake can travel in
-enum class EDirection {
-	e_none, e_left, e_right, e_up, e_down
-};
-
 //To deal with collisions in the game
 enum class ECollisionType {
 	e_wall, e_snake, e_self, e_food
@@ -98,7 +92,7 @@ protected:
 	//The textures...
 	sf::Texture m_headTexture;
 	sf::Texture m_deadTexture;
-
+	sf::Texture m_bendTexture;
 	sf::Texture m_bodyTexture;
 	sf::Texture m_tailTexture;
 	

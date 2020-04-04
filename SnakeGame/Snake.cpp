@@ -25,20 +25,63 @@ void Snake::Render(sf::RenderWindow& _window) {
 				}
 
 				m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
+				
+				EDirection previousNodeDirection = m_direction;
+				
+				if (currentNode->m_previousNode) {
+					previousNodeDirection = currentNode->m_previousNode->m_direction;
+				}
 
 				//Change rotation depending on direction
-				switch (m_direction) {
+				//Add bends at appropriate points
+				switch (currentNode->m_direction) {
 				case EDirection::e_left:
-					m_sprite.setRotation(90);
+					if (previousNodeDirection != EDirection::e_left && i < m_segments.Size() - 1) {
+						m_sprite.setTexture(m_bendTexture);
+						if (previousNodeDirection == EDirection::e_up) {
+							m_sprite.setRotation(0);
+						} else {
+							m_sprite.setRotation(90);
+						}
+					} else {
+						m_sprite.setRotation(90);
+					}
 					break;
 				case EDirection::e_right:
-					m_sprite.setRotation(-90);
+					if (previousNodeDirection != EDirection::e_right && i < m_segments.Size() - 1) {
+						m_sprite.setTexture(m_bendTexture);
+						if (previousNodeDirection == EDirection::e_up) {
+							m_sprite.setRotation(-90);
+						} else {
+							m_sprite.setRotation(180);
+						}
+					} else {
+						m_sprite.setRotation(-90);
+					}
 					break;
 				case EDirection::e_up:
-					m_sprite.setRotation(180);
+					if (previousNodeDirection != EDirection::e_up && i < m_segments.Size() - 1) {
+						m_sprite.setTexture(m_bendTexture);
+						if (previousNodeDirection == EDirection::e_left) {
+							m_sprite.setRotation(180);
+						} else {
+							m_sprite.setRotation(90);
+						}
+					} else {
+						m_sprite.setRotation(180);
+					}
 					break;
 				case EDirection::e_down:
-					m_sprite.setRotation(0);
+					if (previousNodeDirection != EDirection::e_down && i < m_segments.Size() - 1) {
+						m_sprite.setTexture(m_bendTexture);
+						if (previousNodeDirection == EDirection::e_left) {
+							m_sprite.setRotation(-90);
+						} else {
+							m_sprite.setRotation(0);
+						}
+					} else {
+						m_sprite.setRotation(0);
+					}
 					break;
 				default:;
 				}
@@ -70,12 +113,12 @@ void Snake::Move() {
 
 	CheckCollisions();
 	m_segments.PopBack();
-	m_segments.PushFront(sf::Vector2f(m_position.x, m_position.y));
+	m_segments.PushFront(sf::Vector2f(m_position.x, m_position.y), m_direction);
 }
 
 void Snake::Grow(const int _amount) {
 	for (int i{ 0 }; i < _amount; ++i) {
-		m_segments.PushBack(sf::Vector2f(m_position.x, m_position.y));
+		m_segments.PushBack(sf::Vector2f(m_position.x, m_position.y), m_direction);
 	}
 	m_score += (!m_gobbleMode ? 10 : 20) * _amount;
 }

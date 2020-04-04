@@ -2,14 +2,21 @@
 #include <iostream>
 #include <SFML/System/Vector2.hpp>
 
+//Holds the directions that the snake can travel in
+enum class EDirection {
+	e_none, e_left, e_right, e_up, e_down
+};
+
 //Doubly linked list, so we need reference to previous and next node
 struct Node {
 	friend class List;
-	Node(sf::Vector2f _position, Node* _previousNode, Node* _nextNode) : m_position(_position), m_previousNode(_previousNode), m_nextNode(_nextNode) {}
+	Node(sf::Vector2f _position, EDirection _direction, Node* _previousNode, Node* _nextNode) : m_position(_position), m_direction(_direction), m_previousNode(_previousNode), m_nextNode(_nextNode) {}
 
 	bool IsNextNodeAvailable() const { return m_nextNode; }
 
 	sf::Vector2f m_position;
+	EDirection m_direction;
+	
 	Node* m_previousNode;
 	Node* m_nextNode;
 };
@@ -17,11 +24,11 @@ struct Node {
 class List {
 public:
 	List();
-	List(const sf::Vector2f _position);
+	List(const sf::Vector2f _position, EDirection _direction);
 	~List();
 	void PopFront();
-	void PushFront(const sf::Vector2f _segmentPosition);
-	void PushBack(const sf::Vector2f _segmentPosition);
+	void PushFront(const sf::Vector2f _segmentPosition, const EDirection _direction);
+	void PushBack(const sf::Vector2f _segmentPosition, const EDirection _direction);
 	void PopBack();
 	void Clear() const;
 	sf::Vector2f Front() const;

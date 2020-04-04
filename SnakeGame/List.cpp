@@ -1,14 +1,14 @@
 #include "List.h"
 
 List::List() {
-	m_head = new Node(sf::Vector2f(0, 0), NULL, NULL);
-	m_tail = new Node(sf::Vector2f(0, 0), m_head, NULL);
+	m_head = new Node(sf::Vector2f(0, 0), EDirection::e_none, NULL, NULL);
+	m_tail = new Node(sf::Vector2f(0, 0), EDirection::e_none, m_head, NULL);
 	m_head->m_nextNode = m_tail;
 }
 
-List::List(const sf::Vector2f _position) {
+List::List(const sf::Vector2f _position, const EDirection _direction) {
 	//Initialise the 'Head' of the linked list to the position
-	m_head = new Node(_position, NULL, NULL);
+	m_head = new Node(_position, _direction, NULL, NULL);
 	m_size = 1;
 	m_tail = m_head;
 }
@@ -25,9 +25,9 @@ void List::PopFront() {
 }
 
 //Pushes an element to the front of the List
-void List::PushFront(const sf::Vector2f _segmentPosition) {
+void List::PushFront(const sf::Vector2f _segmentPosition, const EDirection _direction) {
 	//Allocate a new node
-	auto* newNode = new Node(_segmentPosition, NULL, m_head);
+	auto* newNode = new Node(_segmentPosition, _direction, NULL, m_head);
 	m_head->m_previousNode = newNode;
 	//make the new node the head of the list
 	m_head = newNode;
@@ -35,9 +35,9 @@ void List::PushFront(const sf::Vector2f _segmentPosition) {
 }
 
 //Pushes an element to the back of the list
-void List::PushBack(const sf::Vector2f _segmentPosition) {
+void List::PushBack(const sf::Vector2f _segmentPosition, const EDirection _direction) {
 	//Allocate a new node
-	auto* newNode = new Node(_segmentPosition, m_tail, NULL);
+	auto* newNode = new Node(_segmentPosition, _direction, m_tail, NULL);
 	//make the current tail point to the newly allocated node
 	m_tail->m_nextNode = newNode;
 

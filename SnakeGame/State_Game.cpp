@@ -5,8 +5,7 @@
 #include "State_GameOver.h"
 
 /*TODO
- *FIX BUG WHERE SPRITES AREN'T PROPERLY ALIGNED ON THE GAME GRID
- *FIX SPRITES WHEN SNAKES TURN
+ *FIX BUG WHERE TAIL DOESN'T FOLLOW DIRECTION
  *FIX PATH-FINDING
 	*AI SNAKES STOP WRAPPING THEMSELVES UP
 	*SOME SORT OF FORWARD-THINKING ALGORITHM
@@ -145,7 +144,7 @@ void State_Game::Render(sf::RenderWindow* _window) {
 }
 
 void State_Game::Destroy(sf::RenderWindow* _window) {
-	for (Food* food : m_foodArray) {
+	for (auto* food : m_foodArray) {
 		food = nullptr;
 	}
 

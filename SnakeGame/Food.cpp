@@ -46,6 +46,7 @@ void Food::Render(sf::RenderWindow& _window) {
 	default:
 		break;
 	}
+	m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
 	m_sprite.setPosition(m_position);
 	_window.draw(m_sprite);
 }
