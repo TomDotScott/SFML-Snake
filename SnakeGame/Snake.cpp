@@ -20,10 +20,8 @@ void Snake::Render(sf::RenderWindow& _window) {
 				} else if (i < m_segments.Size() - 1) {
 					m_sprite.setTexture(m_bodyTexture);
 
-				} else {
-					m_sprite.setTexture(m_tailTexture);
 				}
-
+				
 				m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
 				
 				EDirection previousNodeDirection = m_direction;
@@ -84,6 +82,26 @@ void Snake::Render(sf::RenderWindow& _window) {
 					}
 					break;
 				default:;
+				}
+
+				if(i == m_segments.Size() - 1)
+				{
+					m_sprite.setTexture(m_tailTexture);
+					//make the tail follow the previous segment
+					switch (previousNodeDirection) {
+					case EDirection::e_left:
+						m_sprite.setRotation(90);
+						break;
+					case EDirection::e_right:
+						m_sprite.setRotation(-90);
+						break;
+					case EDirection::e_up:
+						m_sprite.setRotation(180);
+						break;
+					case EDirection::e_down:
+						m_sprite.setRotation(0);
+						break;
+					default: ; }
 				}
 				m_sprite.setPosition(currentNode->m_position);
 				_window.draw(m_sprite);
