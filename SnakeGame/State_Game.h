@@ -5,15 +5,14 @@
 #include "StateManager.h"
 
 struct Wall {
-	Wall(const float _height, const float _width, const sf::Vector2f _position) : m_height(_height), m_width(_width), m_position(_position) {
-		m_wall = sf::RectangleShape(sf::Vector2f(_width, _height));
-		m_wall.setFillColor(m_colour);
+	Wall(const sf::Vector2f _position, const std::string _fileName) : m_position(_position) {
+		m_texture.loadFromFile("Resources/Graphics/" + _fileName);
+		m_wall.setTexture(m_texture);
 		m_wall.setPosition(m_position);
 	}
-	float m_height, m_width;
 	sf::Vector2f m_position;
-	sf::RectangleShape m_wall;
-	sf::Color m_colour = sf::Color::White;
+	sf::Sprite m_wall{};
+	sf::Texture m_texture;
 };
 
 class State_Game final : public BaseState {
@@ -51,13 +50,13 @@ private:
 	bool m_paused{ false };
 
 	//TOP
-	Wall m_topWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth - 200, sf::Vector2f(0, 0)) };
+	Wall m_topWall{ Wall({0, 0}, "top_bottom_wall.png") };
 	//LEFT
-	Wall m_leftWall{ Wall(Constants::k_screenHeight, Constants::k_gridSize, sf::Vector2f(0, 0)) };
+	Wall m_leftWall{ Wall({0, 0}, "left_right_wall.png") };
 	//BOTTOM
-	Wall m_bottomWall{ Wall(Constants::k_gridSize, Constants::k_screenWidth - 200, sf::Vector2f(0, Constants::k_screenHeight - Constants::k_gridSize)) };
+	Wall m_bottomWall{ Wall({0, Constants::k_screenHeight - Constants::k_gridSize}, "top_bottom_wall.png") };
 	//RIGHT
-	Wall m_rightWall{ Wall(Constants::k_screenHeight, Constants::k_gridSize, sf::Vector2f(Constants::k_screenWidth - 200 - Constants::k_gridSize, 0)) };
+	Wall m_rightWall{ Wall({Constants::k_screenWidth - 200 - Constants::k_gridSize, 0}, "left_right_wall.png") };
 
 	//ensure that food doesn't overlap
 	void RandomiseFood(Food* _foodToRandomise);
