@@ -66,5 +66,6 @@ private:
 
 	void SaveScores();
 
-
+	sf::Sprite m_grassSprite;
+	sf::Texture m_grassTexture;
 };

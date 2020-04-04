@@ -60,6 +60,10 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	m_pausedText->setFillColor(sf::Color::Red);
 	m_pausedText->setPosition(static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.f);
 
+	//Initialise background texture
+	m_grassTexture.loadFromFile("Resources/Graphics/Game_Background.png");
+	m_grassSprite.setTexture(m_grassTexture);
+	
 	//make the snakes know where the food and other snakes are on the screen
 	for (auto* snake : m_snakes) {
 		for (auto* food : m_foodArray) {
@@ -112,6 +116,10 @@ void State_Game::Update(sf::RenderWindow* _window) {
 }
 
 void State_Game::Render(sf::RenderWindow* _window) {
+
+	//Draw the background
+	_window->draw(m_grassSprite);
+	
 	//Render the food
 	for (Food* food : m_foodArray) {
 		food->Render(*_window);
@@ -130,7 +138,7 @@ void State_Game::Render(sf::RenderWindow* _window) {
 	if (m_gobble) {
 		_window->draw(*m_gobbleModeText);
 	}
-
+	
 	//Draw the Walls
 	_window->draw(m_topWall.m_wall);
 	_window->draw(m_bottomWall.m_wall);
