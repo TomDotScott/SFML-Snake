@@ -2,6 +2,13 @@
 #include "SFML/Graphics.hpp"
 #include "Constants.h"
 
+Snake::Snake() {
+	m_gobbleBendTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Bend.png");
+	m_gobbleBodyTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Body.png");
+	m_gobbleHeadTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Head.png");
+	m_gobbleTailTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Tail.png");
+}
+
 void Snake::Update() {
 	if (!IsDead()) {
 		m_score += m_gobbleMode ? 2 : 1;
@@ -15,11 +22,9 @@ void Snake::Render(sf::RenderWindow& _window) {
 			auto* currentNode = m_segments.GetHead();
 			for (int i = 0; i < m_segments.Size(); ++i) {
 				if (i == 0) {
-					m_sprite.setTexture(m_headTexture);
-
+					m_sprite.setTexture(m_gobbleMode ? m_gobbleHeadTexture : m_headTexture);
 				} else if (i < m_segments.Size() - 1) {
-					m_sprite.setTexture(m_bodyTexture);
-
+					m_sprite.setTexture(m_gobbleMode ? m_gobbleBodyTexture : m_bodyTexture);
 				}
 				
 				m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
@@ -35,50 +40,42 @@ void Snake::Render(sf::RenderWindow& _window) {
 				switch (currentNode->m_direction) {
 				case EDirection::e_left:
 					if (previousNodeDirection != EDirection::e_left && i < m_segments.Size() - 1) {
-						m_sprite.setTexture(m_bendTexture);
-						if (previousNodeDirection == EDirection::e_up) {
-							m_sprite.setRotation(0);
-						} else {
-							m_sprite.setRotation(90);
-						}
+						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
+
+						m_sprite.setRotation(previousNodeDirection == EDirection::e_up ? 0.f : 90.f);
+						
 					} else {
-						m_sprite.setRotation(90);
+						m_sprite.setRotation(90.f);
 					}
 					break;
 				case EDirection::e_right:
 					if (previousNodeDirection != EDirection::e_right && i < m_segments.Size() - 1) {
-						m_sprite.setTexture(m_bendTexture);
-						if (previousNodeDirection == EDirection::e_up) {
-							m_sprite.setRotation(-90);
-						} else {
-							m_sprite.setRotation(180);
-						}
+						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
+
+						m_sprite.setRotation(previousNodeDirection == EDirection::e_up ? -90.f : 180.f);
+						
 					} else {
-						m_sprite.setRotation(-90);
+						m_sprite.setRotation(-90.f);
 					}
 					break;
 				case EDirection::e_up:
 					if (previousNodeDirection != EDirection::e_up && i < m_segments.Size() - 1) {
-						m_sprite.setTexture(m_bendTexture);
-						if (previousNodeDirection == EDirection::e_left) {
-							m_sprite.setRotation(180);
-						} else {
-							m_sprite.setRotation(90);
-						}
+						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
+
+						m_sprite.setRotation(previousNodeDirection == EDirection::e_left ? 180.f : 90.f);
+						
 					} else {
-						m_sprite.setRotation(180);
+						m_sprite.setRotation(180.f);
 					}
 					break;
 				case EDirection::e_down:
 					if (previousNodeDirection != EDirection::e_down && i < m_segments.Size() - 1) {
-						m_sprite.setTexture(m_bendTexture);
-						if (previousNodeDirection == EDirection::e_left) {
-							m_sprite.setRotation(-90);
-						} else {
-							m_sprite.setRotation(0);
-						}
+						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
+						
+						m_sprite.setRotation(previousNodeDirection == EDirection::e_left ? -90.f : 0.f);
+						
 					} else {
-						m_sprite.setRotation(0);
+						m_sprite.setRotation(0.f);
 					}
 					break;
 				default:;
@@ -86,20 +83,20 @@ void Snake::Render(sf::RenderWindow& _window) {
 
 				if(i == m_segments.Size() - 1)
 				{
-					m_sprite.setTexture(m_tailTexture);
+					m_sprite.setTexture(m_gobbleMode ? m_gobbleTailTexture : m_tailTexture);
 					//make the tail follow the previous segment
 					switch (previousNodeDirection) {
 					case EDirection::e_left:
-						m_sprite.setRotation(90);
+						m_sprite.setRotation(90.f);
 						break;
 					case EDirection::e_right:
-						m_sprite.setRotation(-90);
+						m_sprite.setRotation(-90.f);
 						break;
 					case EDirection::e_up:
-						m_sprite.setRotation(180);
+						m_sprite.setRotation(180.f);
 						break;
 					case EDirection::e_down:
-						m_sprite.setRotation(0);
+						m_sprite.setRotation(0.f);
 						break;
 					default: ; }
 				}

@@ -20,14 +20,13 @@ struct Segment {
 
 class Snake : public Entity {
 public:
-	Snake() = default;
+	Snake();
 
 	void Grow(const int _amount);
 
 	void Shrink(const int _amount);
 
 	virtual void Update();
-
 	
 	void CheckCollisions();
 	
@@ -96,4 +95,9 @@ protected:
 	sf::Texture m_bodyTexture;
 	sf::Texture m_tailTexture;
 	
+	//For Gobble Mode
+	sf::Texture m_gobbleHeadTexture;
+	sf::Texture m_gobbleBendTexture;
+	sf::Texture m_gobbleBodyTexture;
+	sf::Texture m_gobbleTailTexture;
 };

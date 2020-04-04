@@ -5,7 +5,7 @@ namespace Constants {
 
 	const int k_gameHeight{ 750 };
 	const int k_gameWidth{ 350 };
-	const int k_gameGridCellSize{ 25 };
+	const int k_gameGridCellSize{ 24 };
 	const int k_gameGridRows{ 30 };
 	const int k_gameGridColumns{ 14 };
 
