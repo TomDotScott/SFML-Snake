@@ -51,9 +51,12 @@ int main()
 
 	core_state.SetWindow(&window);
 
-	core_state.SetFont(&font);
+	core_state.SetFont(font);
 
+	core_state.SetSoundManager(soundManager);
+	
 	core_state.SetState(new State_MainMenu());
+	
 	current_state = eCurrentState::e_MainMenu;
 
 	// run the program as long as the window is open

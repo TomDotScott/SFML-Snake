@@ -3,13 +3,14 @@
 class State_MainMenu final : public BaseState
 {
 public:
-	void Initialize(sf::RenderWindow* _window, sf::Font* _font) override;
-	void Update(sf::RenderWindow* _window) override;
-	void Render(sf::RenderWindow* _window) override;
-	void Destroy(sf::RenderWindow* _window) override;
+	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) override;
+	void Update() override;
+	void Render(sf::RenderWindow& _window) override;
+	void Destroy() override;
 	~State_MainMenu();
 private:
-	sf::Font* m_font { nullptr };
+	SoundManager m_soundManager;
+	sf::Font m_font;
 	sf::Text* m_title { nullptr };
 	sf::Text* m_play { nullptr };
 	sf::Text* m_quit { nullptr };

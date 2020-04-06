@@ -5,10 +5,12 @@
 #include "State_MainMenu.h"
 
 
-void State_GameOver::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
+void State_GameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) {
 	//initialise selected value to play the game
 	m_selected = 0;
 
+	m_soundManager = _soundManager;
+	
 	//load the font to display text
 	m_font = _font;
 
@@ -18,10 +20,10 @@ void State_GameOver::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	if (file.is_open()) {
 		while (file >> m_lastScoreValue >> m_highScoreValue) {
 			std::string lastScore = "Score: " + m_lastScoreValue;
-			m_lastScore = new sf::Text(lastScore, *m_font, 32U);
+			m_lastScore = new sf::Text(lastScore, m_font, 32U);
 
 			std::string highScore = "Highscore: " + m_highScoreValue;
-			m_highScore = new sf::Text(highScore, *m_font, 32U);
+			m_highScore = new sf::Text(highScore, m_font, 32U);
 		}
 	} else {
 		assert(false);
@@ -29,40 +31,40 @@ void State_GameOver::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	file.close();
 
 	/*MAIN TITLE TEXT*/
-	m_title = new sf::Text("Game Over", *m_font, 80U);
+	m_title = new sf::Text("Game Over", m_font, 80U);
 	//centre the text
 	m_title->setOrigin(m_title->getGlobalBounds().width / 2, m_title->getGlobalBounds().height / 2);
 	//set the position
-	m_title->setPosition(static_cast<float>(_window->getSize().x) / 2.f, static_cast<float>(_window->getSize().y) / 5.f);
+	m_title->setPosition(static_cast<float>(_window.getSize().x) / 2.f, static_cast<float>(_window.getSize().y) / 5.f);
 
 	/*THE HIGHSCORE*/
 	m_highScore->setOrigin(m_highScore->getGlobalBounds().width / 2, m_highScore->getGlobalBounds().height / 2);
-	m_highScore->setPosition(static_cast<float>(_window->getSize().x / 2.f), static_cast<float>(_window->getSize().y / 2.5f));
+	m_highScore->setPosition(static_cast<float>(_window.getSize().x / 2.f), static_cast<float>(_window.getSize().y / 2.5f));
 
 	/*THE SCORE*/
 	m_lastScore->setOrigin(m_lastScore->getGlobalBounds().width / 2, m_lastScore->getGlobalBounds().height / 2);
-	m_lastScore->setPosition(static_cast<float>(_window->getSize().x / 2.f), static_cast<float>(_window->getSize().y / 2.f));
+	m_lastScore->setPosition(static_cast<float>(_window.getSize().x / 2.f), static_cast<float>(_window.getSize().y / 2.f));
 
 	/*PLAY AGAIN TEXT*/
-	m_playAgain = new sf::Text("Play Again", *m_font, 32U);
+	m_playAgain = new sf::Text("Play Again", m_font, 32U);
 	//centre the text
 	m_playAgain->setOrigin(m_playAgain->getGlobalBounds().width / 2, m_playAgain->getGlobalBounds().height / 2);
 	//set the position
-	m_playAgain->setPosition(static_cast<float>(_window->getSize().x) / 2, static_cast<float>(_window->getSize().y) / 1.5f);
+	m_playAgain->setPosition(static_cast<float>(_window.getSize().x) / 2, static_cast<float>(_window.getSize().y) / 1.5f);
 
 
 	/*QUIT TEXT*/
-	m_quit = new sf::Text("Quit To Title", *m_font, 32U);
+	m_quit = new sf::Text("Quit To Title", m_font, 32U);
 	//centre the text
 	m_quit->setOrigin(m_quit->getGlobalBounds().width / 2, m_quit->getGlobalBounds().height / 2);
 	//set the position
-	m_quit->setPosition(static_cast<float>(_window->getSize().x) / 2, static_cast<float>(_window->getSize().y) / 1.25f);
+	m_quit->setPosition(static_cast<float>(_window.getSize().x) / 2, static_cast<float>(_window.getSize().y) / 1.25f);
 
 	std::cout << "Initialized" << std::endl;
 }
 
 
-void State_GameOver::Render(sf::RenderWindow* _window) {
+void State_GameOver::Render(sf::RenderWindow& _window) {
 	//wow i am actually stupid wtf
 	m_playAgain->setFillColor(sf::Color::White);
 	m_quit->setFillColor(sf::Color::White);
@@ -74,15 +76,15 @@ void State_GameOver::Render(sf::RenderWindow* _window) {
 	}
 
 	//draw the text on screen
-	_window->draw(*m_title);
-	_window->draw(*m_highScore);
-	_window->draw(*m_lastScore);
-	_window->draw(*m_playAgain);
-	_window->draw(*m_quit);
+	_window.draw(*m_title);
+	_window.draw(*m_highScore);
+	_window.draw(*m_lastScore);
+	_window.draw(*m_playAgain);
+	_window.draw(*m_quit);
 }
 
 
-void State_GameOver::Update(sf::RenderWindow* _window) {
+void State_GameOver::Update() {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
 		m_upKey = false;
@@ -124,8 +126,7 @@ void State_GameOver::Update(sf::RenderWindow* _window) {
 }
 
 
-void State_GameOver::Destroy(sf::RenderWindow* _window) {
-	m_font = nullptr;
+void State_GameOver::Destroy() {
 	m_title = nullptr;
 	m_playAgain = nullptr;
 	m_quit = nullptr;
@@ -135,7 +136,6 @@ void State_GameOver::Destroy(sf::RenderWindow* _window) {
 }
 
 State_GameOver::~State_GameOver() {
-	delete m_font;
 	delete m_title;
 	delete m_playAgain;
 	delete m_quit;

@@ -14,9 +14,11 @@
 
 
  //BASESTATE METHODS
-void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
-	m_font = *_font;
+void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) {
+	m_font = _font;
 
+	m_soundManager = _soundManager;
+	
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -78,7 +80,7 @@ void State_Game::Initialize(sf::RenderWindow* _window, sf::Font* _font) {
 	}
 }
 
-void State_Game::Update(sf::RenderWindow* _window) {
+void State_Game::Update() {
 	HandleInput();
 	//only play the game if it is paused
 	if (!m_paused) {
@@ -115,42 +117,42 @@ void State_Game::Update(sf::RenderWindow* _window) {
 	}
 }
 
-void State_Game::Render(sf::RenderWindow* _window) {
+void State_Game::Render(sf::RenderWindow& _window) {
 
 	//Draw the background
-	_window->draw(m_grassSprite);
+	_window.draw(m_grassSprite);
 
 	//Draw the Walls
-	_window->draw(m_topWall.m_wall);
-	_window->draw(m_bottomWall.m_wall);
-	_window->draw(m_leftWall.m_wall);
-	_window->draw(m_rightWall.m_wall);
+	_window.draw(m_topWall.m_wall);
+	_window.draw(m_bottomWall.m_wall);
+	_window.draw(m_leftWall.m_wall);
+	_window.draw(m_rightWall.m_wall);
 	
 	//Render the food
 	for (Food* food : m_foodArray) {
-		food->Render(*_window);
+		food->Render(_window);
 	}
 
 	//Render the snakes
 	for (Snake* snake : m_snakes) {
-		snake->Render(*_window);
+		snake->Render(_window);
 	}
 
 	//Draw the UI
 	for (const auto& score : m_scores) {
-		_window->draw(score);
+		_window.draw(score);
 	}
 
 	if (m_gobble) {
-		_window->draw(*m_gobbleModeText);
+		_window.draw(*m_gobbleModeText);
 	}
 
 	if (m_paused) {
-		_window->draw(*m_pausedText);
+		_window.draw(*m_pausedText);
 	}
 }
 
-void State_Game::Destroy(sf::RenderWindow* _window) {
+void State_Game::Destroy() {
 	for (auto* food : m_foodArray) {
 		food = nullptr;
 	}

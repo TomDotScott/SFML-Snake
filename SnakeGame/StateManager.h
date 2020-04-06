@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "SoundManager.h"
 
 //Tracks the current state of the game
 //Has a global variable attached
@@ -16,10 +17,10 @@ enum class eCurrentState {
 class BaseState {
 public:
 	virtual ~BaseState() = default;
-	virtual void Initialize(sf::RenderWindow* _window, sf::Font* _font) = 0;
-	virtual void Update(sf::RenderWindow* _window) = 0;
-	virtual void Render(sf::RenderWindow* _window) = 0;
-	virtual void Destroy(sf::RenderWindow* _window) = 0;
+	virtual void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) = 0;
+	virtual void Update() = 0;
+	virtual void Render(sf::RenderWindow& _window) = 0;
+	virtual void Destroy() = 0;
 
 	void SetUpKey(const bool& _upKey) { m_upKey = _upKey; }
 	void SetDownKey(const bool& _downKey) { m_downKey = _downKey; }
@@ -40,18 +41,19 @@ protected:
 //StateManager keeps track of the current game state
 class StateManager {
 public:
-	StateManager();
 	void SetWindow(sf::RenderWindow* _window);
 	void SetState(BaseState* _state);
-	void SetFont(sf::Font* _font);
+	void SetFont(const sf::Font& _font) { m_font = _font; }
+	void SetSoundManager(const SoundManager& _soundManager) { m_soundManager = _soundManager; }
 	void Input(sf::Event& _event) const;
 	void Update() const;
 	void Render() const;
 	~StateManager();
 private:
-	sf::RenderWindow* m_window{ nullptr };
-	BaseState* m_state{ nullptr };
-	sf::Font* m_font{ nullptr };
+	sf::RenderWindow* m_window = nullptr;
+	BaseState* m_state = nullptr;
+	sf::Font m_font;
+	SoundManager m_soundManager;
 };
 
 extern StateManager core_state;

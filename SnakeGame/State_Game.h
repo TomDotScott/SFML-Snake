@@ -18,10 +18,10 @@ struct Wall {
 class State_Game final : public BaseState {
 public:
 	//BASESTATE METHODS
-	void Initialize(sf::RenderWindow* _window, sf::Font* _font) override;
-	void Update(sf::RenderWindow* _window) override;
-	void Render(sf::RenderWindow* _window) override;
-	void Destroy(sf::RenderWindow* _window) override;
+	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) override;
+	void Update() override;
+	void Render(sf::RenderWindow& _window) override;
+	void Destroy() override;
 
 	//GAME METHODS
 	void HandleInput();
@@ -31,6 +31,9 @@ public:
 private:
 	//the game tick
 	sf::Clock m_clock;
+
+	//the SoundManager
+	SoundManager m_soundManager;
 
 	//the font for the UI
 	sf::Font m_font;
