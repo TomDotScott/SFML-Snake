@@ -249,7 +249,7 @@ void Snake::Collision(ECollisionType _collisionType)
 			|| _collisionType == ECollisionType::e_snake
 			|| _collisionType == ECollisionType::e_self) {
 			m_dead = true;
-			m_soundManager.PlaySFX("sfx_snake_death");
+			m_soundManager->PlaySFX("sfx_snake_death");
 		}
 	}
 }
@@ -257,16 +257,16 @@ void Snake::Collision(ECollisionType _collisionType)
 void Snake::Collision(Food* _food) {
 	switch (_food->GetType()) {
 	case eFoodType::e_standard:
-		m_soundManager.PlaySFX("sfx_food_standard");
+		m_soundManager->PlaySFX("sfx_food_standard");
 		break;
 
 	case eFoodType::e_special:
-		m_soundManager.PlaySFX("sfx_food_special");
+		m_soundManager->PlaySFX("sfx_food_special");
 		break;
 
 	case eFoodType::e_gobble:
 		m_gobbleMode = true;
-		m_soundManager.PlaySFX("sfx_gobble_on");
+		m_soundManager->PlaySFX("sfx_gobble_on");
 		break;
 
 	}

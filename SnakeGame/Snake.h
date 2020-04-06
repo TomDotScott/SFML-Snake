@@ -53,7 +53,7 @@ public:
 
 	void SetIsGobbleMode(const bool& _isGobbleMode) { m_gobbleMode = _isGobbleMode; }
 
-	void SetSoundManager(const SoundManager& _soundManager) { m_soundManager = _soundManager; }
+	void SetSoundManager(SoundManager* _soundManager) { m_soundManager = _soundManager; }
 	
 	void SetFood(Food* _food) { m_food.push_back(_food); }
 
@@ -105,5 +105,5 @@ protected:
 	sf::Texture m_gobbleTailTexture;
 
 	//For SFX
-	SoundManager m_soundManager;
+	SoundManager* m_soundManager;
 };

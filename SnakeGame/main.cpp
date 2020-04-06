@@ -29,7 +29,7 @@ void GameLoop(sf::RenderWindow& _window)
 int main()
 {
 	//Initialise the SoundManager
-	SoundManager soundManager;
+	SoundManager* soundManager = new SoundManager;
 	
 	// Initialise the resources needed for the states	
 	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");

@@ -3,7 +3,7 @@
 
 class State_GameOver final : public BaseState {
 public:
-	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) override;
+	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) override;
 	void Update() override;
 	void Render(sf::RenderWindow& _window) override;
 	void Destroy() override;
@@ -19,7 +19,7 @@ private:
 
 	int m_selected{ 0 };
 
-	SoundManager m_soundManager;
+	SoundManager* m_soundManager;
 	
 	std::string m_lastScoreValue;
 	std::string m_highScoreValue;

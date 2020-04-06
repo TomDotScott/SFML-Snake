@@ -5,7 +5,7 @@
 #include "State_MainMenu.h"
 
 
-void State_GameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) {
+void State_GameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
 	//initialise selected value to play the game
 	m_selected = 0;
 
@@ -87,13 +87,13 @@ void State_GameOver::Render(sf::RenderWindow& _window) {
 void State_GameOver::Update() {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
-		m_soundManager.PlaySFX("sfx_menu_move");
+		m_soundManager->PlaySFX("sfx_menu_move");
 		m_upKey = false;
 	}
 	
 	if (m_downKey && !m_upKey) {
 		m_selected += 1;
-		m_soundManager.PlaySFX("sfx_menu_move");
+		m_soundManager->PlaySFX("sfx_menu_move");
 		m_downKey = false;
 	}
 	//allow for cycling through options...
@@ -107,7 +107,7 @@ void State_GameOver::Update() {
 
 	//Select the option using SPACE
 	if (m_spaceKey && !m_upKey && !m_downKey) {
-		m_soundManager.PlaySFX("sfx_menu_select");
+		m_soundManager->PlaySFX("sfx_menu_select");
 		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:

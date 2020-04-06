@@ -18,7 +18,7 @@ struct Wall {
 class State_Game final : public BaseState {
 public:
 	//BASESTATE METHODS
-	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) override;
+	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) override;
 	void Update() override;
 	void Render(sf::RenderWindow& _window) override;
 	void Destroy() override;
@@ -33,7 +33,7 @@ private:
 	sf::Clock m_clock;
 
 	//the SoundManager
-	SoundManager m_soundManager;
+	SoundManager* m_soundManager{ nullptr };
 
 	//the font for the UI
 	sf::Font m_font;

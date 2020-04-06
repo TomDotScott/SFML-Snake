@@ -5,6 +5,8 @@
 class SoundManager {
 public:
 	SoundManager();
+
+	~SoundManager();
 	
 	void PlaySFX(const std::string& _sfxName);
 

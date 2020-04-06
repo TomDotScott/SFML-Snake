@@ -14,12 +14,12 @@
 
 
  //BASESTATE METHODS
-void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) {
+void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
 	m_font = _font;
 
 	m_soundManager = _soundManager;
 
-	m_soundManager.PlayMusic("music_game");
+	m_soundManager->PlayMusic("music_game");
 	
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
@@ -103,7 +103,7 @@ void State_Game::Update() {
 			for (auto* snake : m_snakes) {
 				if (snake->GetIsGobbleMode()) {
 					snake->SetIsGobbleMode(false);
-					m_soundManager.PlaySFX("sfx_gobble_off");
+					m_soundManager->PlaySFX("sfx_gobble_off");
 					break;
 				}
 			}
@@ -231,7 +231,7 @@ void State_Game::UpdateScores() {
 void State_Game::HandleInput() {
 	//pause and un-pause the game if escape is pressed
 	if (m_escapeKey) {
-		m_soundManager.PlaySFX("sfx_menu_pause");
+		m_soundManager->PlaySFX("sfx_menu_pause");
 		m_paused = !m_paused;
 		m_escapeKey = false;
 	}
@@ -263,7 +263,8 @@ void State_Game::HandleInput() {
 }
 
 void State_Game::SaveScores() {
-	std::string score, highScore;
+	std::string score;
+	std::string highScore;
 
 	//READ THE FILE
 	std::ifstream infile("Resources/Scores.txt");
@@ -275,7 +276,7 @@ void State_Game::SaveScores() {
 
 	//Check if the player has set a new highscore
 	score = std::to_string(m_snakes[0]->GetScore());
-	if (std::stoi(highScore) < std::stoi(score)) {
+	if ((highScore.empty()) || std::stoi(highScore) < std::stoi(score)) {
 		highScore = score;
 	}
 

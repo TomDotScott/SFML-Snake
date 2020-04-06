@@ -17,7 +17,7 @@ enum class eCurrentState {
 class BaseState {
 public:
 	virtual ~BaseState() = default;
-	virtual void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager& _soundManager) = 0;
+	virtual void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) = 0;
 	virtual void Update() = 0;
 	virtual void Render(sf::RenderWindow& _window) = 0;
 	virtual void Destroy() = 0;
@@ -44,7 +44,7 @@ public:
 	void SetWindow(sf::RenderWindow* _window);
 	void SetState(BaseState* _state);
 	void SetFont(const sf::Font& _font) { m_font = _font; }
-	void SetSoundManager(const SoundManager& _soundManager) { m_soundManager = _soundManager; }
+	void SetSoundManager(SoundManager* _soundManager) { m_soundManager = _soundManager; }
 	void Input(sf::Event& _event) const;
 	void Update() const;
 	void Render() const;
@@ -53,7 +53,7 @@ private:
 	sf::RenderWindow* m_window = nullptr;
 	BaseState* m_state = nullptr;
 	sf::Font m_font;
-	SoundManager m_soundManager;
+	SoundManager* m_soundManager = nullptr;
 };
 
 extern StateManager core_state;
