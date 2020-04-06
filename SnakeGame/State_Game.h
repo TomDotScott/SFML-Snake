@@ -5,7 +5,7 @@
 #include "StateManager.h"
 
 struct Wall {
-	Wall(const sf::Vector2f _position, const std::string _fileName) : m_position(_position) {
+	Wall(const sf::Vector2f _position, const std::string& _fileName) : m_position(_position) {
 		m_texture.loadFromFile("Resources/Graphics/" + _fileName);
 		m_wall.setTexture(m_texture);
 		m_wall.setPosition(m_position);

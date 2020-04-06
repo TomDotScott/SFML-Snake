@@ -26,11 +26,11 @@ void Snake::Render(sf::RenderWindow& _window) {
 				} else if (i < m_segments.Size() - 1) {
 					m_sprite.setTexture(m_gobbleMode ? m_gobbleBodyTexture : m_bodyTexture);
 				}
-				
+
 				m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
-				
+
 				EDirection previousNodeDirection = m_direction;
-				
+
 				if (currentNode->m_previousNode) {
 					previousNodeDirection = currentNode->m_previousNode->m_direction;
 				}
@@ -43,7 +43,7 @@ void Snake::Render(sf::RenderWindow& _window) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
 
 						m_sprite.setRotation(previousNodeDirection == EDirection::e_up ? 0.f : 90.f);
-						
+
 					} else {
 						m_sprite.setRotation(90.f);
 					}
@@ -53,7 +53,7 @@ void Snake::Render(sf::RenderWindow& _window) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
 
 						m_sprite.setRotation(previousNodeDirection == EDirection::e_up ? -90.f : 180.f);
-						
+
 					} else {
 						m_sprite.setRotation(-90.f);
 					}
@@ -63,7 +63,7 @@ void Snake::Render(sf::RenderWindow& _window) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
 
 						m_sprite.setRotation(previousNodeDirection == EDirection::e_left ? 180.f : 90.f);
-						
+
 					} else {
 						m_sprite.setRotation(180.f);
 					}
@@ -71,9 +71,9 @@ void Snake::Render(sf::RenderWindow& _window) {
 				case EDirection::e_down:
 					if (previousNodeDirection != EDirection::e_down && i < m_segments.Size() - 1) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
-						
+
 						m_sprite.setRotation(previousNodeDirection == EDirection::e_left ? -90.f : 0.f);
-						
+
 					} else {
 						m_sprite.setRotation(0.f);
 					}
@@ -81,8 +81,7 @@ void Snake::Render(sf::RenderWindow& _window) {
 				default:;
 				}
 
-				if(i == m_segments.Size() - 1)
-				{
+				if (i == m_segments.Size() - 1) {
 					m_sprite.setTexture(m_gobbleMode ? m_gobbleTailTexture : m_tailTexture);
 					//make the tail follow the previous segment
 					switch (previousNodeDirection) {
@@ -98,7 +97,8 @@ void Snake::Render(sf::RenderWindow& _window) {
 					case EDirection::e_down:
 						m_sprite.setRotation(0.f);
 						break;
-					default: ; }
+					default:;
+					}
 				}
 				m_sprite.setPosition(currentNode->m_position);
 				_window.draw(m_sprite);

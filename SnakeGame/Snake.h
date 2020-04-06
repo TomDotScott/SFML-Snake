@@ -77,7 +77,7 @@ protected:
 	bool m_gobbleMode{ false };
 
 	bool m_dead{ false };
-
+	
 	void Move() override;
 
 	int m_score{ 0 };
@@ -90,7 +90,7 @@ protected:
 
 	//The textures...
 	sf::Texture m_headTexture;
-	sf::Texture m_deadTexture;
+	sf::Texture m_scaredTexture;
 	sf::Texture m_bendTexture;
 	sf::Texture m_bodyTexture;
 	sf::Texture m_tailTexture;

@@ -15,5 +15,5 @@ PlayerSnake::PlayerSnake() {
 	m_bendTexture.loadFromFile("Resources/Graphics/Snake_Player_Bend.png");
 	m_bodyTexture.loadFromFile("Resources/Graphics/Snake_Player_Body.png");
 	m_tailTexture.loadFromFile("Resources/Graphics/Snake_Player_Tail.png");
-	m_deadTexture.loadFromFile("Resources/Graphics/Snake_Player_Dead.png");
+	m_scaredTexture.loadFromFile("Resources/Graphics/Snake_Player_Scared.png");
 }

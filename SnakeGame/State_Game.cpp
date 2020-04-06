@@ -119,6 +119,12 @@ void State_Game::Render(sf::RenderWindow* _window) {
 
 	//Draw the background
 	_window->draw(m_grassSprite);
+
+	//Draw the Walls
+	_window->draw(m_topWall.m_wall);
+	_window->draw(m_bottomWall.m_wall);
+	_window->draw(m_leftWall.m_wall);
+	_window->draw(m_rightWall.m_wall);
 	
 	//Render the food
 	for (Food* food : m_foodArray) {
@@ -138,12 +144,6 @@ void State_Game::Render(sf::RenderWindow* _window) {
 	if (m_gobble) {
 		_window->draw(*m_gobbleModeText);
 	}
-	
-	//Draw the Walls
-	_window->draw(m_topWall.m_wall);
-	_window->draw(m_bottomWall.m_wall);
-	_window->draw(m_leftWall.m_wall);
-	_window->draw(m_rightWall.m_wall);
 
 	if (m_paused) {
 		_window->draw(*m_pausedText);
@@ -181,10 +181,10 @@ void State_Game::CheckCollisions() {
 		//only check collisions if the snake is alive
 		if (!currentSnake->IsDead()) {
 			//Check against Walls
-			if (currentSnake->GetHeadPosition().x == m_leftWall.m_position.x ||
-				currentSnake->GetHeadPosition().x == m_rightWall.m_position.x ||
-				currentSnake->GetHeadPosition().y == m_topWall.m_position.y ||
-				currentSnake->GetHeadPosition().y == m_bottomWall.m_position.y) {
+			if (currentSnake->GetHeadPosition().x <= 0 ||
+				currentSnake->GetHeadPosition().x > Constants::k_gameWidth + Constants::k_gameGridCellSize||
+				currentSnake->GetHeadPosition().y <= 0 ||
+				currentSnake->GetHeadPosition().y > Constants::k_gameHeight + Constants::k_gameGridCellSize) {
 				currentSnake->Collision(ECollisionType::e_wall);
 				return;
 			}

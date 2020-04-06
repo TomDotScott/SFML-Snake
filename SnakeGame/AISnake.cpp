@@ -14,7 +14,7 @@ AISnake::AISnake() {
 	m_bendTexture.loadFromFile("Resources/Graphics/Snake_AI_Bend.png");
 	m_bodyTexture.loadFromFile("Resources/Graphics/Snake_AI_Body.png");
 	m_tailTexture.loadFromFile("Resources/Graphics/Snake_AI_Tail.png");
-	m_deadTexture.loadFromFile("Resources/Graphics/Snake_AI_Dead.png");
+	m_scaredTexture.loadFromFile("Resources/Graphics/Snake_AI_Scared.png");
 }
 
 void AISnake::ChooseDirection() {
@@ -99,8 +99,7 @@ void AISnake::ChooseDirection() {
 		//if the y's are the same but the xes are different
 		else if (m_targetList.Front().y == m_position.y
 			&& m_targetList.Front().x != m_position.x
-			&& m_direction == EDirection::e_up
-			|| m_direction == EDirection::e_down) {
+			&& (m_direction == EDirection::e_up || m_direction == EDirection::e_down)) {
 			newDirection = EDirection::e_left;
 			//move left or right
 			if (!IsSelfInWay(newDirection)) {
@@ -114,8 +113,7 @@ void AISnake::ChooseDirection() {
 		//if the xes are the same but the ys are different
 		else if (m_targetList.Front().x == m_position.x
 			&& m_targetList.Front().y != m_position.y
-			&& m_direction == EDirection::e_left
-			|| m_direction == EDirection::e_right) {
+			&& (m_direction == EDirection::e_left || m_direction == EDirection::e_right)) {
 			newDirection = EDirection::e_up;
 			//move up or down
 			if (!IsSelfInWay(newDirection)) {
@@ -143,8 +141,7 @@ void AISnake::FindFood() {
 	//If it's gobble mode, move towards the closest snake
 	if (m_gobbleMode) {
 		FindClosestSnake();
-	}else
-	{
+	} else {
 		//Find the highest food
 		FindHighestFood();
 		//if there is a snake in the way, revert to going to the closest
@@ -296,7 +293,7 @@ bool AISnake::IsOverlapping(sf::Vector2f _position) const {
 	return false;
 }
 
-bool AISnake::IsSnakeInWay() const {
+bool AISnake::IsSnakeInWay() const{
 	for (auto* snake : m_otherSnakes) {
 		//make sure the snake is alive
 		if (!snake->IsDead()) {
@@ -324,34 +321,12 @@ bool AISnake::IsSnakeInWay() const {
 }
 
 bool AISnake::IsSelfInWay(EDirection& _direction) const {
-	//Cycle through 2 grids in front of the snake and see if it overlaps
-	switch (_direction) {
-	case EDirection::e_left:
-		if (IsOverlapping(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, m_position.y))
-			/*|| IsOverlapping(sf::Vector2f(m_position.x - 2 * Constants::k_gridSize, m_position.y))*/) {
-			return true;
-		}
-		break;
-	case EDirection::e_right:
-		if (IsOverlapping(sf::Vector2f(m_position.x + Constants::k_gameGridCellSize, m_position.y))
-			/*|| IsOverlapping(sf::Vector2f(m_position.x + 2 * Constants::k_gridSize, m_position.y))*/) {
-			return true;
-		}
-		break;
-	case EDirection::e_up:
-		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y - Constants::k_gameGridCellSize))
-			/*|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y - 2 * Constants::k_gridSize))*/) {
-			return true;
-		}
-		break;
-	case EDirection::e_down:
-		if (IsOverlapping(sf::Vector2f(m_position.x, m_position.y + Constants::k_gameGridCellSize))
-			/*|| IsOverlapping(sf::Vector2f(m_position.x, m_position.y + 2 * Constants::k_gridSize))*/) {
-			return true;
-		}
-		break;
-	default:
-		return false;
+	//Cycle through the grid in front of the snake and see if it overlaps
+	if ((_direction == EDirection::e_left && IsOverlapping(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, m_position.y)))
+		|| (_direction == EDirection::e_right && IsOverlapping(sf::Vector2f(m_position.x + Constants::k_gameGridCellSize, m_position.y)))
+		|| (_direction == EDirection::e_up && IsOverlapping(sf::Vector2f(m_position.x, m_position.y - Constants::k_gameGridCellSize)))
+		|| (_direction == EDirection::e_down && IsOverlapping(sf::Vector2f(m_position.x, m_position.y + Constants::k_gameGridCellSize)))) {
+		return true;
 	}
 	return false;
 }
