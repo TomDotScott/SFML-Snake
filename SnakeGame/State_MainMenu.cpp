@@ -40,7 +40,6 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 
 
 void State_MainMenu::Render(sf::RenderWindow& _window) {
-	//wow i am actually stupid wtf
 	m_play->setFillColor(sf::Color::White);
 	m_quit->setFillColor(sf::Color::White);
 
@@ -60,11 +59,13 @@ void State_MainMenu::Render(sf::RenderWindow& _window) {
 void State_MainMenu::Update() {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_upKey = false;
 	}
 	
 	if (m_downKey && !m_upKey) {
 		m_selected += 1;
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_downKey = false;
 	}
 	
@@ -79,6 +80,7 @@ void State_MainMenu::Update() {
 
 	//Select the option using SPACE
 	if (m_spaceKey && !m_upKey && !m_downKey) {
+		m_soundManager.PlaySFX("sfx_menu_select");
 		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:
