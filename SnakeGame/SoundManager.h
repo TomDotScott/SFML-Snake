@@ -5,7 +5,11 @@
 class SoundManager {
 public:
 	SoundManager();
+	
 	void PlaySFX(const std::string& _sfxName);
+
+	sf::SoundSource::Status Status() const { return m_sfx.getStatus(); }
+	
 private:
 
 	void LoadSFX(const std::string& _fileName);
@@ -16,6 +20,5 @@ private:
 	
 	sf::Sound m_sfx;
 	std::unordered_map<std::string, sf::SoundBuffer*> m_sfxBuffer;
-
 };
 

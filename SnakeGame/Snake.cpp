@@ -254,8 +254,20 @@ void Snake::Collision(const ECollisionType _collisionType) {
 }
 
 void Snake::Collision(Food* _food) {
-	if (_food->GetType() == eFoodType::e_gobble) {
+	switch (_food->GetType()) {
+	case eFoodType::e_standard:
+		m_soundManager.PlaySFX("sfx_food_standard");
+		break;
+
+	case eFoodType::e_special:
+		m_soundManager.PlaySFX("sfx_food_special");
+		break;
+
+	case eFoodType::e_gobble:
 		m_gobbleMode = true;
+		m_soundManager.PlaySFX("sfx_gobble_on");
+		break;
+
 	}
 	const int growAmount{ _food->GetGrowAmount() };
 	Grow(growAmount);

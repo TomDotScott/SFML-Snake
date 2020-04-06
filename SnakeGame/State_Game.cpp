@@ -18,7 +18,7 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	m_font = _font;
 
 	m_soundManager = _soundManager;
-	
+
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -65,11 +65,12 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	//Initialise background texture
 	m_grassTexture.loadFromFile("Resources/Graphics/Game_Background.png");
 	m_grassSprite.setTexture(m_grassTexture);
-	
+
 	//make the snakes know where the food and other snakes are on the screen
 	for (auto* snake : m_snakes) {
 		for (auto* food : m_foodArray) {
 			snake->SetFood(food);
+			snake->SetSoundManager(m_soundManager);
 		}
 
 		for (auto* otherSnake : m_snakes) {
@@ -100,6 +101,7 @@ void State_Game::Update() {
 			for (auto* snake : m_snakes) {
 				if (snake->GetIsGobbleMode()) {
 					snake->SetIsGobbleMode(false);
+					m_soundManager.PlaySFX("sfx_gobble_off");
 					break;
 				}
 			}
@@ -110,8 +112,10 @@ void State_Game::Update() {
 		//If the player has died, end the game
 		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
 		if (m_snakes[0]->IsDead() && playerSnake) {
+			m_soundManager.PlaySFX("sfx_player_snake_death");
 			SaveScores();
 			current_state = eCurrentState::e_GameOver;
+			//Wait until. the player death sound stops...
 			core_state.SetState(new State_GameOver());
 		}
 	}
@@ -122,12 +126,6 @@ void State_Game::Render(sf::RenderWindow& _window) {
 	//Draw the background
 	_window.draw(m_grassSprite);
 
-	//Draw the Walls
-	_window.draw(m_topWall.m_wall);
-	_window.draw(m_bottomWall.m_wall);
-	_window.draw(m_leftWall.m_wall);
-	_window.draw(m_rightWall.m_wall);
-	
 	//Render the food
 	for (Food* food : m_foodArray) {
 		food->Render(_window);
@@ -150,6 +148,12 @@ void State_Game::Render(sf::RenderWindow& _window) {
 	if (m_paused) {
 		_window.draw(*m_pausedText);
 	}
+
+	//Draw the Walls
+	_window.draw(m_topWall.m_wall);
+	_window.draw(m_bottomWall.m_wall);
+	_window.draw(m_leftWall.m_wall);
+	_window.draw(m_rightWall.m_wall);
 }
 
 void State_Game::Destroy() {
@@ -184,7 +188,7 @@ void State_Game::CheckCollisions() {
 		if (!currentSnake->IsDead()) {
 			//Check against Walls
 			if (currentSnake->GetHeadPosition().x <= 0 ||
-				currentSnake->GetHeadPosition().x > Constants::k_gameWidth + Constants::k_gameGridCellSize||
+				currentSnake->GetHeadPosition().x > Constants::k_gameWidth + Constants::k_gameGridCellSize ||
 				currentSnake->GetHeadPosition().y <= 0 ||
 				currentSnake->GetHeadPosition().y > Constants::k_gameHeight + Constants::k_gameGridCellSize) {
 				currentSnake->Collision(ECollisionType::e_wall);
@@ -206,6 +210,8 @@ void State_Game::RandomiseFood(Food* _foodToRandomise) {
 				if (_foodToRandomise->GetPosition() != food->GetPosition()) {
 					isOverlapping = false;
 					break;
+				} else {
+					_foodToRandomise->Randomise();
 				}
 			} else {
 				_foodToRandomise->Randomise();
@@ -224,6 +230,7 @@ void State_Game::UpdateScores() {
 void State_Game::HandleInput() {
 	//pause and un-pause the game if escape is pressed
 	if (m_escapeKey) {
+		m_soundManager.PlaySFX("sfx_menu_pause");
 		m_paused = !m_paused;
 		m_escapeKey = false;
 	}

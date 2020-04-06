@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Food.h"
 #include "List.h"
+#include "SoundManager.h"
 
 //To deal with collisions in the game
 enum class ECollisionType {
@@ -52,6 +53,8 @@ public:
 
 	void SetIsGobbleMode(const bool& _isGobbleMode) { m_gobbleMode = _isGobbleMode; }
 
+	void SetSoundManager(const SoundManager& _soundManager) { m_soundManager = _soundManager; }
+	
 	void SetFood(Food* _food) { m_food.push_back(_food); }
 
 	void SetOtherSnake(Snake* _snake) { m_otherSnakes.push_back(_snake); }
@@ -100,4 +103,7 @@ protected:
 	sf::Texture m_gobbleBendTexture;
 	sf::Texture m_gobbleBodyTexture;
 	sf::Texture m_gobbleTailTexture;
+
+	//For SFX
+	SoundManager m_soundManager;
 };
