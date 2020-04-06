@@ -30,8 +30,6 @@ int main()
 {
 	//Initialise the SoundManager
 	SoundManager soundManager;
-
-	soundManager.PlaySFX("sfx_gobble_on");
 	
 	// Initialise the resources needed for the states	
 	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");

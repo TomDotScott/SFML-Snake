@@ -242,13 +242,14 @@ void Snake::CheckCollisionsAgainstOtherSnakes() {
 	}
 }
 
-
-void Snake::Collision(const ECollisionType _collisionType) {
+void Snake::Collision(ECollisionType _collisionType)
+{
 	if (!m_dead) {
 		if (_collisionType == ECollisionType::e_wall
 			|| _collisionType == ECollisionType::e_snake
 			|| _collisionType == ECollisionType::e_self) {
 			m_dead = true;
+			m_soundManager.PlaySFX("sfx_snake_death");
 		}
 	}
 }

@@ -19,6 +19,8 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 
 	m_soundManager = _soundManager;
 
+	m_soundManager.PlayMusic("music_game");
+	
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -112,10 +114,9 @@ void State_Game::Update() {
 		//If the player has died, end the game
 		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
 		if (m_snakes[0]->IsDead() && playerSnake) {
-			m_soundManager.PlaySFX("sfx_player_snake_death");
+			//m_soundManager.PlaySFX("sfx_player_snake_death");
 			SaveScores();
 			current_state = eCurrentState::e_GameOver;
-			//Wait until. the player death sound stops...
 			core_state.SetState(new State_GameOver());
 		}
 	}

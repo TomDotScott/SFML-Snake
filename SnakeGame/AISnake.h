@@ -5,7 +5,6 @@ public:
 	AISnake();
 	void ChooseDirection();
 	void Update() override;
-
 private:
 	bool m_hasMoved{ false };
 

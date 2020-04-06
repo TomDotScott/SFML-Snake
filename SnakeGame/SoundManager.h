@@ -8,12 +8,16 @@ public:
 	
 	void PlaySFX(const std::string& _sfxName);
 
+	void PlayMusic(const std::string& _musicName);
+
+	
 	sf::SoundSource::Status Status() const { return m_sfx.getStatus(); }
 	
 private:
 
 	void LoadSFX(const std::string& _fileName);
-	
+	void LoadMusic(const std::string& _fileName);
+
 	sf::Sound m_music;
 	std::unordered_map<std::string, sf::SoundBuffer*> m_musicBuffer;
 
