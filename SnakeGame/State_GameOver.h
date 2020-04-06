@@ -14,13 +14,13 @@ private:
 	sf::Text* m_quit{ nullptr };
 	sf::Text* m_lastScore{ nullptr };
 	sf::Text* m_highScore{ nullptr };
-	
+
 	sf::Font m_font;
 
 	int m_selected{ 0 };
 
-	SoundManager* m_soundManager;
-	
+	SoundManager* m_soundManager{ nullptr };
+
 	std::string m_lastScoreValue;
 	std::string m_highScoreValue;
 };

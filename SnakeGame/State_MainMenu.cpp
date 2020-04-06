@@ -9,6 +9,8 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 
 	//load the soundManager
 	m_soundManager = _soundManager;
+
+	m_soundManager->StopMusic();
 	
 	//load the font and display text
 	m_font = _font;

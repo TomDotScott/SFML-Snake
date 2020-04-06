@@ -3,6 +3,7 @@
 #include "Constants.h"
 
 Snake::Snake() {
+	m_soundManager = nullptr;
 	m_gobbleBendTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Bend.png");
 	m_gobbleBodyTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Body.png");
 	m_gobbleHeadTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Head.png");

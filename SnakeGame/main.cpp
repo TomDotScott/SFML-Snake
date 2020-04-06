@@ -29,7 +29,7 @@ void GameLoop(sf::RenderWindow& _window)
 int main()
 {
 	//Initialise the SoundManager
-	SoundManager* soundManager = new SoundManager;
+	auto* soundManager = new SoundManager;
 	
 	// Initialise the resources needed for the states	
 	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
@@ -89,7 +89,9 @@ int main()
 		}
 		
 	}
+
 	
+	delete soundManager;
 	std::cout << "Snake Game: Ended" << std::endl;
 	
 	return 0;
