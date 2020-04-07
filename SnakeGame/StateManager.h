@@ -24,17 +24,29 @@ public:
 	virtual void Destroy() = 0;
 
 	void SetUpKey(const bool& _upKey) { m_upKey = _upKey; }
+	void SetWKey(const bool& _wKey) { m_wKey = _wKey; }
+
 	void SetDownKey(const bool& _downKey) { m_downKey = _downKey; }
+	void SetSKey(const bool& _sKey) { m_sKey = _sKey; }
+
 	void SetLeftKey(const bool& _leftKey) { m_leftKey = _leftKey; }
+	void SetAKey(const bool& _aKey) { m_aKey = _aKey; }
+
 	void SetRightKey(const bool& _rightKey) { m_rightKey = _rightKey; }
+	void SetDKey(const bool& _dKey) { m_dKey = _dKey; }
+
 	void SetEscapeKey(const bool& _escapeKey) { m_escapeKey = _escapeKey; }
 	void SetSpaceKey(const bool& _spaceKey) { m_spaceKey = _spaceKey; }
 
 protected:
 	bool m_upKey = false;
+	bool m_wKey{ false };
 	bool m_downKey = false;
+	bool m_sKey{ false };
 	bool m_leftKey = false;
+	bool m_aKey{ false };
 	bool m_rightKey = false;
+	bool m_dKey{ false };
 	bool m_escapeKey = false;
 	bool m_spaceKey = false;
 

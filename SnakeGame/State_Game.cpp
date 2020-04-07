@@ -250,19 +250,22 @@ void State_Game::HandleInput() {
 		//If it can be cast to the PlayerSnake type then we have the player
 		auto* playerSnake = dynamic_cast<PlayerSnake*>(snake);
 		if (playerSnake) {
-			if (m_upKey && playerSnake->GetDirection() != EDirection::e_down) {
+			if ((m_upKey && playerSnake->GetDirection() != EDirection::e_down) || (m_wKey && playerSnake->GetDirection() != EDirection::e_down)) {
 				playerSnake->SetDirection(EDirection::e_up);
 				m_upKey = false;
+				m_wKey = false;
 			}
-			if (m_downKey && playerSnake->GetDirection() != EDirection::e_up) {
+			if ((m_downKey && playerSnake->GetDirection() != EDirection::e_up) || (m_sKey && playerSnake->GetDirection() != EDirection::e_up)) {
 				playerSnake->SetDirection(EDirection::e_down);
 				m_downKey = false;
+				m_sKey = false;
 			}
-			if (m_leftKey && playerSnake->GetDirection() != EDirection::e_right) {
+			if ((m_leftKey && playerSnake->GetDirection() != EDirection::e_right) || (m_aKey && playerSnake->GetDirection() != EDirection::e_right)) {
 				playerSnake->SetDirection(EDirection::e_left);
 				m_leftKey = false;
+				m_aKey = false;
 			}
-			if (m_rightKey && playerSnake->GetDirection() != EDirection::e_left) {
+			if ((m_rightKey && playerSnake->GetDirection() != EDirection::e_left) || (m_dKey && playerSnake->GetDirection() != EDirection::e_left)) {
 				playerSnake->SetDirection(EDirection::e_right);
 				m_rightKey = false;
 			}
