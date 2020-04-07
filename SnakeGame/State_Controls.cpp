@@ -13,7 +13,6 @@ void State_Controls::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 	m_gobbleTexture.loadFromFile("Resources/Graphics/Food_Gobble.png");
 	m_standardTexture.loadFromFile("Resources/Graphics/Food_Standard.png");
 	m_specialTexture.loadFromFile("Resources/Graphics/Food_Special.png");
-	m_promo.loadFromFile("Resources/Graphics/Promo_Image.png");
 
 	//load the font and display text
 	m_font = _font;

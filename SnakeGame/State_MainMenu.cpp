@@ -16,10 +16,10 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 	//load the font and display text
 	m_font = _font;
 
-	m_title.SetFont(m_font);
-	m_play.SetFont(m_font);
-	m_quit.SetFont(m_font);
-	m_controls.SetFont(m_font);
+	for(auto text : m_textToRender)
+	{
+		text->SetFont(m_font);
+	}
 
 	std::cout << "Initialised" << std::endl;
 }
@@ -27,16 +27,13 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 
 void State_MainMenu::Render(sf::RenderWindow& _window) {
 	m_play.SetColour(sf::Color::White);
-	m_controls.SetColour(sf::Color::White);
 	m_quit.SetColour(sf::Color::White);
 
 	if (m_selected == 0) {
 		m_play.SetColour(sf::Color::Red);
 	} else if (m_selected == 1) {
-		m_controls.SetColour(sf::Color::Red);
-	} else if(m_selected == 2) {
 		m_quit.SetColour(sf::Color::Red);
-	}
+	} 
 
 	//draw the text on screen
 	for(auto* textElement : m_textToRender)
@@ -60,7 +57,7 @@ void State_MainMenu::Update() {
 	}
 
 	//allow for cycling through options...
-	if (m_selected > 2) {
+	if (m_selected > 1) {
 		m_selected = 0;
 	}
 
@@ -74,17 +71,11 @@ void State_MainMenu::Update() {
 		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:
-			//play the game...
-			core_state.SetState(new State_Game());
-			current_state = eCurrentState::e_Game;
-			std::cout << "PLAYING SNAKE" << std::endl;
-			break;
-		case 1:
 			//Go to the controls state...
 			core_state.SetState(new State_Controls());
-			std::cout << "GOING TO THE CONTROLS MENU"<< std::endl;
+			std::cout << "GOING TO THE CONTROLS MENU" << std::endl;
 			break;
-		case 2:
+		case 1:
 			quit_game = true;
 			break;
 		default:

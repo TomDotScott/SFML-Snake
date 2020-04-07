@@ -7,19 +7,30 @@ public:
 	void Update() override;
 	void Render(sf::RenderWindow& _window) override;
 	void Destroy() override;
-	~State_GameOver();
 private:
-	sf::Text* m_title{ nullptr };
-	sf::Text* m_playAgain{ nullptr };
-	sf::Text* m_quit{ nullptr };
-	sf::Text* m_lastScore{ nullptr };
-	sf::Text* m_highScore{ nullptr };
+	UIText m_title{ "Game Over", sf::Color::White,
+		{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 5.f},
+		m_font, 96 };
 
-	sf::Font m_font;
+	UIText m_highScore{ "HiScore:", sf::Color::White,
+		{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.5f},
+		m_font, 32 };
 
-	int m_selected{ 0 };
+	UIText m_lastScore{ "Score:", sf::Color::White,
+		{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.f},
+		m_font, 32 };
 
-	SoundManager* m_soundManager{ nullptr };
+	UIText m_playAgain{ "Play Again", sf::Color::White,
+	{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 1.5f},
+		m_font, 32};
+	
+	UIText m_main{ "Main Menu", sf::Color::White,
+	{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 1.25f},
+		m_font, 32 };
+
+	std::vector<UIText*> m_textToRender{
+		&m_title, &m_highScore, &m_lastScore, &m_playAgain, &m_main
+	};
 
 	std::string m_lastScoreValue;
 	std::string m_highScoreValue;

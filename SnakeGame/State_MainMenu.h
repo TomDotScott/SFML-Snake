@@ -17,16 +17,12 @@ private:
 		{static_cast<float>(Constants::k_screenWidth) / 2, 450},
 		m_font, 25 };
 
-	UIText m_controls{ "Controls", sf::Color::White,
-	{m_play.m_position.x, m_play.m_position.y + 100},
-		m_font, 25 };
-
 	UIText m_quit{ "Quit", sf::Color::White,
-	{m_play.m_position.x, m_play.m_position.y + 200},
+	{m_play.m_position.x, m_play.m_position.y + 100},
 	m_font, 25 };
 
 	std::vector<UIText*> m_textToRender{
-		&m_title, &m_play, &m_controls, &m_quit
+		&m_title, &m_play, &m_quit
 	};
 	
 	//deal with user selections

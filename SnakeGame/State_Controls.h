@@ -9,7 +9,7 @@ public:
 	void Destroy() override;
 private:
 	sf::Sprite m_gameIcon;
-	sf::Texture m_gobbleTexture, m_specialTexture, m_standardTexture, m_promo;
+	sf::Texture m_gobbleTexture, m_specialTexture, m_standardTexture;
 
 	UIText m_textLine1to3{ "Use WASD or the Arrow keys to move your snake\nYou have 90 seconds to eat as much food as you can\nEating food gives you more points, but it also makes you grow!", sf::Color::White,
 		{static_cast<float>(Constants::k_screenWidth) / 2.f, 100}, m_font, 16 };
@@ -22,10 +22,10 @@ private:
 	
 	
 	UIText m_play{ "Play", sf::Color::White,
-		{static_cast<float>(Constants::k_screenWidth) / 2.f, Constants::k_screenHeight - 150 }, m_font, 25 };
+		{static_cast<float>(Constants::k_screenWidth) / 2.f, 450 }, m_font, 25 };
 	
 	UIText m_main{ "Main Menu", sf::Color::White,
-		{static_cast<float>(Constants::k_screenWidth) / 2.f, Constants::k_screenHeight - 75 }, m_font, 25 };
+		{static_cast<float>(Constants::k_screenWidth) / 2.f, 550 }, m_font, 25 };
 
 	std::vector<UIText*> m_textToRender{
 		&m_textLine1to3, &m_textLine4to7, &m_textLine8toEnd, &m_play, &m_main
