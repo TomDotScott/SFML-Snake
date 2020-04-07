@@ -31,8 +31,8 @@ struct UIText {
 	sf::Font m_font;
 	int m_characterSize;
 
-	void SetContent(const std::string& _newContent) {
-		m_string = _newContent;
+	void SetString(const std::string& _newString) {
+		m_string = _newString;
 		m_text.setString(m_string);
 	}
 };
@@ -116,8 +116,8 @@ private:
 	void SaveScores();
 
 	void GameOver();
-	
-	void UpdateClock();
+
+	int GetTimeRemaining() const;
 	
 	void CheckWinningConditions();
 

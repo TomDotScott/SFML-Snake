@@ -80,14 +80,9 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	}
 }
 
-void State_Game::UpdateClock()
+int State_Game::GetTimeRemaining() const
 {
-	const int timeLeft = 90 - static_cast<int>(floor(m_clock.getElapsedTime().asSeconds()));
-	if(timeLeft == 0)
-	{
-		GameOver();
-	}
-	m_clockText.SetContent(std::to_string());
+	return 90 - static_cast<int>(floor(m_clock.getElapsedTime().asSeconds()));
 }
 
 void State_Game::Update() {
@@ -109,7 +104,7 @@ void State_Game::Update() {
 
 		UpdateScores();
 
-		UpdateClock();
+		m_clockText.SetString(std::to_string(GetTimeRemaining()));
 		
 		CheckWinningConditions();
 	}
@@ -209,11 +204,7 @@ void State_Game::EndGobbleMode() {
 void State_Game::CheckWinningConditions() {
 	//If the player has died, end the game
 	auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
-	if (m_snakes[0]->IsDead() && playerSnake) {
-		GameOver();
-	}
-	//else, end the game if only the player is still alive
-	else if (!CheckIfStillAlive()) {
+	if ((m_snakes[0]->IsDead() && playerSnake) ||  !CheckIfStillAlive() || GetTimeRemaining() == 0){
 		GameOver();
 	}
 }
@@ -241,9 +232,9 @@ void State_Game::RandomiseFood(Food* _foodToRandomise) {
 }
 
 void State_Game::UpdateScores() {
-	m_playerScore.SetContent("Player:" + std::to_string(m_snakes[0]->GetScore()));
-	m_CPU1Score.SetContent("Player:" + std::to_string(m_snakes[1]->GetScore()));
-	m_CPU2Score.SetContent("Player:" + std::to_string(m_snakes[2]->GetScore()));
+	m_playerScore.SetString("Player:" + std::to_string(m_snakes[0]->GetScore()));
+	m_CPU1Score.SetString("Player:" + std::to_string(m_snakes[1]->GetScore()));
+	m_CPU2Score.SetString("Player:" + std::to_string(m_snakes[2]->GetScore()));
 }
 
 void State_Game::HandleInput() {
@@ -292,7 +283,7 @@ void State_Game::SetHighScoreText()
 	infile >> score >> m_highScore;
 	infile.close();
 
-	m_highScoreText.SetContent("Hi:" + m_highScore);
+	m_highScoreText.SetString("Hi:" + m_highScore);
 }
 
 void State_Game::SaveScores() {
