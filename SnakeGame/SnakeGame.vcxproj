@@ -157,6 +157,7 @@
     <ClCompile Include="List.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="State_Controls.cpp" />
     <ClCompile Include="State_Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayerSnake.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="State_Controls.h" />
     <ClInclude Include="State_Game.h" />
     <ClInclude Include="PlayerSnake.h" />
     <ClInclude Include="Snake.h" />

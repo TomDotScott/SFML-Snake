@@ -81,6 +81,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files\Game Structure</Filter>
     </ClCompile>
+    <ClCompile Include="State_Controls.cpp">
+      <Filter>Source Files\Game Structure\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Header Files\Game Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="State_Controls.h">
+      <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

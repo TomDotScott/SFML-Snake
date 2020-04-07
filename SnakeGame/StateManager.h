@@ -38,6 +38,10 @@ protected:
 	bool m_escapeKey = false;
 	bool m_spaceKey = false;
 
+	SoundManager* m_soundManager{ nullptr };
+	int m_selected{ 0 };
+	sf::Font m_font;
+
 	struct UIText {
 		UIText(std::string _string, const sf::Color _colour, const sf::Vector2f _position, const sf::Font& _font, const int _size)
 			: m_string(std::move(_string)), m_colour(_colour), m_position(_position), m_font(_font), m_characterSize(_size) {
@@ -58,14 +62,12 @@ protected:
 			m_text.setString(m_string);
 		}
 
-		void SetColour(const sf::Color& _colour)
-		{
+		void SetColour(const sf::Color& _colour) {
 			m_colour = _colour;
 			m_text.setFillColor(m_colour);
 		}
 
-		void SetFont(const sf::Font& _newFont)
-		{
+		void SetFont(const sf::Font& _newFont) {
 			m_font = _newFont;
 			m_text.setFont(m_font);
 			m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getGlobalBounds().height / 2);
