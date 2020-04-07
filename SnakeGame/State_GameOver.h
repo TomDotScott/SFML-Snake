@@ -22,11 +22,11 @@ private:
 
 	UIText m_playAgain{ "Play Again", sf::Color::White,
 	{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 1.5f},
-		m_font, 32};
+		m_font, Constants::k_uiTextElement };
 	
 	UIText m_main{ "Main Menu", sf::Color::White,
 	{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 1.25f},
-		m_font, 32 };
+		m_font, Constants::k_uiTextElement };
 
 	std::vector<UIText*> m_textToRender{
 		&m_title, &m_highScore, &m_lastScore, &m_playAgain, &m_main

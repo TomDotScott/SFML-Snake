@@ -3,6 +3,8 @@ namespace Constants {
 	const int k_screenHeight{ 800 };
 	const int k_screenWidth{ 600 };
 
+	const int k_uiTextElement{ 40 };
+	
 	const int k_gameHeight{ 750 };
 	const int k_gameWidth{ 350 };
 	const int k_gameGridCellSize{ 24 };

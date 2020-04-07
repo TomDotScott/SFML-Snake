@@ -22,10 +22,10 @@ private:
 	
 	
 	UIText m_play{ "Play", sf::Color::White,
-		{static_cast<float>(Constants::k_screenWidth) / 2.f, 450 }, m_font, 25 };
+		{static_cast<float>(Constants::k_screenWidth) / 2.f, 450 }, m_font, Constants::k_uiTextElement };
 	
 	UIText m_main{ "Main Menu", sf::Color::White,
-		{static_cast<float>(Constants::k_screenWidth) / 2.f, 550 }, m_font, 25 };
+		{static_cast<float>(Constants::k_screenWidth) / 2.f, 550 }, m_font, Constants::k_uiTextElement };
 
 	std::vector<UIText*> m_textToRender{
 		&m_textLine1to3, &m_textLine4to7, &m_textLine8toEnd, &m_play, &m_main
