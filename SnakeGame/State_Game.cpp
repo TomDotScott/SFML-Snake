@@ -1,5 +1,6 @@
 #include "State_Game.h"
 #include <fstream>
+#include <cmath>
 #include "AISnake.h"
 #include "PlayerSnake.h"
 #include "State_GameOver.h"
@@ -19,6 +20,8 @@
 
  //BASESTATE METHODS
 void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+	m_clock.restart();
+	
 	m_font = _font;
 
 	//Load the fonts into the UI Text elements
@@ -77,6 +80,16 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	}
 }
 
+void State_Game::UpdateClock()
+{
+	const int timeLeft = 90 - static_cast<int>(floor(m_clock.getElapsedTime().asSeconds()));
+	if(timeLeft == 0)
+	{
+		GameOver();
+	}
+	m_clockText.SetContent(std::to_string());
+}
+
 void State_Game::Update() {
 	HandleInput();
 	//only play the game if it is paused
@@ -96,6 +109,8 @@ void State_Game::Update() {
 
 		UpdateScores();
 
+		UpdateClock();
+		
 		CheckWinningConditions();
 	}
 }
@@ -195,14 +210,11 @@ void State_Game::CheckWinningConditions() {
 	//If the player has died, end the game
 	auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
 	if (m_snakes[0]->IsDead() && playerSnake) {
-		current_state = eCurrentState::e_GameOver;
-		core_state.SetState(new State_GameOver());
+		GameOver();
 	}
 	//else, end the game if only the player is still alive
 	else if (!CheckIfStillAlive()) {
-		SaveScores();
-		current_state = eCurrentState::e_GameOver;
-		core_state.SetState(new State_GameOver());
+		GameOver();
 	}
 }
 
@@ -308,6 +320,13 @@ void State_Game::SaveScores() {
 	outfile << score << std::endl;
 	outfile << highScore << std::endl;
 	outfile.close();
+}
+
+void State_Game::GameOver()
+{
+	SaveScores();
+	current_state = eCurrentState::e_GameOver;
+	core_state.SetState(new State_GameOver());
 }
 
 bool State_Game::CheckIfStillAlive() {

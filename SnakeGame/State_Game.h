@@ -115,6 +115,10 @@ private:
 
 	void SaveScores();
 
+	void GameOver();
+	
+	void UpdateClock();
+	
 	void CheckWinningConditions();
 
 	void EndGobbleMode();
