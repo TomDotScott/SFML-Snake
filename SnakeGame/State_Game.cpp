@@ -29,6 +29,10 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	m_playerScore.m_font = m_font;
 	m_CPU1Score.m_font = m_font;
 	m_CPU2Score.m_font = m_font;
+
+	m_highScoreText.m_font = m_font;
+
+	SetHighScoreText();
 	
 	m_soundManager = _soundManager;
 
@@ -101,20 +105,27 @@ void State_Game::Render(sf::RenderWindow& _window) {
 	//Draw the background
 	_window.draw(m_grassSprite);
 
-	//Render the food
+	//Draw the food
 	for (Food* food : m_foodArray) {
 		food->Render(_window);
 	}
 
-	//Render the snakes
+	//Draw the snakes
 	for (Snake* snake : m_snakes) {
 		snake->Render(_window);
 	}
+	
+	//Draw the Walls
+	_window.draw(m_topWall.m_wall);
+	_window.draw(m_bottomWall.m_wall);
+	_window.draw(m_leftWall.m_wall);
+	_window.draw(m_rightWall.m_wall);
 
-	//Draw the Score UI
+	//Draw the UI
 	_window.draw(m_playerScore.m_text);
 	_window.draw(m_CPU1Score.m_text);
 	_window.draw(m_CPU2Score.m_text);
+	_window.draw(m_highScoreText.m_text);
 
 	if (m_gobble) {
 		_window.draw(m_gobbleModeText.m_text);
@@ -127,12 +138,6 @@ void State_Game::Render(sf::RenderWindow& _window) {
 
 	_window.draw(m_clockSprite);
 	_window.draw(m_clockText.m_text);
-
-	//Draw the Walls
-	_window.draw(m_topWall.m_wall);
-	_window.draw(m_bottomWall.m_wall);
-	_window.draw(m_leftWall.m_wall);
-	_window.draw(m_rightWall.m_wall);
 }
 
 void State_Game::Destroy() {
@@ -261,6 +266,21 @@ void State_Game::HandleInput() {
 			return;
 		}
 	}
+}
+
+void State_Game::SetHighScoreText()
+{
+	std::string score;
+
+	//READ THE FILE
+	std::ifstream infile("Resources/Scores.txt");
+	if (!infile.is_open()) {
+		assert(false);
+	}
+	infile >> score >> m_highScore;
+	infile.close();
+
+	m_highScoreText.SetContent("Hi:" + m_highScore);
 }
 
 void State_Game::SaveScores() {

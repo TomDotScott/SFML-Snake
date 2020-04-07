@@ -51,6 +51,10 @@ public:
 	~State_Game();
 
 private:
+	std::string m_highScore;
+
+	void SetHighScoreText();
+
 	//the SoundManager
 	SoundManager* m_soundManager{ nullptr };
 
@@ -58,11 +62,6 @@ private:
 	sf::Font m_font;
 
 	std::vector<Snake*> m_snakes;
-
-	//Gobble Mode text
-	UIText m_gobbleModeText{ "Gobble Mode", sf::Color::Yellow,
-		{ Constants::k_screenWidth - 175, 300},
-		m_font, 25 };
 
 	UIText m_pausedText{ "Paused", sf::Color::White,
 		{ static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.f },
@@ -82,9 +81,18 @@ private:
 		m_font, 25 };
 
 	UIText m_CPU2Score{ "CPU2:", sf::Color::Blue,
-	{ static_cast<float>(Constants::k_screenWidth - 175), 175},
+		{ static_cast<float>(Constants::k_screenWidth - 175), 175},
 		m_font, 25 };
-	
+
+	//Gobble Mode text
+	UIText m_gobbleModeText{ "Gobble Mode", sf::Color::Yellow,
+		{ Constants::k_screenWidth - 175, 300},
+		m_font, 25 };
+
+	UIText m_highScoreText{ "Hi: ", sf::Color::White,
+		{static_cast<float>(Constants::k_screenWidth - 175), 350},
+		m_font, 25 };
+
 	std::array<Food*, Constants::k_foodAmount> m_foodArray{};
 
 	bool m_gobble{ false };
