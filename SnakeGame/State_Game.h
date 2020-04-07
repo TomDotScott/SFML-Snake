@@ -69,6 +69,13 @@ private:
 
 	void SaveScores();
 
+	void CheckWinningConditions();
+	
+	void EndGobbleMode();
+	
+	//Returns true if more than one snake is alive
+	bool CheckIfStillAlive();
+
 	sf::Sprite m_grassSprite;
 	sf::Texture m_grassTexture;
 };

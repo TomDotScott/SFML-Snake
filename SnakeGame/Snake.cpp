@@ -13,6 +13,11 @@ Snake::Snake() {
 void Snake::Update() {
 	if (!IsDead()) {
 		m_score += m_gobbleMode ? 2 : 1;
+		//If the snake has no segments left (is just a tail) then it is dead
+		if(m_segments.Size() == 1)
+		{
+			m_dead = true;
+		}
 		Move();
 	}
 }

@@ -5,11 +5,15 @@
 #include "State_GameOver.h"
 
 /*TODO
+ *ADD WINNING CONDITIONS FROM THE SPEC
+	*GAME LASTS FOR 90 SECONDS
+	*GAME ENDS IF ONLY 1 SNAKE LEFT
+ *MAKE UI NICER ON THE EYES
  *FIX PATH-FINDING
 	*AI SNAKES STOP WRAPPING THEMSELVES UP
 	*SOME SORT OF FORWARD-THINKING ALGORITHM
 	*A* OR GREEDY BFS SEARCH
- *MAKE UI NICER ON THE EYES
+
  */
 
 
@@ -20,7 +24,7 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	m_soundManager = _soundManager;
 
 	m_soundManager->PlayMusic("music_game");
-	
+
 	auto* playerSnake = new PlayerSnake();
 	m_snakes.push_back(playerSnake);
 
@@ -98,27 +102,11 @@ void State_Game::Update() {
 			snake->Update();
 		}
 
-		//GOBBLE MODE. After a random amount of time, stop Gobble Mode
-		if (rand() % 25 == 0 && m_gobble) {
-			for (auto* snake : m_snakes) {
-				if (snake->GetIsGobbleMode()) {
-					snake->SetIsGobbleMode(false);
-					m_soundManager->PlaySFX("sfx_gobble_off");
-					break;
-				}
-			}
-		}
-
+		EndGobbleMode();
 
 		UpdateScores();
-		//If the player has died, end the game
-		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
-		if (m_snakes[0]->IsDead() && playerSnake) {
-			//m_soundManager.PlaySFX("sfx_player_snake_death");
-			SaveScores();
-			current_state = eCurrentState::e_GameOver;
-			core_state.SetState(new State_GameOver());
-		}
+
+		CheckWinningConditions();
 	}
 }
 
@@ -196,6 +184,35 @@ void State_Game::CheckCollisions() {
 				return;
 			}
 		}
+	}
+}
+
+
+void State_Game::EndGobbleMode() {
+	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
+	if (rand() % 25 == 0 && m_gobble) {
+		for (auto* snake : m_snakes) {
+			if (snake->GetIsGobbleMode()) {
+				snake->SetIsGobbleMode(false);
+				m_soundManager->PlaySFX("sfx_gobble_off");
+			}
+		}
+	}
+}
+
+void State_Game::CheckWinningConditions()
+{
+	//If the player has died, end the game
+	auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
+	if (m_snakes[0]->IsDead() && playerSnake) {
+		current_state = eCurrentState::e_GameOver;
+		core_state.SetState(new State_GameOver());
+	}
+	//else, end the game if only the player is still alive
+	else if (!CheckIfStillAlive()) {
+		SaveScores();
+		current_state = eCurrentState::e_GameOver;
+		core_state.SetState(new State_GameOver());
 	}
 }
 
@@ -287,4 +304,18 @@ void State_Game::SaveScores() {
 	outfile << score << std::endl;
 	outfile << highScore << std::endl;
 	outfile.close();
+}
+
+bool State_Game::CheckIfStillAlive() {
+	int counter{ 0 };
+	for (auto snake : m_snakes) {
+		if (!snake->IsDead()) {
+			++counter;
+		}
+	}
+	if (counter > 1) {
+		return true;
+	} else {
+		return false;
+	}
 }
