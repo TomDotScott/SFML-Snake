@@ -2,6 +2,7 @@
 #include "Snake.h"
 #include "Food.h"
 #include <array>
+#include <utility>
 #include "StateManager.h"
 
 struct Wall {
@@ -13,6 +14,27 @@ struct Wall {
 	sf::Vector2f m_position;
 	sf::Sprite m_wall{};
 	sf::Texture m_texture;
+};
+
+struct UIText {
+	UIText(std::string _string, const sf::Color _colour, const sf::Vector2f _position, const sf::Font& _font, const int _size)
+		: m_string(std::move(_string)), m_colour(_colour), m_position(_position), m_font(_font), m_characterSize(_size) {
+		m_text = sf::Text(m_string, m_font, m_characterSize);
+		m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getGlobalBounds().height / 2);
+		m_text.setFillColor(m_colour);
+		m_text.setPosition(m_position);
+	}
+	sf::Text m_text;
+	std::string m_string;
+	sf::Color m_colour;
+	sf::Vector2f m_position;
+	sf::Font m_font;
+	int m_characterSize;
+
+	void SetContent(const std::string& _newContent) {
+		m_string = _newContent;
+		m_text.setString(m_string);
+	}
 };
 
 class State_Game final : public BaseState {
@@ -29,9 +51,6 @@ public:
 	~State_Game();
 
 private:
-	//the game tick
-	sf::Clock m_clock;
-
 	//the SoundManager
 	SoundManager* m_soundManager{ nullptr };
 
@@ -40,13 +59,32 @@ private:
 
 	std::vector<Snake*> m_snakes;
 
-	//The scores of the players
-	std::vector<sf::Text> m_scores;
-
 	//Gobble Mode text
-	sf::Text* m_gobbleModeText{ nullptr };
-	sf::Text* m_pausedText{ nullptr };
+	UIText m_gobbleModeText{ "Gobble Mode", sf::Color::Yellow,
+		{ Constants::k_screenWidth - 175, 300},
+		m_font, 25 };
 
+	UIText m_pausedText{ "Paused", sf::Color::White,
+		{ static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.f },
+		m_font, 128 };
+
+	//The overall time remaining
+	UIText m_clockText{ "90", sf::Color::White,
+		{ Constants::k_screenWidth - 145, 25 }, m_font, 25 };
+
+	//Player Scores
+	UIText m_playerScore{ "Player:", sf::Color::Red,
+		{ static_cast<float>(Constants::k_screenWidth - 175), 75},
+		m_font, 25 };
+
+	UIText m_CPU1Score{ "CPU1:", sf::Color::Blue,
+	{ static_cast<float>(Constants::k_screenWidth - 175), 125},
+		m_font, 25 };
+
+	UIText m_CPU2Score{ "CPU2:", sf::Color::Blue,
+	{ static_cast<float>(Constants::k_screenWidth - 175), 175},
+		m_font, 25 };
+	
 	std::array<Food*, Constants::k_foodAmount> m_foodArray{};
 
 	bool m_gobble{ false };
@@ -70,12 +108,20 @@ private:
 	void SaveScores();
 
 	void CheckWinningConditions();
-	
+
 	void EndGobbleMode();
-	
+
 	//Returns true if more than one snake is alive
 	bool CheckIfStillAlive();
 
+	//The Game Background
 	sf::Sprite m_grassSprite;
 	sf::Texture m_grassTexture;
+
+	//The Clock icon
+	sf::Sprite m_clockSprite;
+	sf::Texture m_clockTexture;
+
+	//The time remaining
+	sf::Clock m_clock;
 };

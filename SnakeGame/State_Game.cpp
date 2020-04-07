@@ -21,6 +21,15 @@
 void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
 	m_font = _font;
 
+	//Load the fonts into the UI Text elements
+	m_gobbleModeText.m_font = m_font;
+	m_pausedText.m_font = m_font;
+	m_clockText.m_font = m_font;
+
+	m_playerScore.m_font = m_font;
+	m_CPU1Score.m_font = m_font;
+	m_CPU2Score.m_font = m_font;
+	
 	m_soundManager = _soundManager;
 
 	m_soundManager->PlayMusic("music_game");
@@ -40,37 +49,14 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 		m_snakes.push_back(new AISnake());
 	}
 
-
-	//populate the score UI
-	for (unsigned int i = 0; i < m_snakes.size(); ++i) {
-		sf::Text playerText;
-		playerText.setFont(m_font);
-		std::string textToDisplay = "Player";
-		textToDisplay += std::to_string(i + 1) + ":";
-		playerText.setString(textToDisplay);
-		playerText.setFillColor(sf::Color::White);
-		playerText.setCharacterSize(25);
-
-		//Work out where they will be positioned
-		playerText.setPosition(sf::Vector2f(static_cast<float>(Constants::k_screenWidth - 175), static_cast<float>((i * Constants::k_gameGridCellSize) + 10)));
-		m_scores.push_back(playerText);
-	}
-
-	//Initialise Gobble mode text
-	m_gobbleModeText = new sf::Text("Gobble Mode!", m_font, 20U);
-	m_gobbleModeText->setOrigin(m_gobbleModeText->getGlobalBounds().width / 2, m_gobbleModeText->getGlobalBounds().height / 2);
-	m_gobbleModeText->setFillColor(sf::Color::Yellow);
-	m_gobbleModeText->setPosition(Constants::k_screenWidth - 100, Constants::k_screenHeight - 200);
-
-	//Initialise Pause Text
-	m_pausedText = new sf::Text("Paused", m_font, 128U);
-	m_pausedText->setOrigin(m_pausedText->getGlobalBounds().width / 2, m_pausedText->getGlobalBounds().height / 2);
-	m_pausedText->setFillColor(sf::Color::Red);
-	m_pausedText->setPosition(static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.f);
-
 	//Initialise background texture
 	m_grassTexture.loadFromFile("Resources/Graphics/Game_Background.png");
 	m_grassSprite.setTexture(m_grassTexture);
+
+	//Initialise Clock Texture
+	m_clockTexture.loadFromFile("Resources/Graphics/Game_Clock.png");
+	m_clockSprite.setTexture(m_clockTexture);
+	m_clockSprite.setPosition(Constants::k_screenWidth - 175, m_clockText.m_position.y + 5);
 
 	//make the snakes know where the food and other snakes are on the screen
 	for (auto* snake : m_snakes) {
@@ -125,18 +111,22 @@ void State_Game::Render(sf::RenderWindow& _window) {
 		snake->Render(_window);
 	}
 
-	//Draw the UI
-	for (const auto& score : m_scores) {
-		_window.draw(score);
-	}
+	//Draw the Score UI
+	_window.draw(m_playerScore.m_text);
+	_window.draw(m_CPU1Score.m_text);
+	_window.draw(m_CPU2Score.m_text);
 
 	if (m_gobble) {
-		_window.draw(*m_gobbleModeText);
+		_window.draw(m_gobbleModeText.m_text);
 	}
 
 	if (m_paused) {
-		_window.draw(*m_pausedText);
+		_window.draw(m_pausedText.m_text);
 	}
+
+
+	_window.draw(m_clockSprite);
+	_window.draw(m_clockText.m_text);
 
 	//Draw the Walls
 	_window.draw(m_topWall.m_wall);
@@ -153,8 +143,6 @@ void State_Game::Destroy() {
 	for (auto* snake : m_snakes) {
 		snake = nullptr;
 	}
-	m_gobbleModeText = nullptr;
-	m_pausedText = nullptr;
 }
 
 State_Game::~State_Game() {
@@ -165,8 +153,6 @@ State_Game::~State_Game() {
 	for (auto* snake : m_snakes) {
 		delete snake;
 	}
-	delete m_gobbleModeText;
-	delete m_pausedText;
 }
 
 
@@ -200,8 +186,7 @@ void State_Game::EndGobbleMode() {
 	}
 }
 
-void State_Game::CheckWinningConditions()
-{
+void State_Game::CheckWinningConditions() {
 	//If the player has died, end the game
 	auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
 	if (m_snakes[0]->IsDead() && playerSnake) {
@@ -239,10 +224,9 @@ void State_Game::RandomiseFood(Food* _foodToRandomise) {
 }
 
 void State_Game::UpdateScores() {
-	for (unsigned int i = 0; i < m_snakes.size(); ++i) {
-		std::string textToDisplay = "Player" + std::to_string(i + 1) + ":" + std::to_string(m_snakes[i]->GetScore());
-		m_scores[i].setString(textToDisplay);
-	}
+	m_playerScore.SetContent("Player:" + std::to_string(m_snakes[0]->GetScore()));
+	m_CPU1Score.SetContent("Player:" + std::to_string(m_snakes[1]->GetScore()));
+	m_CPU2Score.SetContent("Player:" + std::to_string(m_snakes[2]->GetScore()));
 }
 
 void State_Game::HandleInput() {
