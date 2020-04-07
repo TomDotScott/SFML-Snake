@@ -16,27 +16,6 @@ struct Wall {
 	sf::Texture m_texture;
 };
 
-struct UIText {
-	UIText(std::string _string, const sf::Color _colour, const sf::Vector2f _position, const sf::Font& _font, const int _size)
-		: m_string(std::move(_string)), m_colour(_colour), m_position(_position), m_font(_font), m_characterSize(_size) {
-		m_text = sf::Text(m_string, m_font, m_characterSize);
-		m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getGlobalBounds().height / 2);
-		m_text.setFillColor(m_colour);
-		m_text.setPosition(m_position);
-	}
-	sf::Text m_text;
-	std::string m_string;
-	sf::Color m_colour;
-	sf::Vector2f m_position;
-	sf::Font m_font;
-	int m_characterSize;
-
-	void SetString(const std::string& _newString) {
-		m_string = _newString;
-		m_text.setString(m_string);
-	}
-};
-
 class State_Game final : public BaseState {
 public:
 	//BASESTATE METHODS
@@ -73,24 +52,24 @@ private:
 
 	//Player Scores
 	UIText m_playerScore{ "Player:", sf::Color::Red,
-		{ static_cast<float>(Constants::k_screenWidth - 175), 75},
+		{ static_cast<float>(Constants::k_screenWidth - 175), 175},
 		m_font, 25 };
 
 	UIText m_CPU1Score{ "CPU1:", sf::Color::Blue,
-	{ static_cast<float>(Constants::k_screenWidth - 175), 125},
+	{ static_cast<float>(Constants::k_screenWidth - 175), 225},
 		m_font, 25 };
 
 	UIText m_CPU2Score{ "CPU2:", sf::Color::Blue,
-		{ static_cast<float>(Constants::k_screenWidth - 175), 175},
+		{ static_cast<float>(Constants::k_screenWidth - 175), 275},
 		m_font, 25 };
 
 	//Gobble Mode text
 	UIText m_gobbleModeText{ "Gobble Mode", sf::Color::Yellow,
-		{ Constants::k_screenWidth - 175, 300},
+		{ Constants::k_screenWidth - 175, 375},
 		m_font, 25 };
 
 	UIText m_highScoreText{ "Hi: ", sf::Color::White,
-		{static_cast<float>(Constants::k_screenWidth - 175), 350},
+		{static_cast<float>(Constants::k_screenWidth - 175), 450},
 		m_font, 25 };
 
 	std::array<Food*, Constants::k_foodAmount> m_foodArray{};

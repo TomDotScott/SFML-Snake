@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "SoundManager.h"
+#include "Constants.h"
 
 //Tracks the current state of the game
 //Has a global variable attached
@@ -36,6 +37,40 @@ protected:
 	bool m_rightKey = false;
 	bool m_escapeKey = false;
 	bool m_spaceKey = false;
+
+	struct UIText {
+		UIText(std::string _string, const sf::Color _colour, const sf::Vector2f _position, const sf::Font& _font, const int _size)
+			: m_string(std::move(_string)), m_colour(_colour), m_position(_position), m_font(_font), m_characterSize(_size) {
+			m_text = sf::Text(m_string, m_font, m_characterSize);
+			m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getGlobalBounds().height / 2);
+			m_text.setFillColor(m_colour);
+			m_text.setPosition(m_position);
+		}
+		sf::Text m_text;
+		std::string m_string;
+		sf::Color m_colour;
+		sf::Vector2f m_position;
+		sf::Font m_font;
+		int m_characterSize;
+
+		void SetString(const std::string& _newString) {
+			m_string = _newString;
+			m_text.setString(m_string);
+		}
+
+		void SetColour(const sf::Color& _colour)
+		{
+			m_colour = _colour;
+			m_text.setFillColor(m_colour);
+		}
+
+		void SetFont(const sf::Font& _newFont)
+		{
+			m_font = _newFont;
+			m_text.setFont(m_font);
+			m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getGlobalBounds().height / 2);
+		}
+	};
 };
 
 //StateManager keeps track of the current game state

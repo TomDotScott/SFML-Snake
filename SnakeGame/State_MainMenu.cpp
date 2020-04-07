@@ -11,50 +11,37 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 	m_soundManager = _soundManager;
 
 	m_soundManager->StopMusic();
-	
+
 	//load the font and display text
 	m_font = _font;
-	
-	/*MAIN TITLE TEXT*/
-	m_title = new sf::Text("Snake!", m_font, 128U);
-	//centre the text
-	m_title->setOrigin(m_title->getGlobalBounds().width / 2, m_title->getGlobalBounds().height / 2);
-	//set the position
-	m_title->setPosition(static_cast<float>(_window.getSize().x) / 2, static_cast<float>(_window.getSize().y) / 5);
 
-	/*PLAY TEXT*/
-	m_play = new sf::Text("Play!", m_font, 32U);
-	//centre the text
-	m_play->setOrigin(m_play->getGlobalBounds().width / 2, m_play->getGlobalBounds().height / 2);
-	//set the position
-	m_play->setPosition(static_cast<float>(_window.getSize().x) / 2, static_cast<float>(_window.getSize().y) / 2);
-
-
-	/*QUIT TEXT*/
-	m_quit = new sf::Text("Quit!", m_font, 32U);
-	//centre the text
-	m_quit->setOrigin(m_quit->getGlobalBounds().width / 2, m_quit->getGlobalBounds().height / 2);
-	//set the position
-	m_quit->setPosition(static_cast<float>(_window.getSize().x) / 2, static_cast<float>(_window.getSize().y) / 1.5f);
+	m_title.SetFont(m_font);
+	m_play.SetFont(m_font);
+	m_quit.SetFont(m_font);
+	m_controls.SetFont(m_font);
 
 	std::cout << "Initialised" << std::endl;
 }
 
 
 void State_MainMenu::Render(sf::RenderWindow& _window) {
-	m_play->setFillColor(sf::Color::White);
-	m_quit->setFillColor(sf::Color::White);
+	m_play.SetColour(sf::Color::White);
+	m_controls.SetColour(sf::Color::White);
+	m_quit.SetColour(sf::Color::White);
 
 	if (m_selected == 0) {
-		m_play->setFillColor(sf::Color::Red);
+		m_play.SetColour(sf::Color::Red);
 	} else if (m_selected == 1) {
-		m_quit->setFillColor(sf::Color::Red);
+		m_controls.SetColour(sf::Color::Red);
+	} else if(m_selected == 2) {
+		m_quit.SetColour(sf::Color::Red);
 	}
 
 	//draw the text on screen
-	_window.draw(*m_title);
-	_window.draw(*m_play);
-	_window.draw(*m_quit);
+	for(auto* textElement : m_textToRender)
+	{
+		_window.draw(textElement->m_text);
+	}
 }
 
 
@@ -64,15 +51,15 @@ void State_MainMenu::Update() {
 		m_soundManager->PlaySFX("sfx_menu_move");
 		m_upKey = false;
 	}
-	
+
 	if (m_downKey && !m_upKey) {
 		m_selected += 1;
 		m_soundManager->PlaySFX("sfx_menu_move");
 		m_downKey = false;
 	}
-	
+
 	//allow for cycling through options...
-	if (m_selected > 1) {
+	if (m_selected > 2) {
 		m_selected = 0;
 	}
 
@@ -92,23 +79,19 @@ void State_MainMenu::Update() {
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
-			//quit the game...
+			//Go to the controls state...
+			core_state.SetState(new State_Controls());
+			std::cout << "GOING TO THE CONTROLS MENU"<< std::endl;
+			break;
+		case 2:
 			quit_game = true;
+			break;
 		default:
 			break;
 		}
 	}
 }
 
-State_MainMenu::~State_MainMenu() {
-	delete m_title;
-	delete m_play;
-	delete m_quit;
-}
-
 void State_MainMenu::Destroy() {
-	m_title = nullptr;
-	m_play = nullptr;
-	m_quit = nullptr;
 	std::cout << "Destroyed" << std::endl;
 }

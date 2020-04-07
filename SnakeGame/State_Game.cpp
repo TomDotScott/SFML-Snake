@@ -233,8 +233,8 @@ void State_Game::RandomiseFood(Food* _foodToRandomise) {
 
 void State_Game::UpdateScores() {
 	m_playerScore.SetString("Player:" + std::to_string(m_snakes[0]->GetScore()));
-	m_CPU1Score.SetString("Player:" + std::to_string(m_snakes[1]->GetScore()));
-	m_CPU2Score.SetString("Player:" + std::to_string(m_snakes[2]->GetScore()));
+	m_CPU1Score.SetString("CPU1:" + std::to_string(m_snakes[1]->GetScore()));
+	m_CPU2Score.SetString("CPU2:" + std::to_string(m_snakes[2]->GetScore()));
 }
 
 void State_Game::HandleInput() {
