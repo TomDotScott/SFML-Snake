@@ -63,7 +63,7 @@ void State_MainMenu::Update() {
 	}
 
 	if (m_selected < 0) {
-		m_selected = 1;
+		m_selected = 2;
 	}
 
 	//Select the option using SPACE

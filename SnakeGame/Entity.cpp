@@ -27,7 +27,7 @@ void Entity::RandomisePosition() {
 		: randomNumber * Constants::k_gameGridCellSize));
 
 	//Choose random row
-	randomNumber = RandomRange(5, Constants::k_gameGridRows - 1);
+	randomNumber = RandomRange(6, Constants::k_gameGridRows - 1);
 
 	m_position.y = static_cast<float>((randomNumber * Constants::k_gameGridCellSize >= Constants::k_gameHeight
 		? Constants::k_gameHeight

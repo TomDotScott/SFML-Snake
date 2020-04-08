@@ -41,19 +41,19 @@ void State_Controls::Render(sf::RenderWindow& _window) {
 		_window.draw(textElement->m_text);
 	}
 
-	m_gameIcon.setPosition(68, 135);
+	m_gameIcon.setPosition(68, 175);
 	m_gameIcon.setTexture(m_standardTexture);
 	_window.draw(m_gameIcon);
 
-	m_gameIcon.setPosition(68, 170);
+	m_gameIcon.setPosition(68, 210);
 	m_gameIcon.setTexture(m_specialTexture);
 	_window.draw(m_gameIcon);
 
-	m_gameIcon.setPosition(68, 205);
+	m_gameIcon.setPosition(68, 245);
 	m_gameIcon.setTexture(m_gobbleTexture);
 	_window.draw(m_gameIcon);
 
-	m_gameIcon.setPosition(68, 235);
+	m_gameIcon.setPosition(68, 275);
 	m_gameIcon.setTexture(m_gobbleTexture);
 	_window.draw(m_gameIcon);
 }
