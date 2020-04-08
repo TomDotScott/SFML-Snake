@@ -16,8 +16,7 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 	//load the font and display text
 	m_font = _font;
 
-	for(auto text : m_textToRender)
-	{
+	for (auto text : m_textToRender) {
 		text->SetFont(m_font);
 	}
 
@@ -26,18 +25,20 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 
 
 void State_MainMenu::Render(sf::RenderWindow& _window) {
-	m_play.SetColour(sf::Color::White);
+	m_playSinglePlayer.SetColour(sf::Color::White);
+	m_playTwoPlayer.SetColour(sf::Color::White);
 	m_quit.SetColour(sf::Color::White);
 
 	if (m_selected == 0) {
-		m_play.SetColour(sf::Color::Red);
+		m_playSinglePlayer.SetColour(sf::Color::Red);
 	} else if (m_selected == 1) {
+		m_playTwoPlayer.SetColour(sf::Color::Red);
+	} else {
 		m_quit.SetColour(sf::Color::Red);
-	} 
+	}
 
 	//draw the text on screen
-	for(auto* textElement : m_textToRender)
-	{
+	for (auto* textElement : m_textToRender) {
 		_window.draw(textElement->m_text);
 	}
 }
@@ -57,7 +58,7 @@ void State_MainMenu::Update() {
 	}
 
 	//allow for cycling through options...
-	if (m_selected > 1) {
+	if (m_selected > 2) {
 		m_selected = 0;
 	}
 
@@ -76,6 +77,10 @@ void State_MainMenu::Update() {
 			std::cout << "GOING TO THE CONTROLS MENU" << std::endl;
 			break;
 		case 1:
+			core_state.SetState(new State_Game(true));
+			std::cout << "PLAYING 2 PLAYER" << std::endl;
+			break;
+		case 2:
 			quit_game = true;
 			break;
 		default:

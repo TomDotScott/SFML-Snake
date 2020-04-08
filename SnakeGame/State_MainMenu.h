@@ -13,16 +13,20 @@ private:
 		{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 5.f},
 		m_font, 128 };
 
-	UIText m_play{ "Play", sf::Color::White,
+	UIText m_playSinglePlayer{ "1 Player", sf::Color::White,
 		{static_cast<float>(Constants::k_screenWidth) / 2, 450},
 		m_font, Constants::k_uiTextElement };
 
+	UIText m_playTwoPlayer{ "2 Player", sf::Color::White,
+		{m_playSinglePlayer.m_position.x, m_playSinglePlayer.m_position.y + 100},
+		m_font, Constants::k_uiTextElement };
+
 	UIText m_quit{ "Quit", sf::Color::White,
-	{m_play.m_position.x, m_play.m_position.y + 100},
+	{m_playSinglePlayer.m_position.x, m_playSinglePlayer.m_position.y + 200},
 		m_font, Constants::k_uiTextElement };
 
 	std::vector<UIText*> m_textToRender{
-		&m_title, &m_play, &m_quit
+		&m_title, &m_playSinglePlayer, &m_playTwoPlayer, &m_quit
 	};
 	
 	//deal with user selections

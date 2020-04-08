@@ -51,6 +51,11 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 		}
 	} else {
 		//Set up 2 player snakes
+		auto* player1Snake = new PlayerSnake();
+		m_snakes.push_back(player1Snake);
+
+		auto* player2Snake = new PlayerSnake();
+		m_snakes.push_back(player2Snake);
 	}
 
 	//Initialise background texture
@@ -68,18 +73,18 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 		m_foodArray[i] = food;
 	}
 
-	if (!m_twoPlayer) {
-		//make the snakes know where the food and other snakes are on the screen
-		for (auto* snake : m_snakes) {
+	//make the snakes know where the food and other snakes are on the screen
+	for (auto* snake : m_snakes) {
+		if (!m_twoPlayer) {
 			for (auto* food : m_foodArray) {
 				snake->SetFood(food);
 				snake->SetSoundManager(m_soundManager);
 			}
+		}
 
-			for (auto* otherSnake : m_snakes) {
-				if (snake != otherSnake) {
-					snake->SetOtherSnake(otherSnake);
-				}
+		for (auto* otherSnake : m_snakes) {
+			if (snake != otherSnake) {
+				snake->SetOtherSnake(otherSnake);
 			}
 		}
 	}
