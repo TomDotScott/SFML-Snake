@@ -55,43 +55,56 @@ private:
 
 	//The overall time remaining
 	UIText m_clockText{ "90", sf::Color::White,
-		{ Constants::k_screenWidth - 145, 25 }, m_font, 25 };
+		{ Constants::k_gameGridCellSize * 2, Constants::k_gameGridCellSize }, m_font, Constants::k_gameGridCellSize };
 
 	//Player Scores
-	UIText m_playerScore{ "Player:", sf::Color::Blue,
-		{ static_cast<float>(Constants::k_screenWidth - 175), 175},
-		m_font, 25 };
+	UIText m_playerScore{ "P1:", sf::Color::Blue,
+		{ static_cast<float>(m_clockText.m_position.x + 2*Constants::k_gameGridCellSize), m_clockText.m_position.y},
+		m_font, Constants::k_gameGridCellSize };
 
+	UIText m_player2Score{ "P2:", sf::Color::Red,
+	{ static_cast<float>(m_playerScore.m_position.x + 120), m_clockText.m_position.y},
+		m_font, Constants::k_gameGridCellSize };
+	
 	UIText m_CPU1Score{ "CPU1:", sf::Color::Red,
-	{ static_cast<float>(Constants::k_screenWidth - 175), 225},
-		m_font, 25 };
+	{ static_cast<float>(m_playerScore.m_position.x + 120), m_playerScore.m_position.y},
+		m_font, Constants::k_gameGridCellSize };
 
 	UIText m_CPU2Score{ "CPU2:", sf::Color::Red,
-		{ static_cast<float>(Constants::k_screenWidth - 175), 275},
-		m_font, 25 };
+		{ static_cast<float>(m_CPU1Score.m_position.x + 144), m_CPU1Score.m_position.y},
+		m_font, Constants::k_gameGridCellSize };
 
+	UIText m_highScoreText{ "Hi-Score: ", sf::Color::White,
+		{static_cast<float>(3 * Constants::k_gameGridCellSize), 2.5 * static_cast<float>(Constants::k_gameGridCellSize)},
+		m_font, Constants::k_gameGridCellSize };
+	
 	//Gobble Mode text
 	UIText m_gobbleModeText{ "Gobble Mode", sf::Color::Yellow,
-		{ Constants::k_screenWidth - 175, 375},
-		m_font, 25 };
+		{ m_highScoreText.m_position.x + 8 * Constants::k_gameGridCellSize, m_highScoreText.m_position.y},
+		m_font, Constants::k_gameGridCellSize };
 
-	UIText m_highScoreText{ "Hi: ", sf::Color::White,
-		{static_cast<float>(Constants::k_screenWidth - 175), 450},
-		m_font, 25 };
+	//The text that will always be on screen
+	std::vector<UIText*> m_UItoRenderSinglePlayer{
+		&m_clockText, &m_playerScore, &m_CPU1Score, &m_CPU2Score, &m_highScoreText
+	};
 
+	std::vector<UIText*> m_UItoRenderTwoPlayer{
+		&m_clockText, &m_playerScore, &m_player2Score, &m_highScoreText
+	};
+	
 	std::array<Food*, Constants::k_foodAmount> m_foodArray{};
 
 	bool m_gobble{ false };
 	bool m_paused{ false };
 
 	//TOP
-	Wall m_topWall{ Wall({0, 0}, "top_bottom_wall.png") };
+	Wall m_topWall{ Wall({0, 100}, "top_bottom_wall.png") };
 	//LEFT
-	Wall m_leftWall{ Wall({0, 0}, "left_right_wall.png") };
+	Wall m_leftWall{ Wall({0, 100}, "left_right_wall.png") };
 	//BOTTOM
 	Wall m_bottomWall{ Wall({0, Constants::k_screenHeight - Constants::k_gameGridCellSize}, "top_bottom_wall.png") };
 	//RIGHT
-	Wall m_rightWall{ Wall({Constants::k_screenWidth - 200 - Constants::k_gameGridCellSize, 0}, "left_right_wall.png") };
+	Wall m_rightWall{ Wall({Constants::k_screenWidth - Constants::k_gameGridCellSize, 100}, "left_right_wall.png") };
 
 	//ensure that food doesn't overlap
 	void RandomiseFood(Food* _foodToRandomise);

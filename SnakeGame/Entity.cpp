@@ -19,18 +19,15 @@ void Entity::Move() {
 
 void Entity::RandomisePosition() {
 	//Find a random grid position
-
-	m_colour = sf::Color(RandomRange(0, 255), RandomRange(0, 255), RandomRange(0, 255));
-
 	//Choose Random Column
-	int randomNumber{ RandomRange(2, Constants::k_gameGridColumns) };
+	int randomNumber{ RandomRange(2, Constants::k_gameGridColumns - 1) };
 
 	m_position.x = static_cast<float>((randomNumber * Constants::k_gameGridCellSize >= Constants::k_gameWidth
 		? Constants::k_gameWidth
 		: randomNumber * Constants::k_gameGridCellSize));
 
 	//Choose random row
-	randomNumber = RandomRange(2, Constants::k_gameGridRows);
+	randomNumber = RandomRange(5, Constants::k_gameGridRows - 1);
 
 	m_position.y = static_cast<float>((randomNumber * Constants::k_gameGridCellSize >= Constants::k_gameHeight
 		? Constants::k_gameHeight

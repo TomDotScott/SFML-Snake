@@ -20,20 +20,18 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 
 	m_font = _font;
 
-	//Load the fonts into the UI Text elements
-	m_gobbleModeText.m_font = m_font;
-	m_pausedText.m_font = m_font;
-	m_clockText.m_font = m_font;
-
+	m_pausedText.SetFont(m_font);
+	m_gobbleModeText.SetFont(m_font);
+	
 	if (!m_twoPlayer) {
-		m_playerScore.m_font = m_font;
-		m_CPU1Score.m_font = m_font;
-		m_CPU2Score.m_font = m_font;
+		for (auto* text : m_UItoRenderSinglePlayer) {
+			text->SetFont(m_font);
+		}
 	} else {
-		//Set up Player and Player2 fonts
+		for (auto* text : m_UItoRenderTwoPlayer) {
+			text->SetFont(m_font);
+		}
 	}
-
-	m_highScoreText.m_font = m_font;
 
 	SetHighScoreText();
 
@@ -61,11 +59,12 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	//Initialise background texture
 	m_grassTexture.loadFromFile("Resources/Graphics/Game_Background.png");
 	m_grassSprite.setTexture(m_grassTexture);
+	m_grassSprite.setPosition(0, 120);
 
 	//Initialise Clock Texture
 	m_clockTexture.loadFromFile("Resources/Graphics/Game_Clock.png");
 	m_clockSprite.setTexture(m_clockTexture);
-	m_clockSprite.setPosition(Constants::k_screenWidth - 175, m_clockText.m_position.y + 5);
+	m_clockSprite.setPosition(10, m_clockText.m_position.y - 5);
 
 	//populate the food array
 	for (int i = 0; i < Constants::k_foodAmount; ++i) {
@@ -78,7 +77,6 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 		if (!m_twoPlayer) {
 			for (auto* food : m_foodArray) {
 				snake->SetFood(food);
-				snake->SetSoundManager(m_soundManager);
 			}
 		}
 
@@ -87,11 +85,13 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 				snake->SetOtherSnake(otherSnake);
 			}
 		}
+		snake->SetSoundManager(m_soundManager);
+
 	}
 }
 
 int State_Game::GetTimeRemaining() const {
-	return 90 - static_cast<int>(floor(m_clock.getElapsedTime().asSeconds()));
+	return 90 - static_cast<int>(m_clock.getElapsedTime().asSeconds());
 }
 
 void State_Game::Update() {
@@ -140,11 +140,10 @@ void State_Game::Render(sf::RenderWindow& _window) {
 	_window.draw(m_leftWall.m_wall);
 	_window.draw(m_rightWall.m_wall);
 
-	//Draw the UI
-	_window.draw(m_playerScore.m_text);
-	_window.draw(m_CPU1Score.m_text);
-	_window.draw(m_CPU2Score.m_text);
-	_window.draw(m_highScoreText.m_text);
+	for(auto* text : m_UItoRenderSinglePlayer)
+	{
+		_window.draw(text->m_text);
+	}
 
 	if (m_gobble) {
 		_window.draw(m_gobbleModeText.m_text);
@@ -191,9 +190,9 @@ void State_Game::CheckCollisions() {
 		if (!currentSnake->IsDead()) {
 			//Check against Walls
 			if (currentSnake->GetHeadPosition().x <= 0 ||
-				currentSnake->GetHeadPosition().x > Constants::k_gameWidth + Constants::k_gameGridCellSize ||
-				currentSnake->GetHeadPosition().y <= 0 ||
-				currentSnake->GetHeadPosition().y > Constants::k_gameHeight + Constants::k_gameGridCellSize) {
+				currentSnake->GetHeadPosition().x > m_rightWall.m_position.x ||
+				currentSnake->GetHeadPosition().y <= 100 + Constants::k_gameGridCellSize ||
+				currentSnake->GetHeadPosition().y > m_bottomWall.m_position.y) {
 				currentSnake->Collision(ECollisionType::e_wall);
 				return;
 			}
@@ -252,11 +251,12 @@ void State_Game::RandomiseFood(Food* _foodToRandomise) {
 
 void State_Game::UpdateScores() {
 	if (!m_twoPlayer) {
-		m_playerScore.SetString("Player:" + std::to_string(m_snakes[0]->GetScore()));
+		m_playerScore.SetString("P1:" + std::to_string(m_snakes[0]->GetScore()));
 		m_CPU1Score.SetString("CPU1:" + std::to_string(m_snakes[1]->GetScore()));
 		m_CPU2Score.SetString("CPU2:" + std::to_string(m_snakes[2]->GetScore()));
 	} else {
-		//Update Player 1 and 2 Scores
+		m_playerScore.SetString("Player 1:" + std::to_string(m_snakes[0]->GetScore()));
+		m_player2Score.SetString("Player 2:" + std::to_string(m_snakes[1]->GetScore()));
 	}
 }
 
@@ -290,11 +290,50 @@ void State_Game::HandleInput() {
 			if ((m_rightKey && playerSnake->GetDirection() != EDirection::e_left) || (m_dKey && playerSnake->GetDirection() != EDirection::e_left)) {
 				playerSnake->SetDirection(EDirection::e_right);
 				m_rightKey = false;
+				m_dKey = false;
 			}
 			return;
 		}
 	} else {
+		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
+		
+		auto* player2Snake = dynamic_cast<PlayerSnake*>(m_snakes[1]);
 		//WASD for Player 1, Arrows for Player 2
+		if ((m_upKey && playerSnake->GetDirection() != EDirection::e_down)) {
+			playerSnake->SetDirection(EDirection::e_up);
+			m_upKey = false;
+		}
+		if ((m_downKey && playerSnake->GetDirection() != EDirection::e_up)) {
+			playerSnake->SetDirection(EDirection::e_down);
+			m_downKey = false;
+		}
+		if ((m_leftKey && playerSnake->GetDirection() != EDirection::e_right)) {
+			playerSnake->SetDirection(EDirection::e_left);
+			m_leftKey = false;
+		}
+		if ((m_rightKey && playerSnake->GetDirection() != EDirection::e_left)) {
+			playerSnake->SetDirection(EDirection::e_right);
+			m_rightKey = false;
+		}
+
+		
+		if (m_wKey && player2Snake->GetDirection() != EDirection::e_down) {
+			player2Snake->SetDirection(EDirection::e_up);
+			m_wKey = false;
+		}
+		if (m_sKey && player2Snake->GetDirection() != EDirection::e_up) {
+			player2Snake->SetDirection(EDirection::e_down);
+			m_sKey = false;
+		}
+		if (m_aKey && player2Snake->GetDirection() != EDirection::e_right) {
+			player2Snake->SetDirection(EDirection::e_left);
+			m_aKey = false;
+		}
+		if (m_dKey && player2Snake->GetDirection() != EDirection::e_left) {
+			player2Snake->SetDirection(EDirection::e_right);
+			m_dKey = false;
+		}
+		
 	}
 }
 
@@ -309,7 +348,7 @@ void State_Game::SetHighScoreText() {
 	infile >> score >> m_highScore;
 	infile.close();
 
-	m_highScoreText.SetString("Hi:" + m_highScore);
+	m_highScoreText.SetString("Hi-Score:" + m_highScore);
 }
 
 void State_Game::SaveScores() {
@@ -349,12 +388,12 @@ bool State_Game::CheckIfStillAlive() {
 	int counter{ 0 };
 	for (auto snake : m_snakes) {
 		if (!snake->IsDead()) {
-			++counter;
+			counter++;
 		}
 	}
-	if (counter > 1) {
-		return true;
-	} else {
+	if (counter == 0) {
 		return false;
+	} else {
+		return true;
 	}
 }
