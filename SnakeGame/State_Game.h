@@ -27,9 +27,16 @@ public:
 	//GAME METHODS
 	void HandleInput();
 	void CheckCollisions();
+	State_Game() = default;
+	State_Game(bool _twoPlayer);
+	
 	~State_Game();
 
 private:
+
+	//If it is 2 player or single player mode
+	bool m_twoPlayer{ false };
+
 	std::string m_highScore;
 
 	void SetHighScoreText();
@@ -97,7 +104,7 @@ private:
 	void GameOver();
 
 	int GetTimeRemaining() const;
-	
+
 	void CheckWinningConditions();
 
 	void EndGobbleMode();

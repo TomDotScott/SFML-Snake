@@ -6,18 +6,18 @@
 #include "State_GameOver.h"
 
 /*TODO
+ *ADD 2 PLAYER FUNCTIONALITY
  *FIX PATH-FINDING
 	*AI SNAKES STOP WRAPPING THEMSELVES UP
 	*SOME SORT OF FORWARD-THINKING ALGORITHM
 	*A* OR GREEDY BFS SEARCH
-
  */
 
 
  //BASESTATE METHODS
 void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
 	m_clock.restart();
-	
+
 	m_font = _font;
 
 	//Load the fonts into the UI Text elements
@@ -25,31 +25,32 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	m_pausedText.m_font = m_font;
 	m_clockText.m_font = m_font;
 
-	m_playerScore.m_font = m_font;
-	m_CPU1Score.m_font = m_font;
-	m_CPU2Score.m_font = m_font;
+	if (!m_twoPlayer) {
+		m_playerScore.m_font = m_font;
+		m_CPU1Score.m_font = m_font;
+		m_CPU2Score.m_font = m_font;
+	} else {
+		//Set up Player and Player2 fonts
+	}
 
 	m_highScoreText.m_font = m_font;
 
 	SetHighScoreText();
-	
+
 	m_soundManager = _soundManager;
 
 	m_soundManager->PlayMusic("music_game");
 
-	auto* playerSnake = new PlayerSnake();
-	m_snakes.push_back(playerSnake);
+	if (!m_twoPlayer) {
+		auto* playerSnake = new PlayerSnake();
+		m_snakes.push_back(playerSnake);
 
-	//populate the food array
-	for (int i = 0; i < Constants::k_foodAmount; ++i) {
-		Food* food = new Food();
-		m_foodArray[i] = food;
-	}
-
-
-	//populate the snake Vector
-	for (int i = 0; i < Constants::k_AISnakeAmount; ++i) {
-		m_snakes.push_back(new AISnake());
+		//populate the snake Vector
+		for (int i = 0; i < Constants::k_AISnakeAmount; ++i) {
+			m_snakes.push_back(new AISnake());
+		}
+	} else {
+		//Set up 2 player snakes
 	}
 
 	//Initialise background texture
@@ -61,23 +62,30 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	m_clockSprite.setTexture(m_clockTexture);
 	m_clockSprite.setPosition(Constants::k_screenWidth - 175, m_clockText.m_position.y + 5);
 
-	//make the snakes know where the food and other snakes are on the screen
-	for (auto* snake : m_snakes) {
-		for (auto* food : m_foodArray) {
-			snake->SetFood(food);
-			snake->SetSoundManager(m_soundManager);
-		}
+	//populate the food array
+	for (int i = 0; i < Constants::k_foodAmount; ++i) {
+		Food* food = new Food();
+		m_foodArray[i] = food;
+	}
 
-		for (auto* otherSnake : m_snakes) {
-			if (snake != otherSnake) {
-				snake->SetOtherSnake(otherSnake);
+	if (!m_twoPlayer) {
+		//make the snakes know where the food and other snakes are on the screen
+		for (auto* snake : m_snakes) {
+			for (auto* food : m_foodArray) {
+				snake->SetFood(food);
+				snake->SetSoundManager(m_soundManager);
+			}
+
+			for (auto* otherSnake : m_snakes) {
+				if (snake != otherSnake) {
+					snake->SetOtherSnake(otherSnake);
+				}
 			}
 		}
 	}
 }
 
-int State_Game::GetTimeRemaining() const
-{
+int State_Game::GetTimeRemaining() const {
 	return 90 - static_cast<int>(floor(m_clock.getElapsedTime().asSeconds()));
 }
 
@@ -101,7 +109,7 @@ void State_Game::Update() {
 		UpdateScores();
 
 		m_clockText.SetString(std::to_string(GetTimeRemaining()));
-		
+
 		CheckWinningConditions();
 	}
 }
@@ -120,7 +128,7 @@ void State_Game::Render(sf::RenderWindow& _window) {
 	for (Snake* snake : m_snakes) {
 		snake->Render(_window);
 	}
-	
+
 	//Draw the Walls
 	_window.draw(m_topWall.m_wall);
 	_window.draw(m_bottomWall.m_wall);
@@ -154,6 +162,10 @@ void State_Game::Destroy() {
 	for (auto* snake : m_snakes) {
 		snake = nullptr;
 	}
+}
+
+State_Game::State_Game(bool _twoPlayer) {
+	m_twoPlayer = _twoPlayer ? true : false;
 }
 
 State_Game::~State_Game() {
@@ -198,10 +210,16 @@ void State_Game::EndGobbleMode() {
 }
 
 void State_Game::CheckWinningConditions() {
-	//If the player has died, end the game
-	auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
-	if ((m_snakes[0]->IsDead() && playerSnake) ||  !CheckIfStillAlive() || GetTimeRemaining() == 0){
-		GameOver();
+	if (!m_twoPlayer) {
+		//If the player has died, end the game
+		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
+		if ((m_snakes[0]->IsDead() && playerSnake) || !CheckIfStillAlive() || GetTimeRemaining() == 0) {
+			GameOver();
+		}
+	} else {
+		if (!CheckIfStillAlive() || GetTimeRemaining() == 0) {
+			GameOver();
+		}
 	}
 }
 
@@ -228,9 +246,13 @@ void State_Game::RandomiseFood(Food* _foodToRandomise) {
 }
 
 void State_Game::UpdateScores() {
-	m_playerScore.SetString("Player:" + std::to_string(m_snakes[0]->GetScore()));
-	m_CPU1Score.SetString("CPU1:" + std::to_string(m_snakes[1]->GetScore()));
-	m_CPU2Score.SetString("CPU2:" + std::to_string(m_snakes[2]->GetScore()));
+	if (!m_twoPlayer) {
+		m_playerScore.SetString("Player:" + std::to_string(m_snakes[0]->GetScore()));
+		m_CPU1Score.SetString("CPU1:" + std::to_string(m_snakes[1]->GetScore()));
+		m_CPU2Score.SetString("CPU2:" + std::to_string(m_snakes[2]->GetScore()));
+	} else {
+		//Update Player 1 and 2 Scores
+	}
 }
 
 void State_Game::HandleInput() {
@@ -240,11 +262,10 @@ void State_Game::HandleInput() {
 		m_paused = !m_paused;
 		m_escapeKey = false;
 	}
-	//access the player's input function
-	for (auto* snake : m_snakes) {
+	if (!m_twoPlayer) {
 		//There is only ever one player snake
 		//If it can be cast to the PlayerSnake type then we have the player
-		auto* playerSnake = dynamic_cast<PlayerSnake*>(snake);
+		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
 		if (playerSnake) {
 			if ((m_upKey && playerSnake->GetDirection() != EDirection::e_down) || (m_wKey && playerSnake->GetDirection() != EDirection::e_down)) {
 				playerSnake->SetDirection(EDirection::e_up);
@@ -267,11 +288,12 @@ void State_Game::HandleInput() {
 			}
 			return;
 		}
+	} else {
+		//WASD for Player 1, Arrows for Player 2
 	}
 }
 
-void State_Game::SetHighScoreText()
-{
+void State_Game::SetHighScoreText() {
 	std::string score;
 
 	//READ THE FILE
@@ -312,8 +334,7 @@ void State_Game::SaveScores() {
 	outfile.close();
 }
 
-void State_Game::GameOver()
-{
+void State_Game::GameOver() {
 	SaveScores();
 	current_state = eCurrentState::e_GameOver;
 	core_state.SetState(new State_GameOver());
