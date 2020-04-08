@@ -58,15 +58,15 @@ private:
 		{ Constants::k_screenWidth - 145, 25 }, m_font, 25 };
 
 	//Player Scores
-	UIText m_playerScore{ "Player:", sf::Color::Red,
+	UIText m_playerScore{ "Player:", sf::Color::Blue,
 		{ static_cast<float>(Constants::k_screenWidth - 175), 175},
 		m_font, 25 };
 
-	UIText m_CPU1Score{ "CPU1:", sf::Color::Blue,
+	UIText m_CPU1Score{ "CPU1:", sf::Color::Red,
 	{ static_cast<float>(Constants::k_screenWidth - 175), 225},
 		m_font, 25 };
 
-	UIText m_CPU2Score{ "CPU2:", sf::Color::Blue,
+	UIText m_CPU2Score{ "CPU2:", sf::Color::Red,
 		{ static_cast<float>(Constants::k_screenWidth - 175), 275},
 		m_font, 25 };
 
