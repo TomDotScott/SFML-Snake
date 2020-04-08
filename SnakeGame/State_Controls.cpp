@@ -27,13 +27,15 @@ void State_Controls::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 
 
 void State_Controls::Render(sf::RenderWindow& _window) {
+	m_menuBackground.Render(_window);
+	
 	m_play.SetColour(sf::Color::White);
 	m_main.SetColour(sf::Color::White);
 
 	if (m_selected == 0) {
-		m_play.SetColour(sf::Color::Red);
+		m_play.SetColour(sf::Color(245, 77, 56));
 	} else if (m_selected == 1) {
-		m_main.SetColour(sf::Color::Red);
+		m_main.SetColour(sf::Color(245, 77, 56));
 	} 
 
 	//draw the text on screen

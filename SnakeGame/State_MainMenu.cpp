@@ -12,7 +12,7 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 	m_soundManager = _soundManager;
 
 	m_soundManager->StopMusic();
-
+	
 	//load the font and display text
 	m_font = _font;
 
@@ -25,16 +25,19 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 
 
 void State_MainMenu::Render(sf::RenderWindow& _window) {
+	m_menuBackground.Render(_window);
+	
+	//THE TEXT
 	m_playSinglePlayer.SetColour(sf::Color::White);
 	m_playTwoPlayer.SetColour(sf::Color::White);
 	m_quit.SetColour(sf::Color::White);
 
 	if (m_selected == 0) {
-		m_playSinglePlayer.SetColour(sf::Color::Red);
+		m_playSinglePlayer.SetColour(sf::Color(245, 77, 56));
 	} else if (m_selected == 1) {
-		m_playTwoPlayer.SetColour(sf::Color::Red);
+		m_playTwoPlayer.SetColour(sf::Color(245, 77, 56));
 	} else {
-		m_quit.SetColour(sf::Color::Red);
+		m_quit.SetColour(sf::Color(245, 77, 56));
 	}
 
 	//draw the text on screen

@@ -11,6 +11,8 @@ private:
 	sf::Sprite m_gameIcon;
 	sf::Texture m_gobbleTexture, m_specialTexture, m_standardTexture;
 
+	MenuBackground m_menuBackground;
+	
 	UIText m_textLine1to3{ "Use WASD or the Arrow keys to move your snake\n\nYou have 90 seconds to eat as much food as you can\n\nEating food gives you more points, but it also makes you grow!", sf::Color::White,
 		{static_cast<float>(Constants::k_screenWidth) / 2.f, 100}, m_font, 16 };
 

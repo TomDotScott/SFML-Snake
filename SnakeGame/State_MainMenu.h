@@ -28,6 +28,8 @@ private:
 	std::vector<UIText*> m_textToRender{
 		&m_title, &m_playSinglePlayer, &m_playTwoPlayer, &m_quit
 	};
+
+	MenuBackground m_menuBackground;
 	
 	//deal with user selections
 	int m_selected{ 0 };

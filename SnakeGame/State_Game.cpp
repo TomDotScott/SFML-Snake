@@ -22,7 +22,7 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 
 	m_pausedText.SetFont(m_font);
 	m_gobbleModeText.SetFont(m_font);
-	
+
 	if (!m_twoPlayer) {
 		for (auto* text : m_UItoRenderSinglePlayer) {
 			text->SetFont(m_font);
@@ -140,8 +140,7 @@ void State_Game::Render(sf::RenderWindow& _window) {
 	_window.draw(m_leftWall.m_wall);
 	_window.draw(m_rightWall.m_wall);
 
-	for(auto* text : m_UItoRenderSinglePlayer)
-	{
+	for (auto* text : m_UItoRenderSinglePlayer) {
 		_window.draw(text->m_text);
 	}
 
@@ -296,8 +295,7 @@ void State_Game::HandleInput() {
 		}
 	} else {
 		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
-		
-		auto* player2Snake = dynamic_cast<PlayerSnake*>(m_snakes[1]);
+
 		//WASD for Player 1, Arrows for Player 2
 		if ((m_upKey && playerSnake->GetDirection() != EDirection::e_down)) {
 			playerSnake->SetDirection(EDirection::e_up);
@@ -316,7 +314,8 @@ void State_Game::HandleInput() {
 			m_rightKey = false;
 		}
 
-		
+		auto* player2Snake = dynamic_cast<PlayerSnake*>(m_snakes[1]);
+
 		if (m_wKey && player2Snake->GetDirection() != EDirection::e_down) {
 			player2Snake->SetDirection(EDirection::e_up);
 			m_wKey = false;
@@ -333,7 +332,7 @@ void State_Game::HandleInput() {
 			player2Snake->SetDirection(EDirection::e_right);
 			m_dKey = false;
 		}
-		
+
 	}
 }
 

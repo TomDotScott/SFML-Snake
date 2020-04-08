@@ -8,9 +8,11 @@ public:
 	void Render(sf::RenderWindow& _window) override;
 	void Destroy() override;
 private:
+	MenuBackground m_menuBackground;
+	
 	UIText m_title{ "Game Over", sf::Color::White,
 		{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 5.f},
-		m_font, 96 };
+		m_font, 84 };
 
 	UIText m_highScore{ "HiScore:", sf::Color::White,
 		{static_cast<float>(Constants::k_screenWidth) / 2.f, static_cast<float>(Constants::k_screenHeight) / 2.5f},

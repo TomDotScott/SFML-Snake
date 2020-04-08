@@ -85,6 +85,45 @@ protected:
 			m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getGlobalBounds().height / 2);
 		}
 	};
+
+	struct MenuBackground
+	{
+		MenuBackground() {
+			//load the textures to display
+			m_leftRightWall.loadFromFile("Resources/Graphics/left_right_wall.png");
+			m_topBottomWall.loadFromFile("Resources/Graphics/top_bottom_wall.png");
+			m_grass.loadFromFile("Resources/Graphics/Game_Background.png");
+		}
+		//To draw the walls and the background 
+		sf::Texture m_leftRightWall, m_topBottomWall, m_grass;
+		sf::Sprite m_spriteBG, m_spriteLR, m_spriteTB;
+		void Render(sf::RenderWindow& _window)
+		{
+			//THE BACKGROUND
+			m_spriteBG.setTexture(m_grass);
+			m_spriteBG.setScale(1.5, 1.5);
+			m_spriteBG.setPosition(0, 0);
+			_window.draw(m_spriteBG);
+
+			//LEFT AND RIGHT WALLS
+			m_spriteLR.setTexture(m_leftRightWall);
+			m_spriteLR.setScale(1.5, 1.5);
+			m_spriteLR.setPosition(0, 0);
+			_window.draw(m_spriteLR);
+
+			m_spriteLR.setPosition(Constants::k_screenWidth - 1.5 * Constants::k_gameGridCellSize, 0);
+			_window.draw(m_spriteLR);
+
+			//TOP AND BOTTOM WALLS
+			m_spriteTB.setTexture(m_topBottomWall);
+			m_spriteTB.setScale(1.5, 1.5);
+			m_spriteTB.setPosition(0, 0);
+			_window.draw(m_spriteTB);
+
+			m_spriteTB.setPosition(0, Constants::k_screenHeight - 1.5 * Constants::k_gameGridCellSize);
+			_window.draw(m_spriteTB);
+		}
+	};
 };
 
 //StateManager keeps track of the current game state

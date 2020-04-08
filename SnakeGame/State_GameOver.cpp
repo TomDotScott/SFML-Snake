@@ -38,13 +38,15 @@ void State_GameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 
 
 void State_GameOver::Render(sf::RenderWindow& _window) {
+	m_menuBackground.Render(_window);
+	
 	m_playAgain.SetColour(sf::Color::White);
 	m_main.SetColour(sf::Color::White);
 
 	if (m_selected == 0) {
-		m_playAgain.SetColour(sf::Color::Red);
+		m_playAgain.SetColour(sf::Color(245, 77, 56));
 	} else if (m_selected == 1) {
-		m_main.SetColour(sf::Color::Red);
+		m_main.SetColour(sf::Color(245, 77, 56));
 	}
 
 	for(auto text : m_textToRender)

@@ -58,20 +58,20 @@ private:
 		{ Constants::k_gameGridCellSize * 2, Constants::k_gameGridCellSize }, m_font, Constants::k_gameGridCellSize };
 
 	//Player Scores
-	UIText m_playerScore{ "P1:", sf::Color::Blue,
-		{ static_cast<float>(m_clockText.m_position.x + 2*Constants::k_gameGridCellSize), m_clockText.m_position.y},
+	UIText m_playerScore{ "P1:", sf::Color(104, 136, 217),
+		{ static_cast<float>(m_clockText.m_position.x + 5*Constants::k_gameGridCellSize), m_clockText.m_position.y},
 		m_font, Constants::k_gameGridCellSize };
 
-	UIText m_player2Score{ "P2:", sf::Color::Red,
+	UIText m_player2Score{ "P2:", sf::Color(245, 77, 56),
 	{ static_cast<float>(m_playerScore.m_position.x + 120), m_clockText.m_position.y},
 		m_font, Constants::k_gameGridCellSize };
 	
-	UIText m_CPU1Score{ "CPU1:", sf::Color::Red,
-	{ static_cast<float>(m_playerScore.m_position.x + 120), m_playerScore.m_position.y},
+	UIText m_CPU1Score{ "CPU1:", sf::Color(245, 77, 56),
+	{ static_cast<float>(Constants::k_screenWidth) / 2.f + Constants::k_gameGridCellSize, m_playerScore.m_position.y},
 		m_font, Constants::k_gameGridCellSize };
 
-	UIText m_CPU2Score{ "CPU2:", sf::Color::Red,
-		{ static_cast<float>(m_CPU1Score.m_position.x + 144), m_CPU1Score.m_position.y},
+	UIText m_CPU2Score{ "CPU2:", sf::Color(245, 77, 56),
+		{ static_cast<float>(Constants::k_screenWidth - 5*Constants::k_gameGridCellSize), m_CPU1Score.m_position.y},
 		m_font, Constants::k_gameGridCellSize };
 
 	UIText m_highScoreText{ "Hi-Score: ", sf::Color::White,
@@ -80,7 +80,7 @@ private:
 	
 	//Gobble Mode text
 	UIText m_gobbleModeText{ "Gobble Mode", sf::Color::Yellow,
-		{ m_highScoreText.m_position.x + 8 * Constants::k_gameGridCellSize, m_highScoreText.m_position.y},
+		{ Constants::k_screenWidth - 120, m_highScoreText.m_position.y},
 		m_font, Constants::k_gameGridCellSize };
 
 	//The text that will always be on screen
