@@ -14,7 +14,7 @@ public:
 
 	void Randomise();
 
-	void Render(sf::RenderWindow& _window) override;
+	void Render(sf::RenderWindow& _window) override final;
 
 	sf::Vector2f GetPosition() const { return m_position; }
 

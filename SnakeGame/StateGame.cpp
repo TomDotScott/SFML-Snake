@@ -1,6 +1,5 @@
 #include "StateGame.h"
 #include <fstream>
-#include <cmath>
 #include "AISnake.h"
 #include "PlayerSnake.h"
 #include "StateGameOver.h"
@@ -24,12 +23,31 @@ void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMana
 	m_pausedText.SetFont(m_font);
 	m_gobbleModeText.SetFont(m_font);
 
-	if (!m_twoPlayer) {
-		for (auto* text : m_UItoRenderSinglePlayer) {
+	if (m_twoPlayer) {
+		//move the player1 text to the centre and the player 2 text to the far right
+		m_playerScore.m_text.setPosition(static_cast<float>(constants::k_screenWidth) / 2 - constants::k_gameGridCellSize * 2, constants::k_gameGridCellSize);
+		m_player2Score.m_text.setPosition(static_cast<float>(constants::k_screenWidth) - 5 * constants::k_gameGridCellSize, constants::k_gameGridCellSize);
+
+		//Set up 2 player snakes
+		auto* player1Snake = new PlayerSnake("Player 1");
+		m_snakes.push_back(player1Snake);
+
+		auto* player2Snake = new PlayerSnake("Player 2");
+		m_snakes.push_back(player2Snake);
+
+		for (auto* text : m_UItoRenderTwoPlayer) {
 			text->SetFont(m_font);
 		}
 	} else {
-		for (auto* text : m_UItoRenderTwoPlayer) {
+		auto* playerSnake = new PlayerSnake("Player 1");
+		m_snakes.push_back(playerSnake);
+
+		//populate the snake Vector
+		for (int i = 0; i < constants::k_AISnakeAmount; ++i) {
+			m_snakes.push_back(new AISnake());
+		}
+
+		for (auto* text : m_UItoRenderSinglePlayer) {
 			text->SetFont(m_font);
 		}
 	}
@@ -37,25 +55,7 @@ void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMana
 	SetHighScoreText();
 
 	m_soundManager = _soundManager;
-
 	m_soundManager->PlayMusic("music_game");
-
-	if (!m_twoPlayer) {
-		auto* playerSnake = new PlayerSnake();
-		m_snakes.push_back(playerSnake);
-
-		//populate the snake Vector
-		for (int i = 0; i < constants::k_AISnakeAmount; ++i) {
-			m_snakes.push_back(new AISnake());
-		}
-	} else {
-		//Set up 2 player snakes
-		auto* player1Snake = new PlayerSnake();
-		m_snakes.push_back(player1Snake);
-
-		auto* player2Snake = new PlayerSnake();
-		m_snakes.push_back(player2Snake);
-	}
 
 	//Initialise background texture
 	m_grassTexture.loadFromFile("Resources/Graphics/Game_Background.png");
@@ -73,13 +73,11 @@ void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMana
 		m_foodArray[i] = food;
 	}
 
-	//make the snakes know where the food and other snakes are on the screen
+	//make the snakes know where the food and other snakes are on the screen for collisions
 	for (auto* snake : m_snakes) {
-		//if (!m_twoPlayer) {
 		for (auto* food : m_foodArray) {
 			snake->SetFood(food);
 		}
-		//}
 
 		for (auto* otherSnake : m_snakes) {
 			if (snake != otherSnake) {
@@ -138,8 +136,15 @@ void StateGame::Render(sf::RenderWindow& _window) {
 	_window.draw(m_leftWall.m_wall);
 	_window.draw(m_rightWall.m_wall);
 
-	for (auto* text : m_UItoRenderSinglePlayer) {
-		_window.draw(text->m_text);
+	if (m_twoPlayer) {
+		for(auto* uiElement : m_UItoRenderTwoPlayer)
+		{
+			_window.draw(uiElement->m_text);
+		}
+	} else {
+		for (auto* uiElement : m_UItoRenderSinglePlayer) {
+			_window.draw(uiElement->m_text);
+		}
 	}
 	if (m_gobble) {
 		_window.draw(m_gobbleModeText.m_text);
@@ -167,11 +172,11 @@ StateGame::StateGame(bool _twoPlayer) {
 
 StateGame::~StateGame() {
 	for (auto* food : m_foodArray) {
-		delete food;
+		food = nullptr;
 	}
 
 	for (auto* snake : m_snakes) {
-		delete snake;
+		snake = nullptr;
 	}
 }
 
@@ -246,8 +251,8 @@ void StateGame::UpdateScores() {
 		m_CPU1Score.SetString("CPU1:" + std::to_string(m_snakes[1]->GetScore()));
 		m_CPU2Score.SetString("CPU2:" + std::to_string(m_snakes[2]->GetScore()));
 	} else {
-		m_playerScore.SetString("Player 1:" + std::to_string(m_snakes[0]->GetScore()));
-		m_player2Score.SetString("Player 2:" + std::to_string(m_snakes[1]->GetScore()));
+		m_playerScore.SetString("P1:" + std::to_string(m_snakes[0]->GetScore()));
+		m_player2Score.SetString("P2:" + std::to_string(m_snakes[1]->GetScore()));
 	}
 }
 
