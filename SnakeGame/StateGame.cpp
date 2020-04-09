@@ -15,7 +15,7 @@ void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMana
 
 	if (m_twoPlayer) {
 		//move the player1 text to the centre and the player 2 text to the far right
-		m_playerScore.m_text.setPosition(static_cast<float>(constants::k_screenWidth) / 2 - constants::k_gameGridCellSize * 2, constants::k_gameGridCellSize);
+		m_playerScore.m_text.setPosition(static_cast<float>(constants::k_screenWidth) / 2 - constants::k_gameGridCellSize, constants::k_gameGridCellSize);
 		m_player2Score.m_text.setPosition(static_cast<float>(constants::k_screenWidth) - 5 * constants::k_gameGridCellSize, constants::k_gameGridCellSize);
 
 		//Set up 2 player snakes
@@ -155,7 +155,7 @@ void StateGame::Destroy() {
 	}
 }
 
-StateGame::StateGame(bool _twoPlayer) {
+StateGame::StateGame(const bool& _twoPlayer) {
 	m_twoPlayer = _twoPlayer ? true : false;
 }
 
@@ -236,12 +236,12 @@ void StateGame::RandomiseFood(Food* _foodToRandomise) {
 
 void StateGame::UpdateScores() {
 	if (!m_twoPlayer) {
-		m_playerScore.SetString("P1:" + std::to_string(m_snakes[0]->GetScore()));
-		m_CPU1Score.SetString("CPU1:" + std::to_string(m_snakes[1]->GetScore()));
-		m_CPU2Score.SetString("CPU2:" + std::to_string(m_snakes[2]->GetScore()));
+		m_playerScore.SetString("P1: " + std::to_string(m_snakes[0]->GetScore()));
+		m_CPU1Score.SetString("CPU1: " + std::to_string(m_snakes[1]->GetScore()));
+		m_CPU2Score.SetString("CPU2: " + std::to_string(m_snakes[2]->GetScore()));
 	} else {
-		m_playerScore.SetString("P1:" + std::to_string(m_snakes[0]->GetScore()));
-		m_player2Score.SetString("P2:" + std::to_string(m_snakes[1]->GetScore()));
+		m_playerScore.SetString("P1: " + std::to_string(m_snakes[0]->GetScore()));
+		m_player2Score.SetString("P2: " + std::to_string(m_snakes[1]->GetScore()));
 	}
 }
 
@@ -363,19 +363,15 @@ void StateGame::SaveScores() {
 
 void StateGame::GameOver() {
 	SaveScores();
-	CORE_STATE.SetState(new StateGameOver(m_twoPlayer ? true : false));
+	CORE_STATE.SetState(new StateGameOver(m_twoPlayer ? true : false, !m_snakes[0]->IsDead()));
 }
 
 bool StateGame::StillAlive() {
 	int counter{ 0 };
-	for (auto snake : m_snakes) {
+	for (auto* snake : m_snakes) {
 		if (!snake->IsDead()) {
 			counter++;
 		}
 	}
-	if (counter == 0) {
-		return false;
-	} else {
-		return true;
-	}
+	return counter == 1 ? false : true;
 }

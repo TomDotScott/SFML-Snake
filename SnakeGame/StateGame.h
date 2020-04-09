@@ -18,8 +18,7 @@ struct Wall {
 
 class StateGame final : public BaseState {
 public:
-	StateGame() = default;
-	StateGame(bool _twoPlayer);
+	explicit StateGame(const bool& _twoPlayer);
 
 	~StateGame();
 	
@@ -107,7 +106,7 @@ private:
 
 	bool m_gobble{ false };
 	bool m_paused{ false };
-
+	
 	//TOP
 	Wall m_topWall{ Wall({0, 100}, "top_bottom_wall.png") };
 	//LEFT

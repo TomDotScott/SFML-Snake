@@ -86,7 +86,7 @@ void StateControls::Update() {
 		switch (m_selected) {
 		case 0:
 			//play the game...
-			CORE_STATE.SetState(new StateGame());
+			CORE_STATE.SetState(new StateGame(false));
 			CURRENT_STATE = ECurrentState::eGame;
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;

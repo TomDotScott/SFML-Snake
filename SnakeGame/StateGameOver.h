@@ -3,7 +3,7 @@
 
 class StateGameOver final : public BaseState {
 public:
-	explicit StateGameOver(const bool& _isTwoPlayer);
+	explicit StateGameOver(const bool& _isTwoPlayer, const bool& _playerWon);
 	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) override;
 	void Update() override;
 	void Render(sf::RenderWindow& _window) override;
@@ -53,5 +53,6 @@ private:
 	std::string m_player1ScoreValue, m_player2ScoreValue, m_highScoreValue;
 
 	bool m_twoPlayer{ false };
+	bool m_playerWon{ false };
 };
 

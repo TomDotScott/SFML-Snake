@@ -5,7 +5,7 @@
 #include "StateMainMenu.h"
 
 
-StateGameOver::StateGameOver(const bool& _isTwoPlayer) : m_twoPlayer(_isTwoPlayer) {}
+StateGameOver::StateGameOver(const bool& _isTwoPlayer, const bool& _playerWon) : m_twoPlayer(_isTwoPlayer), m_playerWon(_playerWon){}
 
 void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
 	CURRENT_STATE = ECurrentState::eGameOver;
@@ -39,6 +39,7 @@ void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, Sound
 			uiText->SetFont(m_font);
 		}
 	} else {
+		m_gameOverText.SetString(m_playerWon ? "You Won!" : "Game Over");
 		for (auto* text : m_textToRenderSinglePlayer) {
 			text->SetFont(m_font);
 		}
@@ -100,7 +101,11 @@ void StateGameOver::Update() {
 		switch (m_selected) {
 		case 0:
 			//play the game...
-			CORE_STATE.SetState(m_twoPlayer ? new StateGame(true) : new StateGame());
+			if (m_twoPlayer) {
+				CORE_STATE.SetState(new StateGame(true));
+			} else {
+				CORE_STATE.SetState(new StateGame(false));
+			}
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
