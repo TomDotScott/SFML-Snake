@@ -4,7 +4,7 @@
 
 //Holds the directions that the snake can travel in
 enum class EDirection {
-	e_none, e_left, e_right, e_up, e_down
+	eNone, eLeft, eRight, eUp, eDown
 };
 
 //Doubly linked list, so we need reference to previous and next node
@@ -16,7 +16,7 @@ struct Node {
 
 	sf::Vector2f m_position;
 	EDirection m_direction;
-	
+
 	Node* m_previousNode;
 	Node* m_nextNode;
 };
@@ -36,15 +36,13 @@ public:
 	bool IsEmpty() const;
 	int Size() const;
 
-	friend std::ostream& operator<<(std::ostream& _os, List _list);
 	//Returns the front node
 	Node* GetHead() const { return m_head; }
 	//Returns the back node
 	Node* GetTail() const { return m_tail; }
 
-
 private:
-	Node* m_head;
-	Node* m_tail;
+	Node* m_head{ nullptr };
+	Node* m_tail{ nullptr };
 	int m_size{ 0 };
 };

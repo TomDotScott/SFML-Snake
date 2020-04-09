@@ -1,13 +1,11 @@
 #include "PlayerSnake.h"
 
 PlayerSnake::PlayerSnake() {
-	m_colour = sf::Color::Red;
-
 	RandomisePosition();
 
 	m_segments.PushBack(m_position, m_direction);
 	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)), m_direction);
-	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, (m_position.y)), m_direction);
+	m_segments.PushBack(sf::Vector2f(m_position.x - constants::k_gameGridCellSize, (m_position.y)), m_direction);
 
 
 	//load the textures

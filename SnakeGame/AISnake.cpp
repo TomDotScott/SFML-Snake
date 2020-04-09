@@ -1,13 +1,11 @@
 #include "AISnake.h"
 
 AISnake::AISnake() {
-	m_defaultColour = sf::Color(sf::Color::Blue);
-
 	RandomisePosition();
 
 	m_segments.PushBack(m_position, m_direction);
 	m_segments.PushBack(sf::Vector2f(m_position.x, (m_position.y)), m_direction);
-	m_segments.PushBack(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, (m_position.y)), m_direction);
+	m_segments.PushBack(sf::Vector2f(m_position.x - constants::k_gameGridCellSize, (m_position.y)), m_direction);
 
 	//load the textures
 	m_headTexture.loadFromFile("Resources/Graphics/Snake_AI_Head.png");
@@ -23,75 +21,75 @@ void AISnake::ChooseDirection() {
 		//Make decisions based on the chosen food
 		EDirection newDirection;
 
-		if (m_targetList.Front().x < m_position.x && m_direction != EDirection::e_right) {
+		if (m_targetList.Front().x < m_position.x && m_direction != EDirection::eRight) {
 			//If the snake is blocking itself in it's current direction
-			newDirection = EDirection::e_left;
+			newDirection = EDirection::eLeft;
 			if (IsSelfInWay(newDirection)) {
 				//Is blocking on the left so must move up or down
-				newDirection = EDirection::e_down;
+				newDirection = EDirection::eDown;
 				if (!IsSelfInWay(newDirection)) {
-					m_direction = EDirection::e_down;
+					m_direction = EDirection::eDown;
 					m_hasMoved = true;
 				} else {
-					m_direction = EDirection::e_up;
+					m_direction = EDirection::eUp;
 					m_hasMoved = true;
 				}
 			} else {
-				m_direction = EDirection::e_left;
+				m_direction = EDirection::eLeft;
 				m_hasMoved = true;
 			}
-		} else if (m_targetList.Front().x > m_position.x && m_direction != EDirection::e_left) {
+		} else if (m_targetList.Front().x > m_position.x && m_direction != EDirection::eLeft) {
 
-			newDirection = EDirection::e_right;
+			newDirection = EDirection::eRight;
 			if (IsSelfInWay(newDirection)) {
 
 				//Is blocking on the right so must move up or down
-				newDirection = EDirection::e_down;
+				newDirection = EDirection::eDown;
 				if (!IsSelfInWay(newDirection)) {
-					m_direction = EDirection::e_down;
+					m_direction = EDirection::eDown;
 					m_hasMoved = true;
 				} else {
-					m_direction = EDirection::e_up;
+					m_direction = EDirection::eUp;
 					m_hasMoved = true;
 				}
 			} else {
-				m_direction = EDirection::e_right;
+				m_direction = EDirection::eRight;
 				m_hasMoved = true;
 			}
 
-		} else if (m_targetList.Front().y > m_position.y && m_direction != EDirection::e_up) {
+		} else if (m_targetList.Front().y > m_position.y && m_direction != EDirection::eUp) {
 
-			newDirection = EDirection::e_down;
+			newDirection = EDirection::eDown;
 			if (IsSelfInWay(newDirection)) {
 
 				//Is blocking on the down so must move left or right
-				newDirection = EDirection::e_left;
+				newDirection = EDirection::eLeft;
 				if (!IsSelfInWay(newDirection)) {
-					m_direction = EDirection::e_left;
+					m_direction = EDirection::eLeft;
 					m_hasMoved = true;
 				} else {
-					m_direction = EDirection::e_right;
+					m_direction = EDirection::eRight;
 					m_hasMoved = true;
 				}
 			} else {
-				m_direction = EDirection::e_down;
+				m_direction = EDirection::eDown;
 				m_hasMoved = true;
 			}
-		} else if (m_targetList.Front().y < m_position.y && m_direction != EDirection::e_down) {
-			newDirection = EDirection::e_up;
+		} else if (m_targetList.Front().y < m_position.y && m_direction != EDirection::eDown) {
+			newDirection = EDirection::eUp;
 			if (IsSelfInWay(newDirection)) {
 
 				//Is blocking on the up so must move left or right
-				newDirection = EDirection::e_left;
+				newDirection = EDirection::eLeft;
 				if (!IsSelfInWay(newDirection)) {
-					m_direction = EDirection::e_left;
+					m_direction = EDirection::eLeft;
 					m_hasMoved = true;
 				} else {
-					m_direction = EDirection::e_right;
+					m_direction = EDirection::eRight;
 					m_hasMoved = true;
 				}
 			} else {
-				m_direction = EDirection::e_up;
+				m_direction = EDirection::eUp;
 				m_hasMoved = true;
 			}
 		}
@@ -99,28 +97,28 @@ void AISnake::ChooseDirection() {
 		//if the y's are the same but the xes are different
 		else if (m_targetList.Front().y == m_position.y
 			&& m_targetList.Front().x != m_position.x
-			&& (m_direction == EDirection::e_up || m_direction == EDirection::e_down)) {
-			newDirection = EDirection::e_left;
+			&& (m_direction == EDirection::eUp || m_direction == EDirection::eDown)) {
+			newDirection = EDirection::eLeft;
 			//move left or right
 			if (!IsSelfInWay(newDirection)) {
-				m_direction = EDirection::e_left;
+				m_direction = EDirection::eLeft;
 				m_hasMoved = true;
 			} else {
-				m_direction = EDirection::e_right;
+				m_direction = EDirection::eRight;
 				m_hasMoved = true;
 			}
 		}
 		//if the xes are the same but the ys are different
 		else if (m_targetList.Front().x == m_position.x
 			&& m_targetList.Front().y != m_position.y
-			&& (m_direction == EDirection::e_left || m_direction == EDirection::e_right)) {
-			newDirection = EDirection::e_up;
+			&& (m_direction == EDirection::eLeft || m_direction == EDirection::eRight)) {
+			newDirection = EDirection::eUp;
 			//move up or down
 			if (!IsSelfInWay(newDirection)) {
-				m_direction = EDirection::e_up;
+				m_direction = EDirection::eUp;
 				m_hasMoved = true;
 			} else {
-				m_direction = EDirection::e_down;
+				m_direction = EDirection::eDown;
 				m_hasMoved = true;
 			}
 		}
@@ -184,7 +182,7 @@ void AISnake::FindClosestFood() {
 			//reset the closest food
 			closestFood = currentFoodPosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
-			m_targetList.PushFront(closestFood, EDirection::e_none);
+			m_targetList.PushFront(closestFood, EDirection::eNone);
 
 			//check that the closest food isn't in any of the segments
 			if (IsOverlapping(closestFood)) {
@@ -193,7 +191,7 @@ void AISnake::FindClosestFood() {
 		}
 		//Otherwise, add to the end of the list
 		else {
-			m_targetList.PushBack(currentFoodPosition, EDirection::e_none);
+			m_targetList.PushBack(currentFoodPosition, EDirection::eNone);
 		}
 	}
 }
@@ -204,7 +202,7 @@ void AISnake::FindClosestSnake() {
 
 	sf::Vector2f closestSnake = m_otherSnakes[0]->GetHeadPosition();
 
-	m_targetList.PushFront(closestSnake, EDirection::e_none);
+	m_targetList.PushFront(closestSnake, EDirection::eNone);
 
 	sf::Vector2f positionVectorOfSnakeToOtherSnake =
 		sf::Vector2f(closestSnake.x - m_position.x, closestSnake.y - m_position.y);
@@ -230,11 +228,11 @@ void AISnake::FindClosestSnake() {
 			//reset the closest food
 			closestSnake = currentSnakePosition;
 			magnitudeOfClosestFood = magnitudeOfCurrentFood;
-			m_targetList.PushFront(closestSnake, EDirection::e_none);
+			m_targetList.PushFront(closestSnake, EDirection::eNone);
 		}
 		//Otherwise, add to the end of the list
 		else {
-			m_targetList.PushBack(currentSnakePosition, EDirection::e_none);
+			m_targetList.PushBack(currentSnakePosition, EDirection::eNone);
 		}
 	}
 }
@@ -247,12 +245,12 @@ void AISnake::FindHighestFood() {
 	Food* highestValueFood = m_food[0];
 
 	//Make the highest the front of the list
-	m_targetList.PushFront(highestValueFood->GetPosition(), EDirection::e_none);
+	m_targetList.PushFront(highestValueFood->GetPosition(), EDirection::eNone);
 
 	//Check to see if any food is higher value
 	for (auto* currentFood : m_food) {
 		if (highestValueFood->GetGrowAmount() < currentFood->GetGrowAmount()) {
-			m_targetList.PushFront(currentFood->GetPosition(), EDirection::e_none);
+			m_targetList.PushFront(currentFood->GetPosition(), EDirection::eNone);
 			highestValueFood = currentFood;
 		}
 		//If their values are the same, then choose the one that is closer
@@ -273,10 +271,10 @@ void AISnake::FindHighestFood() {
 
 			//If the current food is closer, then it goes to the front of the list
 			if (magnitudeOfSnakeToCurrentFood < magnitudeOfSnakeToCurrentHighestValueFood) {
-				m_targetList.PushFront(currentFood->GetPosition(), EDirection::e_none);
+				m_targetList.PushFront(currentFood->GetPosition(), EDirection::eNone);
 			}
 		} else {
-			m_targetList.PushBack(currentFood->GetPosition(), EDirection::e_none);
+			m_targetList.PushBack(currentFood->GetPosition(), EDirection::eNone);
 		}
 	}
 }
@@ -307,7 +305,7 @@ bool AISnake::IsSnakeInWay() const{
 				const float deltaY = segmentPosition.y - m_position.y;
 
 				//Only evaluate if close enough
-				if (deltaX == Constants::k_gameGridCellSize || deltaY == Constants::k_gameGridCellSize) {
+				if (deltaX == constants::k_gameGridCellSize || deltaY == constants::k_gameGridCellSize) {
 					if (currentNode->m_position.x == m_targetList.Front().x || currentNode->m_position.y == m_targetList.Front().y) {
 						return true;
 					}
@@ -322,10 +320,10 @@ bool AISnake::IsSnakeInWay() const{
 
 bool AISnake::IsSelfInWay(EDirection& _direction) const {
 	//Cycle through the grid in front of the snake and see if it overlaps
-	if ((_direction == EDirection::e_left && IsOverlapping(sf::Vector2f(m_position.x - Constants::k_gameGridCellSize, m_position.y)))
-		|| (_direction == EDirection::e_right && IsOverlapping(sf::Vector2f(m_position.x + Constants::k_gameGridCellSize, m_position.y)))
-		|| (_direction == EDirection::e_up && IsOverlapping(sf::Vector2f(m_position.x, m_position.y - Constants::k_gameGridCellSize)))
-		|| (_direction == EDirection::e_down && IsOverlapping(sf::Vector2f(m_position.x, m_position.y + Constants::k_gameGridCellSize)))) {
+	if ((_direction == EDirection::eLeft && IsOverlapping(sf::Vector2f(m_position.x - constants::k_gameGridCellSize, m_position.y)))
+		|| (_direction == EDirection::eRight && IsOverlapping(sf::Vector2f(m_position.x + constants::k_gameGridCellSize, m_position.y)))
+		|| (_direction == EDirection::eUp && IsOverlapping(sf::Vector2f(m_position.x, m_position.y - constants::k_gameGridCellSize)))
+		|| (_direction == EDirection::eDown && IsOverlapping(sf::Vector2f(m_position.x, m_position.y + constants::k_gameGridCellSize)))) {
 		return true;
 	}
 	return false;

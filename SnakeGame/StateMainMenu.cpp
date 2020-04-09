@@ -1,10 +1,12 @@
-#include "State_MainMenu.h"
+#include "StateMainMenu.h"
 #include <iostream>
 #include "SFML/Graphics.hpp"
-#include "State_Controls.h"
-#include "State_Game.h"
+#include "StateControls.h"
+#include "StateGame.h"
 
-void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+void StateMainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+	CURRENT_STATE = ECurrentState::eMainMenu;
+	
 	//initialise selected value to play the game
 	m_selected = 0;
 
@@ -24,7 +26,7 @@ void State_MainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 }
 
 
-void State_MainMenu::Render(sf::RenderWindow& _window) {
+void StateMainMenu::Render(sf::RenderWindow& _window) {
 	m_menuBackground.Render(_window);
 	
 	//THE TEXT
@@ -47,7 +49,7 @@ void State_MainMenu::Render(sf::RenderWindow& _window) {
 }
 
 
-void State_MainMenu::Update() {
+void StateMainMenu::Update() {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
 		m_soundManager->PlaySFX("sfx_menu_move");
@@ -76,15 +78,15 @@ void State_MainMenu::Update() {
 		switch (m_selected) {
 		case 0:
 			//Go to the controls state...
-			core_state.SetState(new State_Controls());
+			CORE_STATE.SetState(new StateControls());
 			std::cout << "GOING TO THE CONTROLS MENU" << std::endl;
 			break;
 		case 1:
-			core_state.SetState(new State_Game(true));
+			CORE_STATE.SetState(new StateGame(true));
 			std::cout << "PLAYING 2 PLAYER" << std::endl;
 			break;
 		case 2:
-			quit_game = true;
+			QUIT_GAME = true;
 			break;
 		default:
 			break;
@@ -92,6 +94,6 @@ void State_MainMenu::Update() {
 	}
 }
 
-void State_MainMenu::Destroy() {
+void StateMainMenu::Destroy() {
 	std::cout << "Destroyed" << std::endl;
 }

@@ -50,14 +50,14 @@ void SoundManager::StopMusic()
 
 void SoundManager::LoadSFX(const std::string& _fileName)
 {
-	auto* newSound = new sf::SoundBuffer();
+	auto* newSound{ new sf::SoundBuffer() };
 	newSound->loadFromFile("Resources/Sounds/" + _fileName + ".flac");
 	m_sfxBuffer.insert(std::pair<std::string, sf::SoundBuffer*>(_fileName, newSound));
 }
 
 void SoundManager::LoadMusic(const std::string& _fileName)
 {
-	auto* newSound = new sf::SoundBuffer();
+	auto* newSound{ new sf::SoundBuffer() };
 	newSound->loadFromFile("Resources/Sounds/" + _fileName + ".flac");
 	m_musicBuffer.insert(std::pair<std::string, sf::SoundBuffer*>(_fileName, newSound));
 }

@@ -1,11 +1,13 @@
-#include "State_GameOver.h"
+#include "StateGameOver.h"
 #include <fstream>
 #include <iostream>
-#include "State_Game.h"
-#include "State_MainMenu.h"
+#include "StateGame.h"
+#include "StateMainMenu.h"
 
 
-void State_GameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+	CURRENT_STATE = ECurrentState::eGameOver;
+	
 	//initialise selected value to play the game
 	m_selected = 0;
 
@@ -13,8 +15,6 @@ void State_GameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 	
 	//load the font to display text
 	m_font = _font;
-
-	
 	
 	//Load the highscore and the previous score to display onscreen
 	std::ifstream file("Resources/Scores.txt");
@@ -37,7 +37,7 @@ void State_GameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 }
 
 
-void State_GameOver::Render(sf::RenderWindow& _window) {
+void StateGameOver::Render(sf::RenderWindow& _window) {
 	m_menuBackground.Render(_window);
 	
 	m_playAgain.SetColour(sf::Color::White);
@@ -56,7 +56,7 @@ void State_GameOver::Render(sf::RenderWindow& _window) {
 }
 
 
-void State_GameOver::Update() {
+void StateGameOver::Update() {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
 		m_soundManager->PlaySFX("sfx_menu_move");
@@ -84,14 +84,14 @@ void State_GameOver::Update() {
 		switch (m_selected) {
 		case 0:
 			//play the game...
-			core_state.SetState(new State_Game());
-			current_state = eCurrentState::e_Game;
+			CORE_STATE.SetState(new StateGame());
+			CURRENT_STATE = ECurrentState::eGame;
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
 			//quit to titles...
-			core_state.SetState(new State_MainMenu());
-			current_state = eCurrentState::e_MainMenu;
+			CORE_STATE.SetState(new StateMainMenu());
+			CURRENT_STATE = ECurrentState::eMainMenu;
 			std::cout << "GOING BACK TO THE MAIN MENU" << std::endl;
 			break;
 		default:
@@ -101,6 +101,4 @@ void State_GameOver::Update() {
 }
 
 
-void State_GameOver::Destroy() {
-	
-}
+void StateGameOver::Destroy(){}

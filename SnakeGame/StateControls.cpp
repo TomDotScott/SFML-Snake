@@ -1,15 +1,16 @@
-#include "State_Controls.h"
-#include "State_MainMenu.h"
+#include "StateControls.h"
+#include "StateMainMenu.h"
 #include <iostream>
 #include "SFML/Graphics.hpp"
-#include "State_Game.h"
+#include "StateGame.h"
 
-void State_Controls::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+void StateControls::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+	CURRENT_STATE = ECurrentState::eControlsMenu;
 	//initialise selected value to play the game
 	m_selected = 0;
 
 	m_soundManager = _soundManager;
-	
+
 	m_gobbleTexture.loadFromFile("Resources/Graphics/Food_Gobble.png");
 	m_standardTexture.loadFromFile("Resources/Graphics/Food_Standard.png");
 	m_specialTexture.loadFromFile("Resources/Graphics/Food_Special.png");
@@ -17,8 +18,7 @@ void State_Controls::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 	//load the font and display text
 	m_font = _font;
 
-	for(auto* textElement : m_textToRender)
-	{
+	for (auto* textElement : m_textToRender) {
 		textElement->SetFont(m_font);
 	}
 
@@ -26,9 +26,9 @@ void State_Controls::Initialize(sf::RenderWindow& _window, sf::Font& _font, Soun
 }
 
 
-void State_Controls::Render(sf::RenderWindow& _window) {
+void StateControls::Render(sf::RenderWindow& _window) {
 	m_menuBackground.Render(_window);
-	
+
 	m_play.SetColour(sf::Color::White);
 	m_main.SetColour(sf::Color::White);
 
@@ -36,32 +36,28 @@ void State_Controls::Render(sf::RenderWindow& _window) {
 		m_play.SetColour(sf::Color(245, 77, 56));
 	} else if (m_selected == 1) {
 		m_main.SetColour(sf::Color(245, 77, 56));
-	} 
+	}
 
 	//draw the text on screen
 	for (auto* textElement : m_textToRender) {
 		_window.draw(textElement->m_text);
 	}
 
-	m_gameIcon.setPosition(68, 175);
-	m_gameIcon.setTexture(m_standardTexture);
-	_window.draw(m_gameIcon);
+	const GameIcon standard{ m_standardTexture, {68, 175} };
+	standard.Render(_window);
 
-	m_gameIcon.setPosition(68, 210);
-	m_gameIcon.setTexture(m_specialTexture);
-	_window.draw(m_gameIcon);
+	const GameIcon special{ m_specialTexture, {68, 208} };
+	special.Render(_window);
 
-	m_gameIcon.setPosition(68, 245);
-	m_gameIcon.setTexture(m_gobbleTexture);
-	_window.draw(m_gameIcon);
+	GameIcon gobble{ m_gobbleTexture, {68, 240} };
+	gobble.Render(_window);
 
-	m_gameIcon.setPosition(68, 275);
-	m_gameIcon.setTexture(m_gobbleTexture);
-	_window.draw(m_gameIcon);
+	gobble.SetPosition({ 68, 270 });
+	gobble.Render(_window);
 }
 
 
-void State_Controls::Update() {
+void StateControls::Update() {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
 		m_soundManager->PlaySFX("sfx_menu_move");
@@ -90,13 +86,13 @@ void State_Controls::Update() {
 		switch (m_selected) {
 		case 0:
 			//play the game...
-			core_state.SetState(new State_Game());
-			current_state = eCurrentState::e_Game;
+			CORE_STATE.SetState(new StateGame());
+			CURRENT_STATE = ECurrentState::eGame;
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
 			//Go to the controls state...
-			core_state.SetState(new State_MainMenu());
+			CORE_STATE.SetState(new StateMainMenu());
 			std::cout << "GOING TO THE MAIN MENU" << std::endl;
 			break;
 		default:
@@ -105,6 +101,6 @@ void State_Controls::Update() {
 	}
 }
 
-void State_Controls::Destroy() {
+void StateControls::Destroy() {
 	std::cout << "Destroyed" << std::endl;
 }

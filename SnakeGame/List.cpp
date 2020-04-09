@@ -1,14 +1,14 @@
 #include "List.h"
 
 List::List() {
-	m_head = new Node(sf::Vector2f(0, 0), EDirection::e_none, NULL, NULL);
-	m_tail = new Node(sf::Vector2f(0, 0), EDirection::e_none, m_head, NULL);
+	m_head = new Node(sf::Vector2f(0, 0), EDirection::eNone, nullptr, nullptr);
+	m_tail = new Node(sf::Vector2f(0, 0), EDirection::eNone, m_head, nullptr);
 	m_head->m_nextNode = m_tail;
 }
 
 List::List(const sf::Vector2f _position, const EDirection _direction) {
 	//Initialise the 'Head' of the linked list to the position
-	m_head = new Node(_position, _direction, NULL, NULL);
+	m_head = new Node(_position, _direction, nullptr, nullptr);
 	m_size = 1;
 	m_tail = m_head;
 }
@@ -27,7 +27,7 @@ void List::PopFront() {
 //Pushes an element to the front of the List
 void List::PushFront(const sf::Vector2f _segmentPosition, const EDirection _direction) {
 	//Allocate a new node
-	auto* newNode = new Node(_segmentPosition, _direction, NULL, m_head);
+	auto* newNode = new Node(_segmentPosition, _direction, nullptr, m_head);
 	m_head->m_previousNode = newNode;
 	//make the new node the head of the list
 	m_head = newNode;
@@ -37,7 +37,7 @@ void List::PushFront(const sf::Vector2f _segmentPosition, const EDirection _dire
 //Pushes an element to the back of the list
 void List::PushBack(const sf::Vector2f _segmentPosition, const EDirection _direction) {
 	//Allocate a new node
-	auto* newNode = new Node(_segmentPosition, _direction, m_tail, NULL);
+	auto* newNode = new Node(_segmentPosition, _direction, m_tail, nullptr);
 	//make the current tail point to the newly allocated node
 	m_tail->m_nextNode = newNode;
 
@@ -81,21 +81,4 @@ bool List::IsEmpty() const {
 
 int List::Size() const {
 	return m_size;
-}
-
-
-std::ostream& operator<<(std::ostream& _os, const List& _list) {
-	Node* currentNode = _list.GetHead();
-	while (currentNode) {
-		if (currentNode->m_previousNode) {
-			_os << "THE PREVIOUS NODE: " << currentNode->m_previousNode->m_position.x << " " << currentNode->m_previousNode->m_position.y << std::endl;
-		}
-		_os << "THIS NODE: " << currentNode->m_position.x << " " << currentNode->m_position.y << std::endl;
-		if (currentNode->m_nextNode) {
-			_os << "THE NEXT NODE: " << currentNode->m_nextNode->m_position.x << " " << currentNode->m_nextNode->m_position.y << std::endl;
-		}
-		currentNode = currentNode->m_nextNode;
-		_os << std::endl << std::endl << std::endl;
-	}
-	return _os;
 }

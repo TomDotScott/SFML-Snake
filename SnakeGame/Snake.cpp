@@ -14,8 +14,7 @@ void Snake::Update() {
 	if (!IsDead()) {
 		m_score += m_gobbleMode ? 2 : 1;
 		//If the snake has no segments left (is just a tail) then it is dead
-		if(m_segments.Size() == 1)
-		{
+		if (m_segments.Size() == 1) {
 			m_dead = true;
 		}
 		Move();
@@ -44,41 +43,41 @@ void Snake::Render(sf::RenderWindow& _window) {
 				//Change rotation depending on direction
 				//Add bends at appropriate points
 				switch (currentNode->m_direction) {
-				case EDirection::e_left:
-					if (previousNodeDirection != EDirection::e_left && i < m_segments.Size() - 1) {
+				case EDirection::eLeft:
+					if (previousNodeDirection != EDirection::eLeft && i < m_segments.Size() - 1) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
 
-						m_sprite.setRotation(previousNodeDirection == EDirection::e_up ? 0.f : 90.f);
+						m_sprite.setRotation(previousNodeDirection == EDirection::eUp ? 0.f : 90.f);
 
 					} else {
 						m_sprite.setRotation(90.f);
 					}
 					break;
-				case EDirection::e_right:
-					if (previousNodeDirection != EDirection::e_right && i < m_segments.Size() - 1) {
+				case EDirection::eRight:
+					if (previousNodeDirection != EDirection::eRight && i < m_segments.Size() - 1) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
 
-						m_sprite.setRotation(previousNodeDirection == EDirection::e_up ? -90.f : 180.f);
+						m_sprite.setRotation(previousNodeDirection == EDirection::eUp ? -90.f : 180.f);
 
 					} else {
 						m_sprite.setRotation(-90.f);
 					}
 					break;
-				case EDirection::e_up:
-					if (previousNodeDirection != EDirection::e_up && i < m_segments.Size() - 1) {
+				case EDirection::eUp:
+					if (previousNodeDirection != EDirection::eUp && i < m_segments.Size() - 1) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
 
-						m_sprite.setRotation(previousNodeDirection == EDirection::e_left ? 180.f : 90.f);
+						m_sprite.setRotation(previousNodeDirection == EDirection::eLeft ? 180.f : 90.f);
 
 					} else {
 						m_sprite.setRotation(180.f);
 					}
 					break;
-				case EDirection::e_down:
-					if (previousNodeDirection != EDirection::e_down && i < m_segments.Size() - 1) {
+				case EDirection::eDown:
+					if (previousNodeDirection != EDirection::eDown && i < m_segments.Size() - 1) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
 
-						m_sprite.setRotation(previousNodeDirection == EDirection::e_left ? -90.f : 0.f);
+						m_sprite.setRotation(previousNodeDirection == EDirection::eLeft ? -90.f : 0.f);
 
 					} else {
 						m_sprite.setRotation(0.f);
@@ -91,16 +90,16 @@ void Snake::Render(sf::RenderWindow& _window) {
 					m_sprite.setTexture(m_gobbleMode ? m_gobbleTailTexture : m_tailTexture);
 					//make the tail follow the previous segment
 					switch (previousNodeDirection) {
-					case EDirection::e_left:
+					case EDirection::eLeft:
 						m_sprite.setRotation(90.f);
 						break;
-					case EDirection::e_right:
+					case EDirection::eRight:
 						m_sprite.setRotation(-90.f);
 						break;
-					case EDirection::e_up:
+					case EDirection::eUp:
 						m_sprite.setRotation(180.f);
 						break;
-					case EDirection::e_down:
+					case EDirection::eDown:
 						m_sprite.setRotation(0.f);
 						break;
 					default:;
@@ -116,17 +115,17 @@ void Snake::Render(sf::RenderWindow& _window) {
 
 void Snake::Move() {
 	switch (m_direction) {
-	case EDirection::e_left:
-		m_position.x -= (Constants::k_gameGridCellSize);
+	case EDirection::eLeft:
+		m_position.x -= (constants::k_gameGridCellSize);
 		break;
-	case EDirection::e_right:
-		m_position.x += (Constants::k_gameGridCellSize);
+	case EDirection::eRight:
+		m_position.x += (constants::k_gameGridCellSize);
 		break;
-	case EDirection::e_up:
-		m_position.y -= (Constants::k_gameGridCellSize);
+	case EDirection::eUp:
+		m_position.y -= (constants::k_gameGridCellSize);
 		break;
-	case EDirection::e_down:
-		m_position.y += (Constants::k_gameGridCellSize);
+	case EDirection::eDown:
+		m_position.y += (constants::k_gameGridCellSize);
 		break;
 	default:
 		break;
@@ -180,11 +179,12 @@ void Snake::CheckCollisions() {
 }
 
 void Snake::CheckCollisionsAgainstSelf() {
-	if (m_direction != EDirection::e_none && !m_segments.IsEmpty()) {
+	if (m_direction != EDirection::eNone && !m_segments.IsEmpty()) {
 		auto* currentNode = m_segments.GetHead();
 		for (int i = 0; i < m_segments.Size(); ++i) {
 			if (currentNode->m_position == m_position && !IsDead()) {
-				Collision(ECollisionType::e_self);
+				std::cout << "I HIT MYSELF" << std::endl;
+				Collision(ECollisionType::eSelf);
 			}
 			currentNode = currentNode->m_nextNode;
 		}
@@ -207,7 +207,7 @@ void Snake::CheckCollisionsAgainstOtherSnakes() {
 		if (!otherSnake->IsDead()) {
 			//Check each segment of the current snake against the heads of the other snakes
 			auto currentSegment = m_segments.GetHead();
-			for (int i = 0; i < m_segments.Size(); ++i) {
+			for (int i{ 0 }; i < m_segments.Size(); ++i) {
 				//Check each segment against the heads of the other snakes
 				if (currentSegment->m_position == otherSnake->GetHeadPosition()) {
 					//if it's a head on collision then both snakes die
@@ -215,21 +215,22 @@ void Snake::CheckCollisionsAgainstOtherSnakes() {
 						//If it's gobble mode, the entire other snake gets eaten
 						if (m_gobbleMode) {
 							Grow(static_cast<const int>((otherSnake->GetSnakeSegments().Size())));
-							otherSnake->Collision(ECollisionType::e_snake);
+							otherSnake->Collision(ECollisionType::eSnake);
 							return;
 						}
-						Collision(ECollisionType::e_snake);
-						otherSnake->Collision(ECollisionType::e_snake);
+						Collision(ECollisionType::eSnake);
+						otherSnake->Collision(ECollisionType::eSnake);
 						return;
 					}
-					otherSnake->Collision(ECollisionType::e_snake);
+					std::cout << "I HIT ANOTHER SNAKE" << std::endl;
+					otherSnake->Collision(ECollisionType::eSnake);
 				}
 				currentSegment = currentSegment->m_nextNode;
 			}
 
 			//Check if the snake has hit another snake's body
 			auto otherSegment = otherSnake->GetSnakeSegments().GetHead();
-			for (int i = 0; i < otherSnake->GetSnakeSegments().Size(); ++i) {
+			for (int i{ 0 }; i < otherSnake->GetSnakeSegments().Size(); ++i) {
 				if (otherSegment->m_position == m_position) {
 					//If it's gobble mode, make sure not to kill the player on collision
 					if (m_gobbleMode) {
@@ -238,7 +239,8 @@ void Snake::CheckCollisionsAgainstOtherSnakes() {
 						otherSnake->Shrink(growShrinkAmount);
 						return;
 					} else {
-						Collision(ECollisionType::e_snake);
+						std::cout << "I HIT ANOTHER SNAKE" << std::endl;
+						Collision(ECollisionType::eSnake);
 						return;
 					}
 				}
@@ -248,12 +250,11 @@ void Snake::CheckCollisionsAgainstOtherSnakes() {
 	}
 }
 
-void Snake::Collision(ECollisionType _collisionType)
-{
+void Snake::Collision(ECollisionType _collisionType) {
 	if (!m_dead) {
-		if (_collisionType == ECollisionType::e_wall
-			|| _collisionType == ECollisionType::e_snake
-			|| _collisionType == ECollisionType::e_self) {
+		if (_collisionType == ECollisionType::eWall
+			|| _collisionType == ECollisionType::eSnake
+			|| _collisionType == ECollisionType::eSelf) {
 			m_dead = true;
 			m_soundManager->PlaySFX("sfx_snake_death");
 		}
@@ -262,15 +263,15 @@ void Snake::Collision(ECollisionType _collisionType)
 
 void Snake::Collision(Food* _food) {
 	switch (_food->GetType()) {
-	case eFoodType::e_standard:
+	case EFoodType::eStandard:
 		m_soundManager->PlaySFX("sfx_food_standard");
 		break;
 
-	case eFoodType::e_special:
+	case EFoodType::eSpecial:
 		m_soundManager->PlaySFX("sfx_food_special");
 		break;
 
-	case eFoodType::e_gobble:
+	case EFoodType::eGobble:
 		m_gobbleMode = true;
 		m_soundManager->PlaySFX("sfx_gobble_on");
 		break;

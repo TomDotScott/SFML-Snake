@@ -5,8 +5,8 @@
 
 //Tracks the current state of the game
 //Has a global variable attached
-enum class eCurrentState {
-	e_MainMenu, e_Game, e_GameOver
+enum class ECurrentState {
+	eMainMenu, eControlsMenu, eGame, eGameOver
 };
 
 //Every state needs to be able to do these 4 things:
@@ -18,6 +18,7 @@ enum class eCurrentState {
 class BaseState {
 public:
 	virtual ~BaseState() = default;
+
 	virtual void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) = 0;
 	virtual void Update() = 0;
 	virtual void Render(sf::RenderWindow& _window) = 0;
@@ -39,21 +40,6 @@ public:
 	void SetSpaceKey(const bool& _spaceKey) { m_spaceKey = _spaceKey; }
 
 protected:
-	bool m_upKey = false;
-	bool m_wKey{ false };
-	bool m_downKey = false;
-	bool m_sKey{ false };
-	bool m_leftKey = false;
-	bool m_aKey{ false };
-	bool m_rightKey = false;
-	bool m_dKey{ false };
-	bool m_escapeKey = false;
-	bool m_spaceKey = false;
-
-	SoundManager* m_soundManager{ nullptr };
-	int m_selected{ 0 };
-	sf::Font m_font;
-
 	struct UIText {
 		UIText(std::string _string, const sf::Color _colour, const sf::Vector2f _position, const sf::Font& _font, const int _size)
 			: m_string(std::move(_string)), m_colour(_colour), m_position(_position), m_font(_font), m_characterSize(_size) {
@@ -86,8 +72,7 @@ protected:
 		}
 	};
 
-	struct MenuBackground
-	{
+	struct MenuBackground {
 		MenuBackground() {
 			//load the textures to display
 			m_leftRightWall.loadFromFile("Resources/Graphics/left_right_wall.png");
@@ -97,8 +82,7 @@ protected:
 		//To draw the walls and the background 
 		sf::Texture m_leftRightWall, m_topBottomWall, m_grass;
 		sf::Sprite m_spriteBG, m_spriteLR, m_spriteTB;
-		void Render(sf::RenderWindow& _window)
-		{
+		void Render(sf::RenderWindow& _window) {
 			//THE BACKGROUND
 			m_spriteBG.setTexture(m_grass);
 			m_spriteBG.setScale(1.5, 1.5);
@@ -111,7 +95,7 @@ protected:
 			m_spriteLR.setPosition(0, 0);
 			_window.draw(m_spriteLR);
 
-			m_spriteLR.setPosition(Constants::k_screenWidth - 1.5 * Constants::k_gameGridCellSize, 0);
+			m_spriteLR.setPosition(constants::k_screenWidth - 1.5 * constants::k_gameGridCellSize, 0);
 			_window.draw(m_spriteLR);
 
 			//TOP AND BOTTOM WALLS
@@ -120,31 +104,47 @@ protected:
 			m_spriteTB.setPosition(0, 0);
 			_window.draw(m_spriteTB);
 
-			m_spriteTB.setPosition(0, Constants::k_screenHeight - 1.5 * Constants::k_gameGridCellSize);
+			m_spriteTB.setPosition(0, constants::k_screenHeight - 1.5 * constants::k_gameGridCellSize);
 			_window.draw(m_spriteTB);
 		}
 	};
+	bool m_upKey{ false };
+	bool m_wKey{ false };
+	bool m_downKey{ false };
+	bool m_sKey{ false };
+	bool m_leftKey{ false };
+	bool m_aKey{ false };
+	bool m_rightKey{ false };
+	bool m_dKey{ false };
+	bool m_escapeKey{ false };
+	bool m_spaceKey{ false };
+
+	SoundManager* m_soundManager{ nullptr };
+	int m_selected{ 0 };
+	sf::Font m_font;
 };
 
 //StateManager keeps track of the current game state
 class StateManager {
 public:
+	~StateManager();
+
+	void Input(sf::Event& _event) const;
+	void Update() const;
+	void Render() const;
+
 	void SetWindow(sf::RenderWindow* _window);
 	void SetState(BaseState* _state);
 	void SetFont(const sf::Font& _font) { m_font = _font; }
 	void SetSoundManager(SoundManager* _soundManager) { m_soundManager = _soundManager; }
-	void Input(sf::Event& _event) const;
-	void Update() const;
-	void Render() const;
-	~StateManager();
 private:
-	sf::RenderWindow* m_window = nullptr;
-	BaseState* m_state = nullptr;
+	sf::RenderWindow* m_window{ nullptr };
+	BaseState* m_state{ nullptr };
 	sf::Font m_font;
-	SoundManager* m_soundManager = nullptr;
+	SoundManager* m_soundManager{ nullptr };
 };
 
-extern StateManager core_state;
-extern bool quit_game;
-extern eCurrentState current_state;
+extern StateManager CORE_STATE;
+extern bool QUIT_GAME;
+extern ECurrentState CURRENT_STATE;
 

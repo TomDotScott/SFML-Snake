@@ -157,14 +157,14 @@
     <ClCompile Include="List.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
-    <ClCompile Include="State_Controls.cpp" />
-    <ClCompile Include="State_Game.cpp" />
+    <ClCompile Include="StateControls.cpp" />
+    <ClCompile Include="StateGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayerSnake.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="State_GameOver.cpp" />
-    <ClCompile Include="State_MainMenu.cpp" />
+    <ClCompile Include="StateGameOver.cpp" />
+    <ClCompile Include="StateMainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AISnake.h" />
@@ -173,13 +173,13 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StateManager.h" />
-    <ClInclude Include="State_Controls.h" />
-    <ClInclude Include="State_Game.h" />
+    <ClInclude Include="StateControls.h" />
+    <ClInclude Include="StateGame.h" />
     <ClInclude Include="PlayerSnake.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="State_GameOver.h" />
-    <ClInclude Include="State_MainMenu.h" />
+    <ClInclude Include="StateGameOver.h" />
+    <ClInclude Include="StateMainMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

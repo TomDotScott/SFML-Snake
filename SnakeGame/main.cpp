@@ -3,23 +3,23 @@
 #include <iostream>
 #include "StateManager.h"
 #include "Food.h"
-#include "State_Game.h"
+#include "StateGame.h"
 #include <assert.h>
 #include <time.h>
 #include "Constants.h"
 #include "SoundManager.h"
-#include "State_MainMenu.h"
+#include "StateMainMenu.h"
 
-StateManager core_state;
-bool quit_game;
-eCurrentState current_state;
+StateManager CORE_STATE;
+bool QUIT_GAME;
+ECurrentState CURRENT_STATE;
 
 void GameLoop(sf::RenderWindow& _window)
 {
 	// We must clear the window each time around the loop
 	_window.clear();
-	core_state.Update();
-	core_state.Render();
+	CORE_STATE.Update();
+	CORE_STATE.Render();
 
 	// Get the window to display its contents
 	_window.display();
@@ -32,7 +32,7 @@ int main()
 	auto* soundManager = new SoundManager;
 	
 	// Initialise the resources needed for the states	
-	sf::RenderWindow window(sf::VideoMode(Constants::k_screenWidth, Constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
+	sf::RenderWindow window(sf::VideoMode(constants::k_screenWidth, constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
 	
 	//seed the random number generator
 	std::srand(static_cast<unsigned int>(time(nullptr)));
@@ -47,15 +47,15 @@ int main()
 
 	sf::Clock clock;
 
-	core_state.SetWindow(&window);
+	CORE_STATE.SetWindow(&window);
 
-	core_state.SetFont(font);
+	CORE_STATE.SetFont(font);
 
-	core_state.SetSoundManager(soundManager);
+	CORE_STATE.SetSoundManager(soundManager);
 	
-	core_state.SetState(new State_MainMenu());
+	CORE_STATE.SetState(new StateMainMenu());
 	
-	current_state = eCurrentState::e_MainMenu;
+	CURRENT_STATE = ECurrentState::eMainMenu;
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -69,10 +69,10 @@ int main()
 				window.close();
 			
 			//Handle Input outside of the game loops
-			core_state.Input(event);
+			CORE_STATE.Input(event);
 
 		}
-		if (current_state == eCurrentState::e_Game)
+		if (CURRENT_STATE == ECurrentState::eGame)
 		{
 			while (clock.getElapsedTime() >= sf::milliseconds(200)) {
 
@@ -83,16 +83,11 @@ int main()
 		else {
 			GameLoop(window);
 		}
-
-		if (quit_game) {
+		if (QUIT_GAME) {
 			window.close();
 		}
-		
 	}
-
-	
 	delete soundManager;
 	std::cout << "Snake Game: Ended" << std::endl;
-	
 	return 0;
 }

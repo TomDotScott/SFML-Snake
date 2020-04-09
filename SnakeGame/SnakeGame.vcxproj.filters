@@ -57,16 +57,7 @@
     <ClCompile Include="AISnake.cpp">
       <Filter>Source Files\Entities\Snakes</Filter>
     </ClCompile>
-    <ClCompile Include="State_Game.cpp">
-      <Filter>Source Files\Game Structure\States</Filter>
-    </ClCompile>
     <ClCompile Include="StateManager.cpp">
-      <Filter>Source Files\Game Structure\States</Filter>
-    </ClCompile>
-    <ClCompile Include="State_MainMenu.cpp">
-      <Filter>Source Files\Game Structure\States</Filter>
-    </ClCompile>
-    <ClCompile Include="State_GameOver.cpp">
       <Filter>Source Files\Game Structure\States</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
@@ -81,7 +72,16 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files\Game Structure</Filter>
     </ClCompile>
-    <ClCompile Include="State_Controls.cpp">
+    <ClCompile Include="StateControls.cpp">
+      <Filter>Source Files\Game Structure\States</Filter>
+    </ClCompile>
+    <ClCompile Include="StateGame.cpp">
+      <Filter>Source Files\Game Structure\States</Filter>
+    </ClCompile>
+    <ClCompile Include="StateGameOver.cpp">
+      <Filter>Source Files\Game Structure\States</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMainMenu.cpp">
       <Filter>Source Files\Game Structure\States</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,16 +98,7 @@
     <ClInclude Include="Snake.h">
       <Filter>Header Files\Entities\Snakes</Filter>
     </ClInclude>
-    <ClInclude Include="State_Game.h">
-      <Filter>Header Files\Game Structure\States</Filter>
-    </ClInclude>
     <ClInclude Include="StateManager.h">
-      <Filter>Header Files\Game Structure\States</Filter>
-    </ClInclude>
-    <ClInclude Include="State_MainMenu.h">
-      <Filter>Header Files\Game Structure\States</Filter>
-    </ClInclude>
-    <ClInclude Include="State_GameOver.h">
       <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
@@ -122,7 +113,16 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Header Files\Game Structure</Filter>
     </ClInclude>
-    <ClInclude Include="State_Controls.h">
+    <ClInclude Include="StateControls.h">
+      <Filter>Header Files\Game Structure\States</Filter>
+    </ClInclude>
+    <ClInclude Include="StateGame.h">
+      <Filter>Header Files\Game Structure\States</Filter>
+    </ClInclude>
+    <ClInclude Include="StateGameOver.h">
+      <Filter>Header Files\Game Structure\States</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMainMenu.h">
       <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
   </ItemGroup>

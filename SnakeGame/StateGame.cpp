@@ -1,9 +1,9 @@
-#include "State_Game.h"
+#include "StateGame.h"
 #include <fstream>
 #include <cmath>
 #include "AISnake.h"
 #include "PlayerSnake.h"
-#include "State_GameOver.h"
+#include "StateGameOver.h"
 
 /*TODO
  *ADD 2 PLAYER FUNCTIONALITY
@@ -15,7 +15,8 @@
 
 
  //BASESTATE METHODS
-void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
+	CURRENT_STATE = ECurrentState::eGame;
 	m_clock.restart();
 
 	m_font = _font;
@@ -44,7 +45,7 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 		m_snakes.push_back(playerSnake);
 
 		//populate the snake Vector
-		for (int i = 0; i < Constants::k_AISnakeAmount; ++i) {
+		for (int i = 0; i < constants::k_AISnakeAmount; ++i) {
 			m_snakes.push_back(new AISnake());
 		}
 	} else {
@@ -67,18 +68,18 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	m_clockSprite.setPosition(10, m_clockText.m_position.y - 5);
 
 	//populate the food array
-	for (int i = 0; i < Constants::k_foodAmount; ++i) {
+	for (int i = 0; i < constants::k_foodAmount; ++i) {
 		Food* food = new Food();
 		m_foodArray[i] = food;
 	}
 
 	//make the snakes know where the food and other snakes are on the screen
 	for (auto* snake : m_snakes) {
-		if (!m_twoPlayer) {
-			for (auto* food : m_foodArray) {
-				snake->SetFood(food);
-			}
+		//if (!m_twoPlayer) {
+		for (auto* food : m_foodArray) {
+			snake->SetFood(food);
 		}
+		//}
 
 		for (auto* otherSnake : m_snakes) {
 			if (snake != otherSnake) {
@@ -90,11 +91,11 @@ void State_Game::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMan
 	}
 }
 
-int State_Game::GetTimeRemaining() const {
+int StateGame::GetTimeRemaining() const {
 	return 90 - static_cast<int>(m_clock.getElapsedTime().asSeconds());
 }
 
-void State_Game::Update() {
+void StateGame::Update() {
 	HandleInput();
 	//only play the game if it is paused
 	if (!m_paused) {
@@ -119,21 +120,18 @@ void State_Game::Update() {
 	}
 }
 
-void State_Game::Render(sf::RenderWindow& _window) {
+void StateGame::Render(sf::RenderWindow& _window) {
 
 	//Draw the background
 	_window.draw(m_grassSprite);
-
 	//Draw the food
 	for (Food* food : m_foodArray) {
 		food->Render(_window);
 	}
-
 	//Draw the snakes
 	for (Snake* snake : m_snakes) {
 		snake->Render(_window);
 	}
-
 	//Draw the Walls
 	_window.draw(m_topWall.m_wall);
 	_window.draw(m_bottomWall.m_wall);
@@ -143,21 +141,17 @@ void State_Game::Render(sf::RenderWindow& _window) {
 	for (auto* text : m_UItoRenderSinglePlayer) {
 		_window.draw(text->m_text);
 	}
-
 	if (m_gobble) {
 		_window.draw(m_gobbleModeText.m_text);
 	}
-
 	if (m_paused) {
 		_window.draw(m_pausedText.m_text);
 	}
-
-
 	_window.draw(m_clockSprite);
 	_window.draw(m_clockText.m_text);
 }
 
-void State_Game::Destroy() {
+void StateGame::Destroy() {
 	for (auto* food : m_foodArray) {
 		food = nullptr;
 	}
@@ -167,12 +161,12 @@ void State_Game::Destroy() {
 	}
 }
 
-State_Game::State_Game(bool _twoPlayer) {
+StateGame::StateGame(bool _twoPlayer) {
 	m_twoPlayer = _twoPlayer ? true : false;
 }
 
-State_Game::~State_Game() {
-	for (Food* food : m_foodArray) {
+StateGame::~StateGame() {
+	for (auto* food : m_foodArray) {
 		delete food;
 	}
 
@@ -183,16 +177,16 @@ State_Game::~State_Game() {
 
 
 //GAME METHODS
-void State_Game::CheckCollisions() {
+void StateGame::CheckCollisions() {
 	for (auto* currentSnake : m_snakes) {
 		//only check collisions if the snake is alive
 		if (!currentSnake->IsDead()) {
 			//Check against Walls
 			if (currentSnake->GetHeadPosition().x <= 0 ||
 				currentSnake->GetHeadPosition().x > m_rightWall.m_position.x ||
-				currentSnake->GetHeadPosition().y <= 100 + Constants::k_gameGridCellSize ||
+				currentSnake->GetHeadPosition().y <= 100 + constants::k_gameGridCellSize ||
 				currentSnake->GetHeadPosition().y > m_bottomWall.m_position.y) {
-				currentSnake->Collision(ECollisionType::e_wall);
+				currentSnake->Collision(ECollisionType::eWall);
 				return;
 			}
 		}
@@ -200,7 +194,7 @@ void State_Game::CheckCollisions() {
 }
 
 
-void State_Game::EndGobbleMode() {
+void StateGame::EndGobbleMode() {
 	//GOBBLE MODE. After a random amount of time, stop Gobble Mode
 	if (rand() % 25 == 0 && m_gobble) {
 		for (auto* snake : m_snakes) {
@@ -212,10 +206,10 @@ void State_Game::EndGobbleMode() {
 	}
 }
 
-void State_Game::CheckWinningConditions() {
+void StateGame::CheckWinningConditions() {
 	if (!m_twoPlayer) {
 		//If the player has died, end the game
-		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
+		auto* playerSnake{ dynamic_cast<PlayerSnake*>(m_snakes[0]) };
 		if ((m_snakes[0]->IsDead() && playerSnake) || !CheckIfStillAlive() || GetTimeRemaining() == 0) {
 			GameOver();
 		}
@@ -226,29 +220,27 @@ void State_Game::CheckWinningConditions() {
 	}
 }
 
-void State_Game::RandomiseFood(Food* _foodToRandomise) {
+void StateGame::RandomiseFood(Food* _foodToRandomise) {
 	//Check that food doesn't spawn on top of each other
-	bool isOverlapping = true;
+	bool isOverlapping{ true };
 	while (isOverlapping) {
 		_foodToRandomise->Randomise();
 		//Check the randomised position
 		for (const Food* food : m_foodArray) {
 			//make sure the food isn't getting compared to itself!
-			if (*food != *_foodToRandomise) {
-				if (_foodToRandomise->GetPosition() != food->GetPosition()) {
+			if (food != _foodToRandomise) {
+				if (_foodToRandomise->GetPosition() == food->GetPosition()) {
+					_foodToRandomise->Randomise();
+				} else {
 					isOverlapping = false;
 					break;
-				} else {
-					_foodToRandomise->Randomise();
 				}
-			} else {
-				_foodToRandomise->Randomise();
 			}
 		}
 	}
 }
 
-void State_Game::UpdateScores() {
+void StateGame::UpdateScores() {
 	if (!m_twoPlayer) {
 		m_playerScore.SetString("P1:" + std::to_string(m_snakes[0]->GetScore()));
 		m_CPU1Score.SetString("CPU1:" + std::to_string(m_snakes[1]->GetScore()));
@@ -259,7 +251,7 @@ void State_Game::UpdateScores() {
 	}
 }
 
-void State_Game::HandleInput() {
+void StateGame::HandleInput() {
 	//pause and un-pause the game if escape is pressed
 	if (m_escapeKey) {
 		m_soundManager->PlaySFX("sfx_menu_pause");
@@ -269,74 +261,74 @@ void State_Game::HandleInput() {
 	if (!m_twoPlayer) {
 		//There is only ever one player snake
 		//If it can be cast to the PlayerSnake type then we have the player
-		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
+		auto* playerSnake{ dynamic_cast<PlayerSnake*>(m_snakes[0]) };
 		if (playerSnake) {
-			if ((m_upKey && playerSnake->GetDirection() != EDirection::e_down) || (m_wKey && playerSnake->GetDirection() != EDirection::e_down)) {
-				playerSnake->SetDirection(EDirection::e_up);
+			if ((m_upKey && playerSnake->GetDirection() != EDirection::eDown) || (m_wKey && playerSnake->GetDirection() != EDirection::eDown)) {
+				playerSnake->SetDirection(EDirection::eUp);
 				m_upKey = false;
 				m_wKey = false;
 			}
-			if ((m_downKey && playerSnake->GetDirection() != EDirection::e_up) || (m_sKey && playerSnake->GetDirection() != EDirection::e_up)) {
-				playerSnake->SetDirection(EDirection::e_down);
+			if ((m_downKey && playerSnake->GetDirection() != EDirection::eUp) || (m_sKey && playerSnake->GetDirection() != EDirection::eUp)) {
+				playerSnake->SetDirection(EDirection::eDown);
 				m_downKey = false;
 				m_sKey = false;
 			}
-			if ((m_leftKey && playerSnake->GetDirection() != EDirection::e_right) || (m_aKey && playerSnake->GetDirection() != EDirection::e_right)) {
-				playerSnake->SetDirection(EDirection::e_left);
+			if ((m_leftKey && playerSnake->GetDirection() != EDirection::eRight) || (m_aKey && playerSnake->GetDirection() != EDirection::eRight)) {
+				playerSnake->SetDirection(EDirection::eLeft);
 				m_leftKey = false;
 				m_aKey = false;
 			}
-			if ((m_rightKey && playerSnake->GetDirection() != EDirection::e_left) || (m_dKey && playerSnake->GetDirection() != EDirection::e_left)) {
-				playerSnake->SetDirection(EDirection::e_right);
+			if ((m_rightKey && playerSnake->GetDirection() != EDirection::eLeft) || (m_dKey && playerSnake->GetDirection() != EDirection::eLeft)) {
+				playerSnake->SetDirection(EDirection::eRight);
 				m_rightKey = false;
 				m_dKey = false;
 			}
 			return;
 		}
 	} else {
-		auto* playerSnake = dynamic_cast<PlayerSnake*>(m_snakes[0]);
+		auto* playerSnake{ dynamic_cast<PlayerSnake*>(m_snakes[0]) };
 
 		//WASD for Player 1, Arrows for Player 2
-		if ((m_upKey && playerSnake->GetDirection() != EDirection::e_down)) {
-			playerSnake->SetDirection(EDirection::e_up);
+		if ((m_upKey && playerSnake->GetDirection() != EDirection::eDown)) {
+			playerSnake->SetDirection(EDirection::eUp);
 			m_upKey = false;
 		}
-		if ((m_downKey && playerSnake->GetDirection() != EDirection::e_up)) {
-			playerSnake->SetDirection(EDirection::e_down);
+		if ((m_downKey && playerSnake->GetDirection() != EDirection::eUp)) {
+			playerSnake->SetDirection(EDirection::eDown);
 			m_downKey = false;
 		}
-		if ((m_leftKey && playerSnake->GetDirection() != EDirection::e_right)) {
-			playerSnake->SetDirection(EDirection::e_left);
+		if ((m_leftKey && playerSnake->GetDirection() != EDirection::eRight)) {
+			playerSnake->SetDirection(EDirection::eLeft);
 			m_leftKey = false;
 		}
-		if ((m_rightKey && playerSnake->GetDirection() != EDirection::e_left)) {
-			playerSnake->SetDirection(EDirection::e_right);
+		if ((m_rightKey && playerSnake->GetDirection() != EDirection::eLeft)) {
+			playerSnake->SetDirection(EDirection::eRight);
 			m_rightKey = false;
 		}
 
-		auto* player2Snake = dynamic_cast<PlayerSnake*>(m_snakes[1]);
+		auto* player2Snake{ dynamic_cast<PlayerSnake*>(m_snakes[1]) };
 
-		if (m_wKey && player2Snake->GetDirection() != EDirection::e_down) {
-			player2Snake->SetDirection(EDirection::e_up);
+		if (m_wKey && player2Snake->GetDirection() != EDirection::eDown) {
+			player2Snake->SetDirection(EDirection::eUp);
 			m_wKey = false;
 		}
-		if (m_sKey && player2Snake->GetDirection() != EDirection::e_up) {
-			player2Snake->SetDirection(EDirection::e_down);
+		if (m_sKey && player2Snake->GetDirection() != EDirection::eUp) {
+			player2Snake->SetDirection(EDirection::eDown);
 			m_sKey = false;
 		}
-		if (m_aKey && player2Snake->GetDirection() != EDirection::e_right) {
-			player2Snake->SetDirection(EDirection::e_left);
+		if (m_aKey && player2Snake->GetDirection() != EDirection::eRight) {
+			player2Snake->SetDirection(EDirection::eLeft);
 			m_aKey = false;
 		}
-		if (m_dKey && player2Snake->GetDirection() != EDirection::e_left) {
-			player2Snake->SetDirection(EDirection::e_right);
+		if (m_dKey && player2Snake->GetDirection() != EDirection::eLeft) {
+			player2Snake->SetDirection(EDirection::eRight);
 			m_dKey = false;
 		}
 
 	}
 }
 
-void State_Game::SetHighScoreText() {
+void StateGame::SetHighScoreText() {
 	std::string score;
 
 	//READ THE FILE
@@ -350,7 +342,7 @@ void State_Game::SetHighScoreText() {
 	m_highScoreText.SetString("Hi-Score:" + m_highScore);
 }
 
-void State_Game::SaveScores() {
+void StateGame::SaveScores() {
 	std::string score;
 	std::string highScore;
 
@@ -377,13 +369,13 @@ void State_Game::SaveScores() {
 	outfile.close();
 }
 
-void State_Game::GameOver() {
+void StateGame::GameOver() {
 	SaveScores();
-	current_state = eCurrentState::e_GameOver;
-	core_state.SetState(new State_GameOver());
+	CURRENT_STATE = ECurrentState::eGameOver;
+	CORE_STATE.SetState(new StateGameOver());
 }
 
-bool State_Game::CheckIfStillAlive() {
+bool StateGame::CheckIfStillAlive() {
 	int counter{ 0 };
 	for (auto snake : m_snakes) {
 		if (!snake->IsDead()) {

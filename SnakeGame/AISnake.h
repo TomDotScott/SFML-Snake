@@ -6,11 +6,6 @@ public:
 	void ChooseDirection();
 	void Update() override;
 private:
-	bool m_hasMoved{ false };
-
-	//The front of the list is targets the snake is going to move toward
-	List m_targetList{};
-
 	//Cycle through the food on the screen to find food
 	void FindFood();
 
@@ -31,4 +26,9 @@ private:
 
 	//Check if the snake's body is in the way
 	bool IsSelfInWay(EDirection& _direction) const;
+
+	bool m_hasMoved{ false };
+
+	//The front of the list is targets the snake is going to move toward
+	List m_targetList{};
 };

@@ -1,5 +1,5 @@
 #pragma once
-namespace Constants {
+namespace constants {
 	const int k_screenHeight{ 816 };
 	const int k_screenWidth{ 600 };
 
