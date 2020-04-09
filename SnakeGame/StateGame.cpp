@@ -3,7 +3,7 @@
 #include "AISnake.h"
 #include "PlayerSnake.h"
 #include "StateGameOver.h"
- //BASESTATE METHODS
+//BASESTATE METHODS
 void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
 	CURRENT_STATE = ECurrentState::eGame;
 	m_clock.restart();
@@ -201,16 +201,8 @@ void StateGame::EndGobbleMode() {
 }
 
 void StateGame::CheckWinningConditions() {
-	if (m_twoPlayer) {
-		if (!StillAlive() || TimeRemaining() == 0) {
-			GameOver();
-		}
-	} else {
-		//If the player has died, end the game
-		auto* playerSnake{ dynamic_cast<PlayerSnake*>(m_snakes[0]) };
-		if ((m_snakes[0]->IsDead() && playerSnake) || !StillAlive() || TimeRemaining() == 0) {
-			GameOver();
-		}
+	if (!StillAlive() || TimeRemaining() == 0) {
+		GameOver();
 	}
 }
 
