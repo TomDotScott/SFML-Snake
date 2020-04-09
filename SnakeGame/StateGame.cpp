@@ -3,16 +3,6 @@
 #include "AISnake.h"
 #include "PlayerSnake.h"
 #include "StateGameOver.h"
-
-/*TODO
- *ADD 2 PLAYER FUNCTIONALITY
- *FIX PATH-FINDING
-	*AI SNAKES STOP WRAPPING THEMSELVES UP
-	*SOME SORT OF FORWARD-THINKING ALGORITHM
-	*A* OR GREEDY BFS SEARCH
- */
-
-
  //BASESTATE METHODS
 void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
 	CURRENT_STATE = ECurrentState::eGame;
