@@ -60,6 +60,11 @@ protected:
 			m_text.setString(m_string);
 		}
 
+		void SetPosition(const sf::Vector2f& _newPosition) {
+			m_position = _newPosition;
+			m_text.setPosition(m_position);
+		}
+
 		void SetColour(const sf::Color& _colour) {
 			m_colour = _colour;
 			m_text.setFillColor(m_colour);

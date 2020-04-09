@@ -42,14 +42,14 @@ private:
 
 	void GameOver();
 
-	int GetTimeRemaining() const;
+	int TimeRemaining() const;
 
 	void CheckWinningConditions();
 
 	void EndGobbleMode();
 
 	//Returns true if more than one snake is alive
-	bool CheckIfStillAlive();
+	bool StillAlive();
 
 	//the SoundManager
 	SoundManager* m_soundManager{ nullptr };
