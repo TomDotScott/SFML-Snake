@@ -5,7 +5,6 @@
 class SoundManager {
 public:
 	SoundManager();
-	~SoundManager();
 
 	void PlaySFX(const std::string& _sfxName);
 
@@ -20,10 +19,10 @@ private:
 	void LoadMusic(const std::string& _fileName);
 
 	sf::Sound m_music;
-	std::unordered_map<std::string, sf::SoundBuffer*> m_musicBuffer;
+	std::unordered_map<std::string, sf::SoundBuffer> m_musicBuffer;
 
 
 	sf::Sound m_sfx;
-	std::unordered_map<std::string, sf::SoundBuffer*> m_sfxBuffer;
+	std::unordered_map<std::string, sf::SoundBuffer> m_sfxBuffer;
 };
 
