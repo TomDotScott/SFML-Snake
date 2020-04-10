@@ -4,17 +4,13 @@
 #include "StateControls.h"
 #include "StateGame.h"
 
-void StateMainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
-	CURRENT_STATE = ECurrentState::eMainMenu;
-	
+void StateMainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
+
 	//initialise selected value to play the game
 	m_selected = 0;
 
-	//load the soundManager
-	m_soundManager = _soundManager;
+	m_soundManager.StopMusic();
 
-	m_soundManager->StopMusic();
-	
 	//load the font and display text
 	m_font = _font;
 
@@ -28,7 +24,7 @@ void StateMainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font, Sound
 
 void StateMainMenu::Render(sf::RenderWindow& _window) {
 	m_menuBackground.Render(_window);
-	
+
 	//THE TEXT
 	m_playSinglePlayer.SetColour(sf::Color::White);
 	m_playTwoPlayer.SetColour(sf::Color::White);
@@ -49,16 +45,16 @@ void StateMainMenu::Render(sf::RenderWindow& _window) {
 }
 
 
-void StateMainMenu::Update() {
+void StateMainMenu::Update(sf::RenderWindow& _window) {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
-		m_soundManager->PlaySFX("sfx_menu_move");
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_upKey = false;
 	}
 
 	if (m_downKey && !m_upKey) {
 		m_selected += 1;
-		m_soundManager->PlaySFX("sfx_menu_move");
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_downKey = false;
 	}
 
@@ -73,16 +69,16 @@ void StateMainMenu::Update() {
 
 	//Select the option using SPACE
 	if (m_spaceKey && !m_upKey && !m_downKey) {
-		m_soundManager->PlaySFX("sfx_menu_select");
+		m_soundManager.PlaySFX("sfx_menu_select");
 		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:
 			//Go to the controls state...
-			CORE_STATE.SetState(new StateControls());
+			STATE_MANAGER.ChangeState(_window, EState::eControlsMenu);
 			std::cout << "GOING TO THE CONTROLS MENU" << std::endl;
 			break;
 		case 1:
-			CORE_STATE.SetState(new StateGame(true));
+			STATE_MANAGER.ChangeState(_window, EState::eGame, true);
 			std::cout << "PLAYING 2 PLAYER" << std::endl;
 			break;
 		case 2:

@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AISnake.cpp" />
+    <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="SoundManager.cpp" />
@@ -168,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AISnake.h" />
+    <ClInclude Include="BaseState.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="List.h" />

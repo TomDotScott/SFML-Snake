@@ -5,16 +5,17 @@
 #include "StateMainMenu.h"
 
 
-StateGameOver::StateGameOver(const bool& _isTwoPlayer, const bool& _playerWon) : m_twoPlayer(_isTwoPlayer), m_playerWon(_playerWon){}
+StateGameOver::StateGameOver(SoundManager& _soundManager, const bool& _isTwoPlayer, const bool& _playerWon) :
+	BaseState(_soundManager), m_twoPlayer(_isTwoPlayer),
+	m_playerWon(_playerWon)
+{
+}
 
-void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
-	CURRENT_STATE = ECurrentState::eGameOver;
+void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 
 	//initialise selected value to play the game
 	m_selected = 0;
-
-	m_soundManager = _soundManager;
-
+	
 	//load the font to display text
 	m_font = _font;
 
@@ -73,16 +74,16 @@ void StateGameOver::Render(sf::RenderWindow& _window) {
 }
 
 
-void StateGameOver::Update() {
+void StateGameOver::Update(sf::RenderWindow& _window) {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
-		m_soundManager->PlaySFX("sfx_menu_move");
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_upKey = false;
 	}
 
 	if (m_downKey && !m_upKey) {
 		m_selected += 1;
-		m_soundManager->PlaySFX("sfx_menu_move");
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_downKey = false;
 	}
 	//allow for cycling through options...
@@ -96,21 +97,21 @@ void StateGameOver::Update() {
 
 	//Select the option using SPACE
 	if (m_spaceKey && !m_upKey && !m_downKey) {
-		m_soundManager->PlaySFX("sfx_menu_select");
+		m_soundManager.PlaySFX("sfx_menu_select");
 		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:
 			//play the game...
 			if (m_twoPlayer) {
-				CORE_STATE.SetState(new StateGame(true));
+				STATE_MANAGER.ChangeState(_window, EState::eGame, true);
 			} else {
-				CORE_STATE.SetState(new StateGame(false));
+				STATE_MANAGER.ChangeState(_window, EState::eGame, false);
 			}
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
 			//quit to titles...
-			CORE_STATE.SetState(new StateMainMenu());
+			STATE_MANAGER.ChangeState(_window, EState::eMainMenu);
 			std::cout << "GOING BACK TO THE MAIN MENU" << std::endl;
 			break;
 		default:

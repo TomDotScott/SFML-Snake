@@ -2,8 +2,9 @@
 #include "StateManager.h"
 class StateControls : public BaseState {
 public:
-	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) override;
-	void Update() override;
+	StateControls(SoundManager& _soundManager) : BaseState(_soundManager) {};
+	void Initialize(sf::RenderWindow& _window, sf::Font& _font) override;
+	void Update(sf::RenderWindow& _window) override;
 	void Render(sf::RenderWindow& _window) override;
 	void Destroy() override;
 private:

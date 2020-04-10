@@ -84,6 +84,9 @@
     <ClCompile Include="StateMainMenu.cpp">
       <Filter>Source Files\Game Structure\States</Filter>
     </ClCompile>
+    <ClCompile Include="BaseState.cpp">
+      <Filter>Source Files\Game Structure\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
     <ClInclude Include="StateMainMenu.h">
+      <Filter>Header Files\Game Structure\States</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
       <Filter>Header Files\Game Structure\States</Filter>
     </ClInclude>
   </ItemGroup>

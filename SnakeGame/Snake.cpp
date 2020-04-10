@@ -2,8 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "Constants.h"
 
-Snake::Snake() {
-	m_soundManager = nullptr;
+Snake::Snake(SoundManager& _soundManager) : m_soundManager(_soundManager) {
 	m_gobbleBendTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Bend.png");
 	m_gobbleBodyTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Body.png");
 	m_gobbleHeadTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Head.png");
@@ -256,7 +255,7 @@ void Snake::Collision(ECollisionType _collisionType) {
 			|| _collisionType == ECollisionType::eSnake
 			|| _collisionType == ECollisionType::eSelf) {
 			m_dead = true;
-			m_soundManager->PlaySFX("sfx_snake_death");
+			m_soundManager.PlaySFX("sfx_snake_death");
 		}
 	}
 }
@@ -264,16 +263,16 @@ void Snake::Collision(ECollisionType _collisionType) {
 void Snake::Collision(Food* _food) {
 	switch (_food->GetType()) {
 	case EFoodType::eStandard:
-		m_soundManager->PlaySFX("sfx_food_standard");
+		m_soundManager.PlaySFX("sfx_food_standard");
 		break;
 
 	case EFoodType::eSpecial:
-		m_soundManager->PlaySFX("sfx_food_special");
+		m_soundManager.PlaySFX("sfx_food_special");
 		break;
 
 	case EFoodType::eGobble:
 		m_gobbleMode = true;
-		m_soundManager->PlaySFX("sfx_gobble_on");
+		m_soundManager.PlaySFX("sfx_gobble_on");
 		break;
 
 	}

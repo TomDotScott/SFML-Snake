@@ -1,19 +1,51 @@
 ﻿#include "StateManager.h"
 
 #include <iostream>
+#include "StateControls.h"
+#include "StateGame.h"
+#include "StateGameOver.h"
+#include "StateMainMenu.h"
 
-void StateManager::SetWindow(sf::RenderWindow* _window) {
-	m_window = _window;
+void StateManager::Initialize(sf::RenderWindow& _window, const sf::Font& _font, const EState& _state, const SoundManager& _soundManager)
+{
+	m_font = _font;
+	m_currentState = _state;
+	m_soundManager = _soundManager;
+	ChangeState(_window, m_currentState);
 }
 
-void StateManager::SetState(BaseState* _state) {
+void StateManager::ChangeState(sf::RenderWindow& _window, const EState& _state, const bool _twoPlayer, const bool _playerWon) {
+	m_currentState = _state;
+	switch (_state) {
+	case EState::eMainMenu:
+		STATE_MANAGER.SetState(new StateMainMenu(m_soundManager), _window);
+		break;
+
+	case EState::eControlsMenu:
+		STATE_MANAGER.SetState(new StateControls(m_soundManager), _window);
+		break;
+
+	case EState::eGame:
+		STATE_MANAGER.SetState(new StateGame(m_soundManager, _twoPlayer), _window);
+		break;
+
+	case EState::eGameOver:
+		STATE_MANAGER.SetState(new StateGameOver(m_soundManager, _twoPlayer, _playerWon), _window);
+		break;
+
+	default:;
+	}
+}
+
+
+void StateManager::SetState(BaseState* _state, sf::RenderWindow& _window) {
 	if (m_state != nullptr) {
 		m_state->Destroy();
 		delete m_state;
 	}
 	m_state = _state;
 	if (m_state != nullptr) {
-		m_state->Initialize(*m_window, m_font, m_soundManager);
+		m_state->Initialize(_window, m_font);
 	}
 }
 
@@ -36,15 +68,15 @@ void StateManager::Input(sf::Event& _event) const {
 	}
 }
 
-void StateManager::Update() const {
+void StateManager::Update(sf::RenderWindow& _window) const {
 	if (m_state != nullptr) {
-		m_state->Update();
+		m_state->Update(_window);
 	}
 }
 
-void StateManager::Render() const {
+void StateManager::Render(sf::RenderWindow& _window) const {
 	if (m_state != nullptr) {
-		m_state->Render(*m_window);
+		m_state->Render(_window);
 	}
 }
 

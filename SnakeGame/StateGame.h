@@ -18,12 +18,12 @@ struct Wall {
 
 class StateGame final : public BaseState {
 public:
-	explicit StateGame(const bool& _twoPlayer);
+	explicit StateGame(SoundManager& _soundManager, const bool& _twoPlayer);
 
 	~StateGame();
 	
-	void Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) override;
-	void Update() override;
+	void Initialize(sf::RenderWindow& _window, sf::Font& _font) override;
+	void Update(sf::RenderWindow& _window) override;
 	void Render(sf::RenderWindow& _window) override;
 	void Destroy() override;
 	void HandleInput();
@@ -39,22 +39,16 @@ private:
 
 	void SaveScores();
 
-	void GameOver();
+	void GameOver(sf::RenderWindow& _window);
 
 	int TimeRemaining() const;
 
-	void CheckWinningConditions();
+	void CheckWinningConditions(sf::RenderWindow& _window);
 
 	void EndGobbleMode();
 
 	//Returns true if more than one snake is alive
 	bool StillAlive();
-
-	//the SoundManager
-	SoundManager* m_soundManager{ nullptr };
-
-	//the font for the UI
-	sf::Font m_font;
 
 	//Container for all the snakes - Player or AI
 	std::vector<Snake*> m_snakes;

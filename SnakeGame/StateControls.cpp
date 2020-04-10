@@ -4,12 +4,9 @@
 #include "SFML/Graphics.hpp"
 #include "StateGame.h"
 
-void StateControls::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
-	CURRENT_STATE = ECurrentState::eControlsMenu;
+void StateControls::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 	//initialise selected value to play the game
 	m_selected = 0;
-
-	m_soundManager = _soundManager;
 
 	m_gobbleTexture.loadFromFile("Resources/Graphics/Food_Gobble.png");
 	m_standardTexture.loadFromFile("Resources/Graphics/Food_Standard.png");
@@ -57,16 +54,16 @@ void StateControls::Render(sf::RenderWindow& _window) {
 }
 
 
-void StateControls::Update() {
+void StateControls::Update(sf::RenderWindow& _window) {
 	if (m_upKey && !m_downKey) {
 		m_selected -= 1;
-		m_soundManager->PlaySFX("sfx_menu_move");
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_upKey = false;
 	}
 
 	if (m_downKey && !m_upKey) {
 		m_selected += 1;
-		m_soundManager->PlaySFX("sfx_menu_move");
+		m_soundManager.PlaySFX("sfx_menu_move");
 		m_downKey = false;
 	}
 
@@ -81,18 +78,17 @@ void StateControls::Update() {
 
 	//Select the option using SPACE
 	if (m_spaceKey && !m_upKey && !m_downKey) {
-		m_soundManager->PlaySFX("sfx_menu_select");
+		m_soundManager.PlaySFX("sfx_menu_select");
 		m_spaceKey = false;
 		switch (m_selected) {
 		case 0:
 			//play the game...
-			CORE_STATE.SetState(new StateGame(false));
-			CURRENT_STATE = ECurrentState::eGame;
+			STATE_MANAGER.ChangeState(_window, EState::eGame, false);
 			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
-			//Go to the controls state...
-			CORE_STATE.SetState(new StateMainMenu());
+			//Go to the main menu state...
+			STATE_MANAGER.ChangeState(_window, EState::eMainMenu, false);
 			std::cout << "GOING TO THE MAIN MENU" << std::endl;
 			break;
 		default:

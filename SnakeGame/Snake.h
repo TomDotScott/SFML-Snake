@@ -12,7 +12,7 @@ enum class ECollisionType {
 
 class Snake : public Entity {
 public:
-	Snake();
+	explicit Snake(SoundManager& _soundManager);
 
 	virtual void Update();
 	void Render(sf::RenderWindow& _window) override final;
@@ -36,7 +36,7 @@ public:
 	bool GetIsGobbleMode() const { return m_gobbleMode; }
 	void SetIsGobbleMode(const bool& _isGobbleMode) { m_gobbleMode = _isGobbleMode; }
 
-	void SetSoundManager(SoundManager* _soundManager) { m_soundManager = _soundManager; }
+	void SetSoundManager(SoundManager& _soundManager) const { m_soundManager = _soundManager; }
 
 	int GetScore() const { return m_score; }
 
@@ -84,5 +84,5 @@ protected:
 	sf::Texture m_gobbleTailTexture;
 
 	//For SFX
-	SoundManager* m_soundManager;
+	SoundManager& m_soundManager;
 };

@@ -2,7 +2,7 @@
 #include "Snake.h"
 class AISnake : public Snake {
 public:
-	AISnake();
+	explicit AISnake(SoundManager& _soundManager);
 	void ChooseDirection();
 	void Update() override;
 private:

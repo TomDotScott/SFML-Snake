@@ -1,6 +1,7 @@
 #include "AISnake.h"
 
-AISnake::AISnake() {
+AISnake::AISnake(SoundManager& _soundManager) : Snake(_soundManager)
+{
 	RandomisePosition();
 
 	m_segments.PushBack(m_position, m_direction);

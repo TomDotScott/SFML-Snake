@@ -1,6 +1,6 @@
 #include "PlayerSnake.h"
 
-PlayerSnake::PlayerSnake(const std::string& _player) {
+PlayerSnake::PlayerSnake(const std::string& _player, SoundManager& _soundManager) : Snake(_soundManager) {
 	RandomisePosition();
 
 	m_segments.PushBack(m_position, m_direction);

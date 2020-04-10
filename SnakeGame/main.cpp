@@ -10,16 +10,15 @@
 #include "SoundManager.h"
 #include "StateMainMenu.h"
 
-StateManager CORE_STATE;
 bool QUIT_GAME;
-ECurrentState CURRENT_STATE;
+StateManager STATE_MANAGER;
 
-void GameLoop(sf::RenderWindow& _window)
+void game_loop(sf::RenderWindow& _window)
 {
 	// We must clear the window each time around the loop
 	_window.clear();
-	CORE_STATE.Update();
-	CORE_STATE.Render();
+	STATE_MANAGER.Update(_window);
+	STATE_MANAGER.Render(_window);
 
 	// Get the window to display its contents
 	_window.display();
@@ -28,11 +27,10 @@ void GameLoop(sf::RenderWindow& _window)
 
 int main()
 {
-	//Initialise the SoundManager
-	auto* soundManager = new SoundManager;
+	SoundManager soundManager;
 	
 	// Initialise the resources needed for the states	
-	sf::RenderWindow window(sf::VideoMode(constants::k_screenWidth, constants::k_screenHeight), "C++ Snake ICA - Thomas Scott : W9036922");
+	sf::RenderWindow window(sf::VideoMode(constants::k_screenWidth, constants::k_screenHeight),"C++ Snake ICA - Thomas Scott : W9036922");
 	
 	//seed the random number generator
 	std::srand(static_cast<unsigned int>(time(nullptr)));
@@ -47,15 +45,7 @@ int main()
 
 	sf::Clock clock;
 
-	CORE_STATE.SetWindow(&window);
-
-	CORE_STATE.SetFont(font);
-
-	CORE_STATE.SetSoundManager(soundManager);
-	
-	CORE_STATE.SetState(new StateMainMenu());
-	
-	CURRENT_STATE = ECurrentState::eMainMenu;
+	STATE_MANAGER.Initialize(window, font, EState::eMainMenu, soundManager);
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -69,25 +59,24 @@ int main()
 				window.close();
 			
 			//Handle Input outside of the game loops
-			CORE_STATE.Input(event);
+			STATE_MANAGER.Input(event);
 
 		}
-		if (CURRENT_STATE == ECurrentState::eGame)
+		if (STATE_MANAGER.GetCurrentState() == EState::eGame)
 		{
 			while (clock.getElapsedTime() >= sf::milliseconds(200)) {
 
-				GameLoop(window);
+				game_loop(window);
 				clock.restart();
 			}
 		}
 		else {
-			GameLoop(window);
+			game_loop(window);
 		}
 		if (QUIT_GAME) {
 			window.close();
 		}
 	}
-	delete soundManager;
 	std::cout << "Snake Game: Ended" << std::endl;
 	return 0;
 }

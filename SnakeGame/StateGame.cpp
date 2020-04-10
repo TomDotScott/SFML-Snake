@@ -3,13 +3,28 @@
 #include "AISnake.h"
 #include "PlayerSnake.h"
 #include "StateGameOver.h"
+
+StateGame::StateGame(SoundManager& _soundManager, const bool& _twoPlayer): BaseState(_soundManager)
+{
+	m_soundManager.PlayMusic("music_game");
+
+	m_twoPlayer = _twoPlayer ? true : false;
+}
+
+StateGame::~StateGame() {
+	for (auto* food : m_foodArray) {
+		food = nullptr;
+	}
+
+	for (auto* snake : m_snakes) {
+		snake = nullptr;
+	}
+}
+
 //BASESTATE METHODS
-void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundManager* _soundManager) {
-	CURRENT_STATE = ECurrentState::eGame;
+void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 	m_clock.restart();
-
 	m_font = _font;
-
 	m_pausedText.SetFont(m_font);
 	m_gobbleModeText.SetFont(m_font);
 
@@ -19,22 +34,22 @@ void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMana
 		m_player2Score.m_text.setPosition(static_cast<float>(constants::k_screenWidth) - 5 * constants::k_gameGridCellSize, constants::k_gameGridCellSize);
 
 		//Set up 2 player snakes
-		auto* player1Snake = new PlayerSnake("Player 1");
+		auto* player1Snake = new PlayerSnake("Player 1", m_soundManager);
 		m_snakes.push_back(player1Snake);
 
-		auto* player2Snake = new PlayerSnake("Player 2");
+		auto* player2Snake = new PlayerSnake("Player 2", m_soundManager);
 		m_snakes.push_back(player2Snake);
 
 		for (auto* text : m_UItoRenderTwoPlayer) {
 			text->SetFont(m_font);
 		}
 	} else {
-		auto* playerSnake = new PlayerSnake("Player 1");
+		auto* playerSnake = new PlayerSnake("Player 1", m_soundManager);
 		m_snakes.push_back(playerSnake);
 
 		//populate the snake Vector
 		for (int i = 0; i < constants::k_AISnakeAmount; ++i) {
-			m_snakes.push_back(new AISnake());
+			m_snakes.push_back(new AISnake(m_soundManager));
 		}
 
 		for (auto* text : m_UItoRenderSinglePlayer) {
@@ -43,9 +58,6 @@ void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font, SoundMana
 	}
 
 	SetHighScoreText();
-
-	m_soundManager = _soundManager;
-	m_soundManager->PlayMusic("music_game");
 
 	//Initialise background texture
 	m_grassTexture.loadFromFile("Resources/Graphics/Game_Background.png");
@@ -83,7 +95,7 @@ int StateGame::TimeRemaining() const {
 	return 90 - static_cast<int>(m_clock.getElapsedTime().asSeconds());
 }
 
-void StateGame::Update() {
+void StateGame::Update(sf::RenderWindow& _window) {
 	HandleInput();
 	//only play the game if it is paused
 	if (!m_paused) {
@@ -104,7 +116,7 @@ void StateGame::Update() {
 
 		m_clockText.SetString(std::to_string(TimeRemaining()));
 
-		CheckWinningConditions();
+		CheckWinningConditions(_window);
 	}
 }
 
@@ -126,6 +138,7 @@ void StateGame::Render(sf::RenderWindow& _window) {
 	_window.draw(m_leftWall.m_wall);
 	_window.draw(m_rightWall.m_wall);
 
+	
 	if (m_twoPlayer) {
 		for (auto* uiElement : m_UItoRenderTwoPlayer) {
 			_window.draw(uiElement->m_text);
@@ -146,20 +159,6 @@ void StateGame::Render(sf::RenderWindow& _window) {
 }
 
 void StateGame::Destroy() {
-	for (auto* food : m_foodArray) {
-		food = nullptr;
-	}
-
-	for (auto* snake : m_snakes) {
-		snake = nullptr;
-	}
-}
-
-StateGame::StateGame(const bool& _twoPlayer) {
-	m_twoPlayer = _twoPlayer ? true : false;
-}
-
-StateGame::~StateGame() {
 	for (auto* food : m_foodArray) {
 		food = nullptr;
 	}
@@ -194,15 +193,15 @@ void StateGame::EndGobbleMode() {
 		for (auto* snake : m_snakes) {
 			if (snake->GetIsGobbleMode()) {
 				snake->SetIsGobbleMode(false);
-				m_soundManager->PlaySFX("sfx_gobble_off");
+				m_soundManager.PlaySFX("sfx_gobble_off");
 			}
 		}
 	}
 }
 
-void StateGame::CheckWinningConditions() {
+void StateGame::CheckWinningConditions(sf::RenderWindow& _window) {
 	if (!StillAlive() || TimeRemaining() == 0) {
-		GameOver();
+		GameOver(_window);
 	}
 }
 
@@ -240,7 +239,7 @@ void StateGame::UpdateScores() {
 void StateGame::HandleInput() {
 	//pause and un-pause the game if escape is pressed
 	if (m_escapeKey) {
-		m_soundManager->PlaySFX("sfx_menu_pause");
+		m_soundManager.PlaySFX("sfx_menu_pause");
 		m_paused = !m_paused;
 		m_escapeKey = false;
 	}
@@ -353,9 +352,9 @@ void StateGame::SaveScores() {
 	outfile.close();
 }
 
-void StateGame::GameOver() {
+void StateGame::GameOver(sf::RenderWindow& _window) {
 	SaveScores();
-	CORE_STATE.SetState(new StateGameOver(m_twoPlayer ? true : false, !m_snakes[0]->IsDead()));
+	STATE_MANAGER.ChangeState(_window, EState::eGameOver, m_twoPlayer, !m_snakes[0]->IsDead());
 }
 
 bool StateGame::StillAlive() {
