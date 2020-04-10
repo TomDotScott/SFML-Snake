@@ -13,7 +13,6 @@ SoundManager::SoundManager()
 	LoadSFX("sfx_menu_pause");
 	LoadSFX("sfx_menu_select");
 	LoadSFX("sfx_snake_death");
-	LoadSFX("sfx_snake_move");
 
 	LoadMusic("music_game");
 }

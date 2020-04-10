@@ -153,7 +153,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AISnake.cpp" />
-    <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="SoundManager.cpp" />
