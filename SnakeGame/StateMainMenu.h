@@ -25,9 +25,9 @@ private:
 		m_font, constants::k_uiTextElement };
 
 	//MUSIC LINK - https://youtu.be/0nO2lHSlXN0
-	UIText m_copyright{ "All artwork made by Tom Scott\nMusic is Royalty and Copyright Free by Paul Caveworks on Youtube",
+	UIText m_copyright{ "All artwork made by Thomas Scott\nMusic is Royalty and Copyright Free by Paul Caveworks on Youtube",
 	sf::Color::White,
-	{static_cast<float>(constants::k_screenWidth) / 2, constants::k_screenHeight - 1.5 * constants::k_gameGridCellSize},
+	{constants::k_gameGridCellSize * 10 + 10, constants::k_screenHeight - 2 * constants::k_gameGridCellSize - 10},
 	m_font, constants::k_gameGridCellSize / 2};
 	
 	std::vector<UIText*> m_textToRender{
