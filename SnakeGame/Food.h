@@ -8,7 +8,7 @@ enum class EFoodType {
 	eStandard, eSpecial, eGobble
 };
 
-class Food : public Entity {
+class Food final : public Entity {
 public:
 	Food();
 

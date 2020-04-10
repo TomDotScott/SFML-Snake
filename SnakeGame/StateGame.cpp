@@ -6,18 +6,15 @@
 
 StateGame::StateGame(SoundManager& _soundManager, const bool& _twoPlayer): BaseState(_soundManager)
 {
-	m_soundManager.PlayMusic("music_game");
-
 	m_twoPlayer = _twoPlayer ? true : false;
 }
 
 StateGame::~StateGame() {
-	for (auto* food : m_foodArray) {
-		food = nullptr;
-	}
-
-	for (auto* snake : m_snakes) {
-		snake = nullptr;
+	for (auto * snake : m_snakes) {
+		if (snake) {
+			delete snake;
+			snake = nullptr;
+		}
 	}
 }
 
@@ -89,6 +86,8 @@ void StateGame::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 		snake->SetSoundManager(m_soundManager);
 
 	}
+	m_soundManager.PlayMusic("music_game");
+
 }
 
 int StateGame::TimeRemaining() const {
@@ -159,13 +158,7 @@ void StateGame::Render(sf::RenderWindow& _window) {
 }
 
 void StateGame::Destroy() {
-	for (auto* food : m_foodArray) {
-		food = nullptr;
-	}
-
-	for (auto* snake : m_snakes) {
-		snake = nullptr;
-	}
+	
 }
 
 

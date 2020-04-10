@@ -22,16 +22,12 @@ SoundManager::~SoundManager()
 {
 	for(const auto& sound : m_sfxBuffer)
 	{
-		if (sound.second) {
-			delete sound.second;
-		}
+		delete sound.second;
 	}
 
 	for (const auto& music : m_musicBuffer)
 	{
-		if (music.second) {
-			delete music.second;
-		}
+		delete music.second;
 	}
 }
 
@@ -43,7 +39,6 @@ void SoundManager::PlaySFX(const std::string& _sfxName)
 
 void SoundManager::PlayMusic(const std::string& _musicName)
 {
-	std::cout << "MUSIC PLAYING" << std::endl;
 	m_music.setBuffer(*m_musicBuffer.at(_musicName));
 	m_music.play();
 }

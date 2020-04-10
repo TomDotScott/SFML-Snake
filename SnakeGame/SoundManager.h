@@ -12,7 +12,7 @@ public:
 	void PlayMusic(const std::string& _musicName);
 
 	void StopMusic();
-
+	
 	sf::SoundSource::Status Status() const { return m_sfx.getStatus(); }
 
 private:
