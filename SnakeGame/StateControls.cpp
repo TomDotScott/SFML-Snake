@@ -1,10 +1,9 @@
-#include "StateControls.h"
-#include "StateMainMenu.h"
-#include <iostream>
 #include "SFML/Graphics.hpp"
 #include "StateGame.h"
+#include "StateControls.h"
+#include "StateMainMenu.h"
 
-void StateControls::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
+void StateControls::OnCreate(sf::RenderWindow& _window, sf::Font& _font) {
 	//initialise selected value to play the game
 	m_selected = 0;
 
@@ -18,8 +17,6 @@ void StateControls::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 	for (auto* textElement : m_textToRender) {
 		textElement->SetFont(m_font);
 	}
-
-	std::cout << "Initialised" << std::endl;
 }
 
 
@@ -40,13 +37,13 @@ void StateControls::Render(sf::RenderWindow& _window) {
 		_window.draw(textElement->m_text);
 	}
 
-	const GameIcon standard{ m_standardTexture, {68, 175} };
+	const FoodIcon standard{ m_standardTexture, {68, 175} };
 	standard.Render(_window);
 
-	const GameIcon special{ m_specialTexture, {68, 208} };
+	const FoodIcon special{ m_specialTexture, {68, 208} };
 	special.Render(_window);
 
-	GameIcon gobble{ m_gobbleTexture, {68, 240} };
+	FoodIcon gobble{ m_gobbleTexture, {68, 240} };
 	gobble.Render(_window);
 
 	gobble.SetPosition({ 68, 270 });
@@ -83,20 +80,14 @@ void StateControls::Update(sf::RenderWindow& _window) {
 		switch (m_selected) {
 		case 0:
 			//play the game...
-			STATE_MANAGER.ChangeState(_window, EState::eGame, false);
-			std::cout << "PLAYING SNAKE" << std::endl;
+			STATE_MANAGER.ChangeState(EState::eGame, _window);
 			break;
 		case 1:
 			//Go to the main menu state...
-			STATE_MANAGER.ChangeState(_window, EState::eMainMenu, false);
-			std::cout << "GOING TO THE MAIN MENU" << std::endl;
+			STATE_MANAGER.ChangeState(EState::eMainMenu, _window);
 			break;
 		default:
 			break;
 		}
 	}
-}
-
-void StateControls::Destroy() {
-	std::cout << "Destroyed" << std::endl;
 }

@@ -1,8 +1,9 @@
 #include "Snake.h"
+
 #include "SFML/Graphics.hpp"
 #include "Constants.h"
 
-Snake::Snake(SoundManager& _soundManager) : m_soundManager(_soundManager) {
+Snake::Snake(SoundManager& _soundManager, std::array<Food*, constants::k_foodAmount>& _foodArray) : m_soundManager(_soundManager), m_food(_foodArray) {
 	m_gobbleBendTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Bend.png");
 	m_gobbleBodyTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Body.png");
 	m_gobbleHeadTexture.loadFromFile("Resources/Graphics/Snake_Gobble_Head.png");
@@ -23,7 +24,7 @@ void Snake::Update() {
 void Snake::Render(sf::RenderWindow& _window) {
 	if (!m_dead) {
 		if (!m_segments.IsEmpty()) {
-			auto* currentNode = m_segments.GetHead();
+			auto* currentNode = m_segments.Front();
 			for (int i = 0; i < m_segments.Size(); ++i) {
 				if (i == 0) {
 					m_sprite.setTexture(m_gobbleMode ? m_gobbleHeadTexture : m_headTexture);
@@ -36,12 +37,12 @@ void Snake::Render(sf::RenderWindow& _window) {
 				EDirection previousNodeDirection = m_direction;
 
 				if (currentNode->m_previousNode) {
-					previousNodeDirection = currentNode->m_previousNode->m_direction;
+					previousNodeDirection = currentNode->m_previousNode->m_data.second;
 				}
 
 				//Change rotation depending on direction
 				//Add bends at appropriate points
-				switch (currentNode->m_direction) {
+				switch (currentNode->m_data.second) {
 				case EDirection::eLeft:
 					if (previousNodeDirection != EDirection::eLeft && i < m_segments.Size() - 1) {
 						m_sprite.setTexture(m_gobbleMode ? m_gobbleBendTexture : m_bendTexture);
@@ -104,7 +105,7 @@ void Snake::Render(sf::RenderWindow& _window) {
 					default:;
 					}
 				}
-				m_sprite.setPosition(currentNode->m_position);
+				m_sprite.setPosition(currentNode->m_data.first);
 				_window.draw(m_sprite);
 				currentNode = currentNode->m_nextNode;
 			}
@@ -129,15 +130,13 @@ void Snake::Move() {
 	default:
 		break;
 	}
-
-	CheckCollisions();
 	m_segments.PopBack();
-	m_segments.PushFront(sf::Vector2f(m_position.x, m_position.y), m_direction);
+	m_segments.PushFront({ sf::Vector2f(m_position.x, m_position.y), m_direction });
 }
 
 void Snake::Grow(const int _amount) {
 	for (int i{ 0 }; i < _amount; ++i) {
-		m_segments.PushBack(sf::Vector2f(m_position.x, m_position.y), m_direction);
+		m_segments.PushBack({ sf::Vector2f(m_position.x, m_position.y), m_direction });
 	}
 	m_score += (!m_gobbleMode ? 10 : 20) * _amount;
 }
@@ -148,17 +147,20 @@ int Snake::FindGobblePoint(sf::Vector2f _gobbleSnakeHead) const {
 	if (!m_dead) {
 		int counter{ 0 };
 		if (!m_segments.IsEmpty()) {
-			auto* currentNode = m_segments.GetHead();
-			while (currentNode->m_nextNode) {
-				if (currentNode->m_position == _gobbleSnakeHead) {
-					return counter;
+			auto* currentNode = m_segments.Back();
+			for (int i = m_segments.Size(); i > 0; --i) {
+				if (currentNode) {
+					if (currentNode->m_data.first == _gobbleSnakeHead) {
+						return counter;
+					}
+					currentNode = currentNode->m_previousNode;
+					++counter;
+				} else {
+					return -1;
 				}
-				currentNode = currentNode->m_nextNode;
-				++counter;
 			}
 		}
-	}
-	return -1;
+	}return -1;
 }
 
 void Snake::Shrink(const int _amount) {
@@ -171,111 +173,125 @@ void Snake::Shrink(const int _amount) {
 }
 
 //check the snake's collisions
-void Snake::CheckCollisions() {
-	CheckCollisionsAgainstSelf();
-	CheckCollisionsAgainstFood();
-	CheckCollisionsAgainstOtherSnakes();
+ECollisionType Snake::CheckCollisions() {
+	if (CheckCollisionsAgainstSelf()) {
+		Collision(ECollisionType::eSelf);
+		return ECollisionType::eSelf;
+	}
+	if (CheckCollisionsAgainstFood()) {
+		Collision(ECollisionType::eFood);
+		return ECollisionType::eFood;
+	}if (CheckCollisionsAgainstOtherSnakes()) {
+		return ECollisionType::eSnake;
+	}
+	return ECollisionType::eNone;
 }
 
-void Snake::CheckCollisionsAgainstSelf() {
+bool Snake::CheckCollisionsAgainstSelf() const {
 	if (m_direction != EDirection::eNone && !m_segments.IsEmpty()) {
-		auto* currentNode = m_segments.GetHead();
+		auto* currentNode = m_segments.Front();
 		for (int i = 0; i < m_segments.Size(); ++i) {
-			if (currentNode->m_position == m_position && !IsDead()) {
-				std::cout << "I HIT MYSELF" << std::endl;
-				Collision(ECollisionType::eSelf);
+			if (i != 0) {
+				if (currentNode->m_data.first == m_position && !IsDead()) {
+					return true;
+				}
 			}
 			currentNode = currentNode->m_nextNode;
 		}
 	}
+
+	return false;
 }
 
-void Snake::CheckCollisionsAgainstFood() {
+bool Snake::CheckCollisionsAgainstFood() {
 	//Check Against Food
-	for (auto* food : m_food) {
+	for (auto& food : m_food) {
 		if (food->GetPosition() == m_position) {
-			Collision(food);
-			food->Randomise();
+			m_lastFood = food;
+			return true;
 		}
 	}
+	return false;
 }
 
-void Snake::CheckCollisionsAgainstOtherSnakes() {
+bool Snake::CheckCollisionsAgainstOtherSnakes() {
 	//Check against other snakes
 	for (auto* otherSnake : m_otherSnakes) {
-		if (!otherSnake->IsDead()) {
-			//Check each segment of the current snake against the heads of the other snakes
-			auto currentSegment = m_segments.GetHead();
+		if (!otherSnake->IsDead() && otherSnake != this) {
+			//Check each segment of THIS snake against the heads of the other snakes
+			auto currentSegment = m_segments.Front();
 			for (int i{ 0 }; i < m_segments.Size(); ++i) {
-				//Check each segment against the heads of the other snakes
-				if (currentSegment->m_position == otherSnake->GetHeadPosition()) {
+				if (currentSegment->m_data.first == otherSnake->GetHeadPosition()) {
 					//if it's a head on collision then both snakes die
-					if (m_position == currentSegment->m_position) {
+					if (m_position == currentSegment->m_data.first) {
 						//If it's gobble mode, the entire other snake gets eaten
 						if (m_gobbleMode) {
 							Grow(static_cast<const int>((otherSnake->GetSnakeSegments().Size())));
+							m_soundManager.PlaySFX("sfx_gobble_eat");
 							otherSnake->Collision(ECollisionType::eSnake);
-							return;
+							return true;
 						}
 						Collision(ECollisionType::eSnake);
 						otherSnake->Collision(ECollisionType::eSnake);
-						return;
+						return true;
 					}
-					std::cout << "I HIT ANOTHER SNAKE" << std::endl;
 					otherSnake->Collision(ECollisionType::eSnake);
 				}
 				currentSegment = currentSegment->m_nextNode;
 			}
 
 			//Check if the snake has hit another snake's body
-			auto otherSegment = otherSnake->GetSnakeSegments().GetHead();
+			auto otherSegment = otherSnake->GetSnakeSegments().Front();
 			for (int i{ 0 }; i < otherSnake->GetSnakeSegments().Size(); ++i) {
-				if (otherSegment->m_position == m_position) {
+				if (otherSegment->m_data.first == m_position) {
 					//If it's gobble mode, make sure not to kill the player on collision
 					if (m_gobbleMode) {
 						const int growShrinkAmount{ otherSnake->FindGobblePoint(m_position) };
-						Grow(growShrinkAmount);
-						otherSnake->Shrink(growShrinkAmount);
-						return;
+						if (growShrinkAmount != -1) {
+							Grow(growShrinkAmount);
+							m_soundManager.PlaySFX("sfx_gobble_eat");
+							otherSnake->Shrink(growShrinkAmount);
+							return true;
+						}
 					} else {
-						std::cout << "I HIT ANOTHER SNAKE" << std::endl;
 						Collision(ECollisionType::eSnake);
-						return;
+						return true;
 					}
 				}
 				otherSegment = otherSegment->m_nextNode;
 			}
 		}
 	}
+	return false;
 }
 
-void Snake::Collision(ECollisionType _collisionType) {
+void Snake::Collision(const ECollisionType _collisionType) {
 	if (!m_dead) {
 		if (_collisionType == ECollisionType::eWall
 			|| _collisionType == ECollisionType::eSnake
 			|| _collisionType == ECollisionType::eSelf) {
 			m_dead = true;
+			m_gobbleMode = false;
 			m_soundManager.PlaySFX("sfx_snake_death");
 		}
+		if (_collisionType == ECollisionType::eFood) {
+			switch (m_lastFood->GetType()) {
+			case EFoodType::eStandard:
+				m_soundManager.PlaySFX("sfx_food_standard");
+				break;
+
+			case EFoodType::eSpecial:
+				m_soundManager.PlaySFX("sfx_food_special");
+				break;
+
+			case EFoodType::eGobble:
+				m_gobbleMode = true;
+				m_soundManager.PlaySFX("sfx_gobble_on");
+				break;
+
+			}
+			const int growAmount{ m_lastFood->GetGrowAmount() };
+			Grow(growAmount);
+		}
 	}
-}
-
-void Snake::Collision(Food* _food) {
-	switch (_food->GetType()) {
-	case EFoodType::eStandard:
-		m_soundManager.PlaySFX("sfx_food_standard");
-		break;
-
-	case EFoodType::eSpecial:
-		m_soundManager.PlaySFX("sfx_food_special");
-		break;
-
-	case EFoodType::eGobble:
-		m_gobbleMode = true;
-		m_soundManager.PlaySFX("sfx_gobble_on");
-		break;
-
-	}
-	const int growAmount{ _food->GetGrowAmount() };
-	Grow(growAmount);
 }

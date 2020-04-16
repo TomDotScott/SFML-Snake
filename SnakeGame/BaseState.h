@@ -4,22 +4,48 @@
 #include "Constants.h"
 #include "SoundManager.h"
 
-//Every state needs to be able to do these 4 things:
-//*Initialize
-//*Update
-//*Render
-//*Destroy
-//If an object can't, it's not a state
+/**
+ * \brief The BaseState Class is the parent class for all of the states in the game
+ * It defines the behaviours that each state needs to have:
+ * 1. Be created
+ * 2. Update
+ * 3. Render to the screen
+ * It also contains all of the data needed for each state
+ */
 class BaseState {
 public:
+	/**
+	 * \brief Constructs a BaseState object
+	 * \param _soundManager A reference to the sound manager to play sound effects and music
+	 */
 	explicit BaseState(SoundManager& _soundManager) : m_soundManager(_soundManager){};
+	
+	/**
+	 * \brief Destroys the BaseState object
+	 */
 	virtual ~BaseState() = default;
 
-	virtual void Initialize(sf::RenderWindow& _window, sf::Font& _font) = 0;
+	
+	/**
+	 * \brief Called upon the creation of the object. Initialises State objects further than their respective Constructors
+	 * \param _window a reference to the game window
+	 * \param _font the font that will be used in the game
+	 */
+	virtual void OnCreate(sf::RenderWindow& _window, sf::Font& _font) = 0;
+	
+	/**
+	 * \brief Update is called once per game loop
+	 * \param _window a reference to the game window
+	 */
 	virtual void Update(sf::RenderWindow& _window) = 0;
+	
+	/**
+	 * \brief Draws renderables to the window
+	 * \param _window a reference to the game window
+	 */
 	virtual void Render(sf::RenderWindow& _window) = 0;
-	virtual void Destroy() = 0;
 
+	
 	void SetUpKey(const bool& _upKey) { m_upKey = _upKey; }
 	void SetWKey(const bool& _wKey) { m_wKey = _wKey; }
 	void SetDownKey(const bool& _downKey) { m_downKey = _downKey; }
@@ -49,7 +75,18 @@ protected:
 	sf::Font m_font;
 };
 
+/**
+ * \brief UIText is a container for the UI text that will be displayed in each State
+ */
 struct UIText {
+	/**
+	 * \brief Constructs a UIText object
+	 * \param _string The string value of the UIText to display
+	 * \param _colour The colour of the UIText to display
+	 * \param _position The position of the UIText to display
+	 * \param _font The font of the UIText to display
+	 * \param _size The size of the UIText to display
+	 */
 	UIText(std::string _string, const sf::Color _colour, const sf::Vector2f _position, const sf::Font& _font, const int _size)
 		: m_string(std::move(_string)), m_colour(_colour), m_position(_position), m_font(_font), m_characterSize(_size) {
 		m_text = sf::Text(m_string, m_font, m_characterSize);
@@ -64,21 +101,36 @@ struct UIText {
 	sf::Font m_font;
 	int m_characterSize;
 
+	/**
+	 * \brief Sets the string value of the UIText
+	 * \param _newString The new value to display on screen
+	 */
 	void SetString(const std::string& _newString) {
 		m_string = _newString;
 		m_text.setString(m_string);
 	}
 
+	/**
+	 * \brief Sets the position of the UIText
+	 * \param _newPosition The new position of the UIText
+	 */
 	void SetPosition(const sf::Vector2f& _newPosition) {
 		m_position = _newPosition;
 		m_text.setPosition(m_position);
 	}
 
+	/**
+	 * \brief Sets the colour of the UIText
+	 * \param _colour The new colour of the UIText
+	 */
 	void SetColour(const sf::Color& _colour) {
 		m_colour = _colour;
 		m_text.setFillColor(m_colour);
 	}
-
+	/**
+	 * \brief Sets the font of the UIText
+	 * \param _newFont The new font of the UIText
+	 */
 	void SetFont(const sf::Font& _newFont) {
 		m_font = _newFont;
 		m_text.setFont(m_font);
@@ -86,7 +138,13 @@ struct UIText {
 	}
 };
 
+/**
+ * \brief The MenuBackground is a container object for the UI elements in the background of the various menus
+ */
 struct MenuBackground {
+	/**
+	 * \brief Constructs a MenuBackground object
+	 */
 	MenuBackground() {
 		//load the textures to display
 		m_leftRightWall.loadFromFile("Resources/Graphics/left_right_wall.png");
@@ -96,6 +154,11 @@ struct MenuBackground {
 	//To draw the walls and the background 
 	sf::Texture m_leftRightWall, m_topBottomWall, m_grass;
 	sf::Sprite m_spriteBG, m_spriteLR, m_spriteTB;
+	
+	/**
+	 * \brief Renders the menuBackground
+	 * \param _window A reference to the game window
+	 */
 	void Render(sf::RenderWindow& _window) {
 		//THE BACKGROUND
 		m_spriteBG.setTexture(m_grass);

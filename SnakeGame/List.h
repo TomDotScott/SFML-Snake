@@ -1,48 +1,125 @@
 #pragma once
-#include <iostream>
-#include <SFML/System/Vector2.hpp>
+#include <utility>
 
-//Holds the directions that the snake can travel in
+#include "SFML/System/Vector2.hpp"
+
+/**
+ * \brief The directions that the snake can travel in. None, Left, Right, Up, and Down
+ */
 enum class EDirection {
 	eNone, eLeft, eRight, eUp, eDown
 };
 
-//Doubly linked list, so we need reference to previous and next node
+
+/**
+ * \brief The structure of each element of the Linked List
+ */
 struct Node {
 	friend class List;
-	Node(sf::Vector2f _position, EDirection _direction, Node* _previousNode, Node* _nextNode) : m_position(_position), m_direction(_direction), m_previousNode(_previousNode), m_nextNode(_nextNode) {}
+	/**
+	 * \brief Constructs a Node
+	 * \param _data The data to store in the node
+	 * \param _previousNode A pointer to the previous node in the Linked List
+	 * \param _nextNode A pointer to the next node in the Linked List
+	 */
+	Node(std::pair<sf::Vector2f, EDirection>& _data, Node* _previousNode, Node* _nextNode) : m_data(_data),
+		m_previousNode(_previousNode),
+		m_nextNode(_nextNode) {
+	}
 
+
+	/**
+	 * \return false if at the end of the Linked List
+	 */
 	bool IsNextNodeAvailable() const { return m_nextNode; }
 
-	sf::Vector2f m_position;
-	EDirection m_direction;
+	std::pair<sf::Vector2f, EDirection> m_data;
 
 	Node* m_previousNode;
 	Node* m_nextNode;
 };
 
+/**
+ * \brief The List class is a custom doubly-linked list. TODO - make it a template class!
+ */
 class List {
 public:
+	/**
+	 * \brief Constructs a Linked List object with an empty node
+	 */
 	List();
-	List(const sf::Vector2f _position, EDirection _direction);
+
+	/**
+	 * \brief Constructs a Linked List object with parameters
+	 * \param _data The data to store in the first node
+	 */
+	List(std::pair<sf::Vector2f, EDirection>& _data);
+
+	/**
+	 * \brief Destroys the Linked List
+	 */
 	~List();
+
+	/**
+	 * \brief Pops the front of the list. TODO - when making a template, make it return the data stored
+	 */
 	void PopFront();
-	void PushFront(const sf::Vector2f _segmentPosition, const EDirection _direction);
-	void PushBack(const sf::Vector2f _segmentPosition, const EDirection _direction);
+
+	/**
+	 * \brief Adds data to the front of the list
+	 * \param _data The data to store in the front node
+	 */
+	void PushFront(std::pair<sf::Vector2f, EDirection> _data);
+
+	/**
+	 * \brief Adds data to the back of the list
+	 * \param _data The data to store in the back node
+	 */
+	void PushBack(std::pair<sf::Vector2f, EDirection> _data);
+
+	/**
+	 * \brief Pops the front of the list. TODO - when making a template, make it return the data stored
+	 */
 	void PopBack();
+
+	/**
+	 * \brief Clears the list by deleting each node
+	 */
 	void Clear() const;
-	sf::Vector2f Front() const;
-	sf::Vector2f Back() const;
+
+	/**
+	 * \return The front node of the Linked List without popping it
+	 */
+	Node* Front() const { return m_head; }
+
+	/**
+	* \return The back node of the Linked List without popping it
+	*/
+	Node* Back() const { return m_tail; }
+	
+	/**
+	 * \return true if no nodes are in the Linked List
+	 */
 	bool IsEmpty() const;
+	
+	/**
+	 * \return the amount of nodes in the Linked List
+	 */
 	int Size() const;
 
-	//Returns the front node
-	Node* GetHead() const { return m_head; }
-	//Returns the back node
-	Node* GetTail() const { return m_tail; }
-
 private:
+	/**
+	 * \brief The head - or front - of the Linked List
+	 */
 	Node* m_head{ nullptr };
+
+	/**
+	 * \brief The tail - or back - of the Linked List 
+	 */
 	Node* m_tail{ nullptr };
+
+	/**
+	 * \brief The size of the Linked List
+	 */
 	int m_size{ 0 };
 };

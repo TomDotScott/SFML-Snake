@@ -22,7 +22,7 @@ void Food::Randomise() {
 		m_type = EFoodType::eStandard;
 	}
 	//30% chance of being Special
-	else if (randomType <= 90) {
+	else if (randomType <= 98) {
 		m_type = EFoodType::eSpecial;
 	}
 	//10% chance of being Gobble Mode

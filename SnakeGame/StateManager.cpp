@@ -1,20 +1,17 @@
-﻿#include "StateManager.h"
-
-#include <iostream>
-#include "StateControls.h"
+﻿#include "StateControls.h"
+#include "StateManager.h"
 #include "StateGame.h"
 #include "StateGameOver.h"
 #include "StateMainMenu.h"
 
-void StateManager::Initialize(sf::RenderWindow& _window, const sf::Font& _font, const EState& _state, const SoundManager& _soundManager)
-{
+void StateManager::OnCreate(sf::RenderWindow& _window, const sf::Font& _font, const EState& _state, const SoundManager& _soundManager) {
 	m_font = _font;
 	m_currentState = _state;
 	m_soundManager = _soundManager;
-	ChangeState(_window, m_currentState);
+	ChangeState(m_currentState, _window);
 }
 
-void StateManager::ChangeState(sf::RenderWindow& _window, const EState& _state, const bool _twoPlayer, const bool _playerWon) {
+void StateManager::ChangeState(const EState& _state, sf::RenderWindow& _window, const bool _twoPlayer, const bool _playerWon) {
 	m_currentState = _state;
 	switch (_state) {
 	case EState::eMainMenu:
@@ -39,13 +36,10 @@ void StateManager::ChangeState(sf::RenderWindow& _window, const EState& _state, 
 
 
 void StateManager::SetState(BaseState* _state, sf::RenderWindow& _window) {
-	if (m_state != nullptr) {
-		m_state->Destroy();
-		delete m_state;
-	}
+	delete m_state;
 	m_state = _state;
 	if (m_state != nullptr) {
-		m_state->Initialize(_window, m_font);
+		m_state->OnCreate(_window, m_font);
 	}
 }
 
@@ -81,7 +75,5 @@ void StateManager::Render(sf::RenderWindow& _window) const {
 }
 
 StateManager::~StateManager() {
-	if (m_state != nullptr) {
-		m_state->Destroy();
-	}
+	delete m_state;
 }

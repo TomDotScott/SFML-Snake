@@ -2,20 +2,19 @@
 #include <fstream>
 #include <iostream>
 #include "StateGame.h"
-#include "StateMainMenu.h"
 
 
 StateGameOver::StateGameOver(SoundManager& _soundManager, const bool& _isTwoPlayer, const bool& _playerWon) :
 	BaseState(_soundManager), m_twoPlayer(_isTwoPlayer),
-	m_playerWon(_playerWon)
-{
+	m_playerWon(_playerWon) {
 }
 
-void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
+void StateGameOver::OnCreate(sf::RenderWindow& _window, sf::Font& _font) {
+	m_soundManager.StopMusic();
 
 	//initialise selected value to play the game
 	m_selected = 0;
-	
+
 	//load the font to display text
 	m_font = _font;
 
@@ -27,8 +26,6 @@ void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 			m_player2Score.SetString("P2: " + m_player2ScoreValue);
 			m_highScore.SetString("Highscore:  " + m_highScoreValue);
 		}
-	} else {
-		assert(false);
 	}
 	file.close();
 
@@ -41,12 +38,11 @@ void StateGameOver::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 		}
 	} else {
 		m_gameOverText.SetString(m_playerWon ? "You Won!" : "Game Over");
+		m_soundManager.PlaySFX(m_playerWon ? "sfx_game_win" : "sfx_game_lose");
 		for (auto* text : m_textToRenderSinglePlayer) {
 			text->SetFont(m_font);
 		}
 	}
-
-	std::cout << "Initialized" << std::endl;
 }
 
 
@@ -103,25 +99,20 @@ void StateGameOver::Update(sf::RenderWindow& _window) {
 		case 0:
 			//play the game...
 			if (m_twoPlayer) {
-				STATE_MANAGER.ChangeState(_window, EState::eGame, true);
+				STATE_MANAGER.ChangeState(EState::eGame, _window, true);
 			} else {
-				STATE_MANAGER.ChangeState(_window, EState::eGame, false);
+				STATE_MANAGER.ChangeState(EState::eGame, _window);
 			}
-			std::cout << "PLAYING SNAKE" << std::endl;
 			break;
 		case 1:
 			//quit to titles...
-			STATE_MANAGER.ChangeState(_window, EState::eMainMenu);
-			std::cout << "GOING BACK TO THE MAIN MENU" << std::endl;
+			STATE_MANAGER.ChangeState(EState::eMainMenu, _window);
 			break;
 		default:
 			break;
 		}
 	}
 }
-
-
-void StateGameOver::Destroy() {}
 
 void StateGameOver::SetWinnerText() {
 	if (std::stoi(m_player1ScoreValue) == std::stoi(m_player2ScoreValue)) {

@@ -1,11 +1,9 @@
 #include "StateMainMenu.h"
-#include <iostream>
 #include "SFML/Graphics.hpp"
 #include "StateControls.h"
 #include "StateGame.h"
 
-void StateMainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
-
+void StateMainMenu::OnCreate(sf::RenderWindow& _window, sf::Font& _font) {
 	//initialise selected value to play the game
 	m_selected = 0;
 
@@ -17,8 +15,6 @@ void StateMainMenu::Initialize(sf::RenderWindow& _window, sf::Font& _font) {
 	for (auto text : m_textToRender) {
 		text->SetFont(m_font);
 	}
-
-	std::cout << "Initialised" << std::endl;
 }
 
 
@@ -74,12 +70,10 @@ void StateMainMenu::Update(sf::RenderWindow& _window) {
 		switch (m_selected) {
 		case 0:
 			//Go to the controls state...
-			STATE_MANAGER.ChangeState(_window, EState::eControlsMenu);
-			std::cout << "GOING TO THE CONTROLS MENU" << std::endl;
+			STATE_MANAGER.ChangeState(EState::eControlsMenu, _window);
 			break;
 		case 1:
-			STATE_MANAGER.ChangeState(_window, EState::eGame, true);
-			std::cout << "PLAYING 2 PLAYER" << std::endl;
+			STATE_MANAGER.ChangeState(EState::eGame, _window, true);
 			break;
 		case 2:
 			QUIT_GAME = true;
@@ -88,8 +82,4 @@ void StateMainMenu::Update(sf::RenderWindow& _window) {
 			break;
 		}
 	}
-}
-
-void StateMainMenu::Destroy() {
-	std::cout << "Destroyed" << std::endl;
 }

@@ -1,14 +1,40 @@
 #pragma once
 #include "StateManager.h"
 
+/**
+ * \brief The GameOver State is displayed to the player when the game has ended
+ */
 class StateGameOver final : public BaseState {
 public:
-	explicit StateGameOver(SoundManager& _soundManager, const bool& _isTwoPlayer, const bool& _playerWon);
-	void Initialize(sf::RenderWindow& _window, sf::Font& _font) override;
+	/**
+	 * \brief Constructs a StateGameOver object
+	 * \param _soundManager A reference to the sound manager to play sound effects and music
+	 * \param _isTwoPlayer true if the game is 2 player
+	 * \param _playerWon true if the game was won in the last game
+	 */
+	explicit StateGameOver(SoundManager& _soundManager, const bool& _isTwoPlayer = false, const bool& _playerWon = false);
+	/**
+	 * \brief Called upon the creation of the object
+	 * \param _window a reference to the game window
+	 * \param _font the font that will be used in the game
+	 */	
+	void OnCreate(sf::RenderWindow& _window, sf::Font& _font) override;
+	
+	/**
+	 * \brief Update is called once per game loop
+	 * \param _window a reference to the game window
+	 */
 	void Update(sf::RenderWindow& _window) override;
+
+	/**
+	 * \brief Draws renderables to the window
+	 * \param _window a reference to the game window
+	 */
 	void Render(sf::RenderWindow& _window) override;
-	void Destroy() override;
 private:
+	/**
+	 * \brief Works out who won the game and displays the result on screen
+	 */
 	void SetWinnerText();
 	
 	MenuBackground m_menuBackground;

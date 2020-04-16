@@ -1,9 +1,7 @@
 #include "Entity.h"
-
 #include "Constants.h"
 
-Entity::Entity(sf::Color _color, sf::Vector2f _position)
-	: m_colour(_color),
+Entity::Entity(sf::Vector2f _position) :
 	m_position(_position) {
 }
 

@@ -1,10 +1,7 @@
 #include "SoundManager.h"
 
-#include <iostream>
-
 SoundManager::SoundManager()
 {
-	std::cout << "SOUND MANAGER CONSTRUCTED" << std::endl;
 	LoadSFX("sfx_food_special");
 	LoadSFX("sfx_food_standard");
 	LoadSFX("sfx_gobble_on");
@@ -13,7 +10,9 @@ SoundManager::SoundManager()
 	LoadSFX("sfx_menu_pause");
 	LoadSFX("sfx_menu_select");
 	LoadSFX("sfx_snake_death");
-
+	LoadSFX("sfx_gobble_eat");
+	LoadSFX("sfx_game_lose");
+	LoadSFX("sfx_game_win");
 	LoadMusic("music_game");
 }
 

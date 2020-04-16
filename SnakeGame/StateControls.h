@@ -1,22 +1,61 @@
 #pragma once
 #include "StateManager.h"
+
+/**
+ * \brief The StateControls Class is the Controls Screen that is shown to the player before playing the game in single player
+ */
 class StateControls : public BaseState {
 public:
+	/**
+	 * \brief Constructs a StateControls object
+	 * \param _soundManager A reference to the sound manager to play sound effects and music
+	 */
 	StateControls(SoundManager& _soundManager) : BaseState(_soundManager) {};
-	void Initialize(sf::RenderWindow& _window, sf::Font& _font) override;
+
+	/**
+	 * \brief Called upon the creation of the object
+	 * \param _window a reference to the game window
+	 * \param _font the font that will be used in the game
+	 */
+	void OnCreate(sf::RenderWindow& _window, sf::Font& _font) override;
+
+	/**
+	 * \brief Update is called once per game loop
+	 * \param _window a reference to the game window
+	 */
 	void Update(sf::RenderWindow& _window) override;
+
+	/**
+	 * \brief Draws renderables to the window
+	 * \param _window a reference to the game window
+	 */
 	void Render(sf::RenderWindow& _window) override;
-	void Destroy() override;
 private:
 
-	struct GameIcon {
-		GameIcon(const sf::Texture& _texture, const sf::Vector2f& _position) : m_texture(_texture), m_position(_position) {
+	/**
+	 * \brief FoodIcon is a container for the Food Icons that are displayed in the Controls Menu
+	 */
+	struct FoodIcon {
+		/**
+		 * \brief Constructs a FoodIcon object
+		 * \param _texture A reference to the texture to be displayed
+		 * \param _position The position of the FoodIcon
+		 */
+		FoodIcon(const sf::Texture& _texture, const sf::Vector2f& _position) : m_texture(_texture), m_position(_position) {
 			m_sprite.setTexture(m_texture);
 			m_sprite.setPosition(m_position);
 		}
 
+		/**
+		 * \brief Sets the position of the FoodIcon
+		 * \param _newPosition The new position of the FoodIcon object
+		 */
 		void SetPosition(const sf::Vector2f _newPosition) { m_sprite.setPosition(_newPosition); }
 
+		/**
+		 * \brief Draws the FoodIcon to the screen
+		 * \param _window A reference to the game window
+		 */
 		void Render(sf::RenderWindow& _window) const {
 			_window.draw(m_sprite);
 		}

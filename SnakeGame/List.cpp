@@ -1,17 +1,21 @@
 #include "List.h"
 
-List::List() {
-	m_head = new Node(sf::Vector2f(0, 0), EDirection::eNone, nullptr, nullptr);
-	m_tail = new Node(sf::Vector2f(0, 0), EDirection::eNone, m_head, nullptr);
+List::List()
+{
+	std::pair<sf::Vector2f, EDirection> null{ sf::Vector2f(0, 0), EDirection::eRight };
+	m_head = new Node(null, nullptr, nullptr);
+	m_tail = new Node(null, m_head, nullptr);
 	m_head->m_nextNode = m_tail;
-}
+};
 
-List::List(const sf::Vector2f _position, const EDirection _direction) {
+List::List(std::pair<sf::Vector2f, EDirection>& _data)
+{
 	//Initialise the 'Head' of the linked list to the position
-	m_head = new Node(_position, _direction, nullptr, nullptr);
+	m_head = new Node(_data, nullptr, nullptr);
 	m_size = 1;
 	m_tail = m_head;
 }
+
 
 List::~List() {
 	Clear();
@@ -25,9 +29,9 @@ void List::PopFront() {
 }
 
 //Pushes an element to the front of the List
-void List::PushFront(const sf::Vector2f _segmentPosition, const EDirection _direction) {
+void List::PushFront(std::pair<sf::Vector2f, EDirection> _data) {
 	//Allocate a new node
-	auto* newNode = new Node(_segmentPosition, _direction, nullptr, m_head);
+	auto* newNode = new Node(_data, nullptr, m_head);
 	m_head->m_previousNode = newNode;
 	//make the new node the head of the list
 	m_head = newNode;
@@ -35,9 +39,9 @@ void List::PushFront(const sf::Vector2f _segmentPosition, const EDirection _dire
 }
 
 //Pushes an element to the back of the list
-void List::PushBack(const sf::Vector2f _segmentPosition, const EDirection _direction) {
+void List::PushBack(std::pair<sf::Vector2f, EDirection> _data) {
 	//Allocate a new node
-	auto* newNode = new Node(_segmentPosition, _direction, m_tail, nullptr);
+	auto* newNode = new Node(_data, m_tail, nullptr);
 	//make the current tail point to the newly allocated node
 	m_tail->m_nextNode = newNode;
 
@@ -65,14 +69,6 @@ void List::Clear() const {
 		currentNode = nextNode;
 		nextNode = nullptr;
 	}
-}
-
-sf::Vector2f List::Front() const {
-	return m_head->m_position;
-}
-
-sf::Vector2f List::Back() const {
-	return m_tail->m_position;
 }
 
 bool List::IsEmpty() const {
